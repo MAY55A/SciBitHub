@@ -1,10 +1,9 @@
-import { forgotPasswordAction } from "@/app/actions";
-import { FormMessage, Message } from "@/components/form-message";
-import { SubmitButton } from "@/components/submit-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { forgotPasswordAction } from "@/src/utils/auth-actions";
+import { FormMessage, Message } from "@/src/components/custom/form-message";
+import { SubmitButton } from "@/src/components/custom/submit-button";
+import { Input } from "@/src/components/ui/input";
+import { Label } from "@/src/components/ui/label";
 import Link from "next/link";
-import { SmtpMessage } from "../smtp-message";
 
 export default async function ForgotPassword(props: {
   searchParams: Promise<Message>;
@@ -12,17 +11,17 @@ export default async function ForgotPassword(props: {
   const searchParams = await props.searchParams;
   return (
     <>
-      <form className="flex-1 flex flex-col w-full gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-64 mx-auto">
+      <form className="flex-1 flex flex-col gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-md mx-auto py-12">
         <div>
           <h1 className="text-2xl font-medium">Reset Password</h1>
-          <p className="text-sm text-secondary-foreground">
-            Already have an account?{" "}
-            <Link className="text-primary underline" href="/sign-in">
-              Sign in
-            </Link>
-          </p>
+          <p className="text-sm pt-4">
+          Already have an account ?{" "}
+          <Link className="text-green font-medium underline" href="/sign-in">
+            Sign in
+          </Link>
+        </p>
         </div>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+        <div className="flex flex-col gap-6 [&>input]:mb-3 mt-8">
           <Label htmlFor="email">Email</Label>
           <Input name="email" placeholder="you@example.com" required />
           <SubmitButton formAction={forgotPasswordAction}>
@@ -31,7 +30,6 @@ export default async function ForgotPassword(props: {
           <FormMessage message={searchParams} />
         </div>
       </form>
-      <SmtpMessage />
     </>
   );
 }
