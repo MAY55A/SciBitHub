@@ -14,7 +14,7 @@ import { EducationDetailsForm } from "@/src/components/account-settings/Educatio
 
 export default function Settings() {
     const { user, loading } = useAuth();
-    if (loading) {
+    if (loading || !user) {
         return <AccountSettingsSkeleton />;
     }
 

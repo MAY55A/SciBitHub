@@ -73,7 +73,7 @@ export default function NameAndCountryForm() {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8 w-full max-w-md px-4"
+                className="space-y-8 w-full max-w-md px-4 pt-20"
             >
                 <h1 className="text-2xl font-medium">Enter Your Name & Country</h1>
                 <FormField

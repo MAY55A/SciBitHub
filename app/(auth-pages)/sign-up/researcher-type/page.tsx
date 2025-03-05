@@ -34,7 +34,7 @@ export default function ResearcherTypeSelection() {
     return (
         <motion.form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col items-center gap-10"
+            className="flex flex-col items-center gap-10 pt-20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
@@ -44,21 +44,21 @@ export default function ResearcherTypeSelection() {
             <div className="grid grid-rows-2 grid-cols-2 gap-4 [&>*:nth-child(3)]:col-span-2 [&>*:nth-child(3)]:place-self-center">
                 <Card
                     title="Casual"
-                    content="Join and contribute to projects."
+                    content="Start a research project as an individual, just for fun or curiosity."
                     icon={User}
                     isSelected={selectedType === "casual"}
                     onClick={() => handleSelectType(ResearcherType.CASUAL)}
                 />
                 <Card
                     title="Academic"
-                    content="Create and publish research projects"
+                    content="Conduct research for studies, as a student, or as a professional researcher."
                     icon={GraduationCap}
                     isSelected={selectedType === "academic"}
                     onClick={() => handleSelectType(ResearcherType.ACADEMIC)}
                 />
                 <Card
                     title="Organisation"
-                    content="Create and publish research projects"
+                    content="Create and manage research projects as an organization or institution."
                     icon={Building}
                     isSelected={selectedType === "organization"}
                     onClick={() => handleSelectType(ResearcherType.ORGANIZATION)}

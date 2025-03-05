@@ -19,6 +19,7 @@ export default async function ResetPassword(props: {
                 type="password"
                 name="password"
                 placeholder="New password"
+                minLength={8}
                 required
             />
             <Label htmlFor="confirmPassword">Confirm password</Label>
@@ -26,6 +27,7 @@ export default async function ResetPassword(props: {
                 type="password"
                 name="confirmPassword"
                 placeholder="Confirm password"
+                minLength={8}
                 required
             />
             <SubmitButton formAction={resetPasswordAction}>

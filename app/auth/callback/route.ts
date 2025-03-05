@@ -1,11 +1,9 @@
 import { createClient } from "@/src/utils/supabase/server";
-import { checkEmailExists } from "@/src/utils/utils";
+import { checkEmailExists, encodedRedirect } from "@/src/utils/utils";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  // The `/auth/callback` route is required for the server-side auth flow implemented
-  // by the SSR package. It exchanges an auth code for the user's session.
-  // https://supabase.com/docs/guides/auth/server-side/nextjs
+
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   const origin = requestUrl.origin;
@@ -16,14 +14,17 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (error || !data?.session?.user) {
       console.error("Auth exchange failed:", error);
-      return NextResponse.redirect(`${origin}/sign-in?error=Authentication failed`);
+      // Redirect to sign-in page if the confirmation link is clicked after having expired
+      if (error?.code === "flow_state_expired") {
+        return encodedRedirect("success",`${origin}/sign-in`,"Email confirmed. Please sign in.");
+      }
+      return encodedRedirect("error",`${origin}/sign-in`,"Authentication failed");
     }
+
     const { id, email, user_metadata, app_metadata } = data.session.user;
     if (app_metadata.provider === "google") {
       const username = user_metadata?.full_name;
-
       // Check if user exists in the database
-
       if (await checkEmailExists(supabase, email!)) {
         // User exists → Log them in
         return NextResponse.redirect(`${origin}/profile`);

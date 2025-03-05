@@ -11,15 +11,16 @@ export const updateEmail = async (newEmail: string) => {
         return { success: false, message: 'New email required.' };
     }
     try {
+        /*
         const identities = (await supabase.auth.getUser()).data.user?.identities;
         const noPassword = identities?.findIndex((provider) => provider.provider === 'email') === -1;
         const isNewEmailGmail = newEmail.endsWith('@gmail.com');
 
-        // If the user is doesnt have a password (Google-only signin) and the new email is not a Gmail, ask them to set a password
+        // If the user doesnt have a password (Google-only signin) and the new email is not a Gmail, ask them to set a password
         if (noPassword && !isNewEmailGmail) {
             return { success: false, message: 'You are currently using google signin, please set a password before changing to a non-Gmail email.' };
         }
-
+        */
         // Else update the email
         const { error } = await supabase.auth.updateUser({ email: newEmail });
 
