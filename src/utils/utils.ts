@@ -22,6 +22,36 @@ export const areEqualArrays = (arr1?: any[], arr2?: any[]) => {
   return [...arr1].sort().toString() === [...arr2].sort().toString();
 };
 
+export function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+}
+
+export function base64ToFile(base64: string): Blob {
+  const byteCharacters = atob(base64.split(",")[1]);
+  const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
+  const byteArray = new Uint8Array(byteNumbers);
+  const fileBlob = new Blob([byteArray], { type: "image/webp" });
+  return fileBlob;
+}
+
+export function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+  let timer: NodeJS.Timeout;
+
+  const debouncedFunction = (...args: Parameters<T>) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => func(...args), delay);
+  };
+
+  debouncedFunction.cancel = () => clearTimeout(timer);
+
+  return debouncedFunction as T & { cancel: () => void };
+}
+
 /**
  * Checks if an email is already registered in Supabase.
  * @param email - The email address to check.
