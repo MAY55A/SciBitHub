@@ -4,7 +4,7 @@ import { Input } from "@/src/components/ui/input";
 import { GoogleButton } from "../../../../src/components/custom/google-button";
 import { Button } from "@/src/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useMultistepFormContext } from "../../../../src/contexts/multistep-form-context";
+import { useMultistepSignupFormContext } from "../../../../src/contexts/multistep-signup-form-context";
 import { useForm } from "react-hook-form";
 import { inputDataSchema, InputData } from "@/src/types/user-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +25,7 @@ import { createClient } from "@/src/utils/supabase/client";
 export default function Signup() {
 
   const router = useRouter();
-  const { formData, updateFormData } = useMultistepFormContext();
+  const { formData, updateFormData } = useMultistepSignupFormContext();
   const form = useForm({
     resolver: zodResolver(inputDataSchema.pick({ email: true, password: true })),
     defaultValues: { email: formData.email, password: formData.password },

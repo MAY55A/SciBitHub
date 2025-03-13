@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMultistepFormContext } from "../../../../src/contexts/multistep-form-context";
+import { useMultistepSignupFormContext } from "../../../../src/contexts/multistep-signup-form-context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputData, inputDataSchema } from "@/src/types/user-form-data";
@@ -14,7 +14,7 @@ import { ResearcherType } from "@/src/types/models";
 
 export default function ResearcherTypeSelection() {
     const router = useRouter();
-    const { formData, updateFormData } = useMultistepFormContext();
+    const { formData, updateFormData } = useMultistepSignupFormContext();
     const form = useForm({
         resolver: zodResolver(inputDataSchema.pick({ researcherType: true })),
         defaultValues: { researcherType: formData.researcherType },

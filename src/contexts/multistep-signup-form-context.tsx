@@ -4,20 +4,20 @@ import { InputData } from "@/src/types/user-form-data";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 
-interface MultistepFormContextType {
+interface MultistepSignupFormContextType {
     formData: InputData;
     updateFormData: (data: Partial<InputData>) => void;
     clearFormData: () => void;
     formDataIsFilled: () => boolean;
 }
 
-const MultistepFormContext = createContext<
-    MultistepFormContextType | undefined
+const MultistepSignupFormContext = createContext<
+    MultistepSignupFormContextType | undefined
 >(undefined);
 
-const STORAGE_KEY = "multistep_form_data";
+const STORAGE_KEY = "multistep_signup_form_data";
 
-export default function MultistepFormContextProvider({
+export default function MultistepSignupFormContextProvider({
     children,
 }: {
     children: ReactNode;
@@ -53,19 +53,19 @@ export default function MultistepFormContextProvider({
     };
 
     return (
-        <MultistepFormContext.Provider
+        <MultistepSignupFormContext.Provider
             value={{ formData, updateFormData, clearFormData, formDataIsFilled }}
         >
             {children}
-        </MultistepFormContext.Provider>
+        </MultistepSignupFormContext.Provider>
     );
 }
 
-export function useMultistepFormContext() {
-    const context = useContext(MultistepFormContext);
+export function useMultistepSignupFormContext() {
+    const context = useContext(MultistepSignupFormContext);
     if (context === undefined) {
         throw new Error(
-            "useMultistepFormContext must be used within a MultistepFormContextProvider",
+            "useMultistepSignupFormContext must be used within a MultistepSignupFormContextProvider",
         );
     }
     return context;

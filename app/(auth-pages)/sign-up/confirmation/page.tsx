@@ -5,7 +5,7 @@ import { inputDataSchema } from "@/src/types/user-form-data";
 import { signUpAction } from "@/src/utils/auth-actions";
 import { FormMessage } from "@/src/components/custom/form-message";
 import { SubmitButton } from "@/src/components/custom/submit-button";
-import { useMultistepFormContext } from "@/src/contexts/multistep-form-context";
+import { useMultistepSignupFormContext } from "@/src/contexts/multistep-signup-form-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ export default function Signup() {
 
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-  const { formData, clearFormData } = useMultistepFormContext();
+  const { formData, clearFormData } = useMultistepSignupFormContext();
 
   const form = useForm({
     resolver: zodResolver(inputDataSchema),

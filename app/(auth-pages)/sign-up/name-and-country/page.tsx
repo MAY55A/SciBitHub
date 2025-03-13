@@ -9,7 +9,7 @@ import {
     FormMessage,
 } from "@/src/components/ui/form";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMultistepFormContext } from "../../../../src/contexts/multistep-form-context";
+import { useMultistepSignupFormContext } from "../../../../src/contexts/multistep-signup-form-context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputData, inputDataSchema } from "@/src/types/user-form-data";
@@ -25,7 +25,7 @@ export default function NameAndCountryForm() {
     const id = searchParams.get("id");
     const username = searchParams.get("username");
 
-    const { formData, updateFormData } = useMultistepFormContext();
+    const { formData, updateFormData } = useMultistepSignupFormContext();
     // Update form data only once when params are available
     useEffect(() => {
         if (email && username && id) {
