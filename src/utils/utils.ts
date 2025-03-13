@@ -16,6 +16,12 @@ export function encodedRedirect(
   return redirect(`${path}?${type}=${encodeURIComponent(message)}`);
 }
 
+export const areEqualArrays = (arr1?: any[], arr2?: any[]) => {
+  if (!arr1 || !arr2) return arr1 == arr2;
+  if (arr1.length !== arr2.length) return false;
+  return [...arr1].sort().toString() === [...arr2].sort().toString();
+};
+
 /**
  * Checks if an email is already registered in Supabase.
  * @param email - The email address to check.

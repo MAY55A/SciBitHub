@@ -10,9 +10,10 @@ interface CountryOption {
 interface CountrySelectProps {
     control: any; // The control from react-hook-form
     name: string; // The name of the field to bind the input
+    multiple?: boolean; // Whether to allow multiple selections
 }
 
-const CountrySelector: React.FC<CountrySelectProps> = ({ control, name }) => {
+const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple }) => {
     const [countries, setCountries] = useState<CountryOption[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -40,21 +41,31 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name }) => {
             name={name}
             render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Country</FormLabel>
+                    <FormLabel className={multiple ? "text-primary" : ""}>{multiple ? "Countries" : "Country"}</FormLabel>
                     <FormControl>
                         {loading ? (
                             <div>Loading...</div> // Replace with a loading spinner if desired
                         ) : (
                             <Select
+                                isMulti={multiple ?? false}
                                 {...field}
                                 options={countries}
-                                placeholder="Search and select your country"
+                                placeholder={"Search and select " + (multiple ? "target countries" : "your country")}
                                 isSearchable
                                 getOptionLabel={(e) => e.label} // This ensures the label is shown in the dropdown
                                 getOptionValue={(e) => e.value} // This ensures the value is set correctly when selected
-                                value={countries.find(country => country.value === field.value)}
+                                value={countries.filter(country => field.value?.includes(country.value) ?? country.value === field.value)}
                                 onChange={(selectedOption) => {
-                                    field.onChange(selectedOption ? selectedOption.value : undefined); // Get the value only, not the whole object
+                                    if (Array.isArray(selectedOption)) {
+                                        // Handle multi-select: return an array of values
+                                        field.onChange(selectedOption.map(option => option.value));
+                                    } else if (selectedOption) {
+                                        // Handle single-select: return just the value
+                                        field.onChange(selectedOption.value);
+                                    } else {
+                                        // In case nothing is selected, pass undefined
+                                        field.onChange(undefined);
+                                    }
                                 }}
                                 className="text-green"
                                 styles={{
@@ -62,7 +73,6 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name }) => {
                                         ...provided,
                                         background: "hsl(var(--background))",
                                         borderColor: "hsl(var(--border))",
-
                                     }),
                                     menu: (provided) => ({
                                         ...provided,
@@ -76,7 +86,24 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name }) => {
                                     singleValue: (provided) => ({
                                         ...provided,
                                         color: "hsl(var(--foreground))"
-                                    })
+                                    }),
+                                    multiValue: (provided) => ({
+                                        ...provided,
+                                        backgroundColor: "hsl(var(--muted))",
+                                        color: "hsl(var(--foreground))"
+                                    }),
+                                    multiValueLabel: (provided) => ({
+                                        ...provided,
+                                        color: "hsl(var(--foreground))"
+                                    }),
+                                    multiValueRemove: (provided, state) => ({
+                                        ...provided,
+                                        color: "hsl(var(--destructive))"
+                                    }),
+                                    input: (provided) => ({
+                                        ...provided,
+                                        color: "hsl(var(--muted-foreground))", // Change search text color
+                                    }),             
                                 }}
                             />
                         )}
