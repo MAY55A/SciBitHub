@@ -4,8 +4,9 @@
 
 @layer base {
   :root {
-    --green: 76 71% 53%;
     --orange: hsl(5, 100%, 69%);
+    --black: hsl(240, 6%, 6%);
+    --green: 76 71% 53%;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -31,7 +32,6 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --black: hsl(240, 6%, 6%);
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -40,6 +40,8 @@
     --sidebar-accent-foreground: 76 71% 53%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --canvas-default: #fcfcfc;
+    --canvas-subtle: #e9ebee;
   }
 
   .dark {
@@ -76,8 +78,35 @@
     --sidebar-accent-foreground: 76 71% 53%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --canvas-default: #0d1117;
+    --canvas-subtle: #161b22;
   }
 }
+
+.wmde-markdown, .wmde-markdown-var {
+  --color-canvas-default: var(--canvas-default) !important;
+  --color-canvas-subtle: var(--canvas-subtle) !important;
+  --color-fg-default: hsl(var(--foreground)) !important;
+}
+
+.w-md-editor-toolbar li > button:hover {
+    background-color: hsl(var(--muted)) !important;
+    color: hsl(var(--green)) !important;
+}
+
+.w-md-editor-toolbar li > button:disabled {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+::-webkit-scrollbar-track {
+  background-color: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--background));
+  border-radius: 10px;
+}
+
 
 @layer base {
   * {

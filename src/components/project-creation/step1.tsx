@@ -1,0 +1,155 @@
+"use client"
+
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
+import { ProjectDomain, ProjectStatus } from "@/src/types/models";
+import { ProjectInputData, projectInputDataSchema } from "@/src/types/project-form-data";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import TagsInput from "../custom/tags-input";
+import { useMultistepProjectForm } from "@/src/contexts/multistep-project-form-context";
+import { ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { areEqualArrays } from "@/src/utils/utils";
+import { CancelAlertDialog } from "./cancel-alert-dialog";
+
+export function Step1({ onNext, onSaveStep, onSaveProject }: { onNext: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void }) {
+    const { data, updateData } = useMultistepProjectForm();
+    const [isVerifiying, setIsVerifying] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
+    const form = useForm({
+        resolver: zodResolver(projectInputDataSchema.pick({ name: true, description: true, domain: true, tags: true })),
+        defaultValues: data,
+    });
+
+    const saveData = async (data: Partial<ProjectInputData>) => {
+        try {
+            setIsVerifying(true);
+            const response = await fetch("/api/check-exists", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ table: "projects", attribute: "name", value: data.name }),
+            });
+
+            const result = await response.json();
+            setIsVerifying(false);
+
+            if (result.exists) {
+                form.setError("name", {
+                    type: "manual",
+                    message: "There exists already a project with this name",
+                });
+                return;
+            }
+            updateData({ ...data });
+            setIsSaved(true);
+            onSaveStep();
+        } catch (error) {
+            console.error("Error checking name:", error);
+            form.setError("name", {
+                type: "manual",
+                message: "Something went wrong. Please try again.",
+            });
+        }
+    };
+    const watchedFields = form.watch();
+    useEffect(() => {
+        const same = watchedFields.name.length > 0 && watchedFields.name === data.name && watchedFields.description === data.description && watchedFields.domain === data.domain && areEqualArrays(watchedFields.tags, data.tags);
+        setIsSaved(same);
+    }, [JSON.stringify(watchedFields)]);
+
+    return (
+        <Form {...form}>
+            <form
+                onSubmit={form.handleSubmit(saveData)}
+                className="w-full flex flex-col gap-8 p-6 shadow-lg rounded-lg border">
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="text-primary">Project Name</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Enter project name" {...field} />
+                            </FormControl>
+                            <FormMessage>{isVerifiying && "Verifying name..."}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="text-primary">Description</FormLabel>
+                            <FormControl>
+                                <MDEditor
+                                    height={300}
+                                    preview="edit"
+                                    previewOptions={{
+                                        rehypePlugins: [[rehypeSanitize]],
+                                    }}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                            </FormControl>
+                            <FormMessage></FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="domain"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="text-primary">Research Domain</FormLabel>
+                            <FormControl>
+                                <select {...field} className="w-full p-2 border rounded mt-1">
+                                    {["select a domain", ...Object.values(ProjectDomain).sort()].map(value =>
+                                        <option key={value} value={value}>{value}</option>
+                                    )}
+                                </select>
+                            </FormControl>
+                            <FormMessage></FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="tags"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="text-primary">Relevant Tags</FormLabel>
+                            <FormControl>
+                                <TagsInput onChange={field.onChange} tags={field.value ?? []} />
+                            </FormControl>
+                            <FormMessage></FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <div className="w-full flex justify-between">
+                    <CancelAlertDialog
+                        saveDraft={data.name.length === 0 ? undefined : () => onSaveProject(data, ProjectStatus.DRAFT)}
+                    />
+                    {isSaved ?
+                        <Button
+                            type="button"
+                            onClick={onNext}
+                        >
+                            Continue
+                            <ChevronRight size={18} className="ml-2" />
+                        </Button> :
+                        <Button
+                            type="submit"
+                        >
+                            {form.formState.isSubmitting ? "Saving..." : "Save"}
+                        </Button>
+                    }
+                </div>
+            </form>
+        </Form>
+    );
+}
