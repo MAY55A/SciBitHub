@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const ALLOWED_TABLES: Record<string, string[]> = {
     users: ["username", "email"], // Only allow checking username or email in users table
-    projects: ["title"], // Example: Checking project titles
+    projects: ["name"], // Example: Checking project titles
 };
 
 export async function POST(req: Request) {

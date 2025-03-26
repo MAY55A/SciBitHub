@@ -1,6 +1,6 @@
-import { FormMessage, Message } from "@/src/components/custom/form-message";
-import { Footer } from "@/src/components/footer";
-import Hero from "@/src/components/hero";
+import { FormMessage } from "@/src/components/custom/form-message";
+import { Footer } from "@/src/components/custom/footer";
+import Hero from "@/src/components/custom/hero";
 
 export default async function Home(props: { searchParams?: { error?: string; error_description?: string; message?: string } }) {
   const searchParams = await props.searchParams;

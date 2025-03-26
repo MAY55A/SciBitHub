@@ -2,7 +2,7 @@ import { Skeleton } from '@/src/components/ui/skeleton';
 
 export const AccountSettingsSkeleton = () => (
     <form
-        className="border rounded-lg p-10 flex flex-col gap-6 w-full mx-12"
+        className="rounded-lg p-10 flex flex-col gap-6 w-full mx-12"
     >
         <div>
             <Skeleton className="h-6 w-32 mb-2" />

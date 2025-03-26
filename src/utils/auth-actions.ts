@@ -36,7 +36,7 @@ export const signUpAction = async (inputData: InputData) => {
     inputData.id = data.user?.id!;
   }
   // Insert the new user into the users table
-  const metadata = inputData.role === "researcher" ? { interests: inputData.fieldsOfInterest, researcher_type: inputData.researcherType, is_verified: false } : { interests: inputData.fieldsOfInterest };
+  const metadata = inputData.role === "researcher" ? { interests: inputData.fieldsOfInterest, researcherType: inputData.researcherType, isVerified: false } : { interests: inputData.fieldsOfInterest };
   const { error: dbError } = await supabase.from("users").insert({
     id: inputData.id,
     username: inputData.username,
@@ -72,7 +72,11 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  return redirect("/profile");
+  const referer = (await headers()).get("referer");
+  const url = new URL(referer || "");
+  const redirectTo = url.searchParams.get("redirect_to") || "/profile";
+
+  return redirect(redirectTo);
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {

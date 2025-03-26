@@ -1,10 +1,15 @@
 import { createServerClient } from "@supabase/ssr";
+import { SupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
+let supabaseClient: SupabaseClient | null = null;
+
 export const createClient = async () => {
+  if (supabaseClient) return supabaseClient;
+
   const cookieStore = await cookies();
 
-  return createServerClient(
+  supabaseClient = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -18,12 +23,12 @@ export const createClient = async () => {
               cookieStore.set(name, value, options);
             });
           } catch (error) {
-            // The `set` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
+            // Ignore errors from server components
           }
         },
       },
-    },
+    }
   );
+
+  return supabaseClient;
 };

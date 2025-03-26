@@ -1,4 +1,4 @@
-import { ThemeSwitcher } from '../theme-switcher'
+import { ThemeSwitcher } from '../custom/theme-switcher'
 import Link from '../custom/Link'
 import HeaderAuth from './header-auth'
 import { Nav } from './nav'

@@ -1,5 +1,5 @@
 import { Orbitron } from "next/font/google";
-import "@/src//globals.css";
+import "@/src/globals.css";
 import Header from "@/src/components/navigation/Header";
 import { AuthProvider } from "@/src/contexts/AuthContext";
 import { ClientThemeProvider } from "@/src/components/wrappers/client-theme-provider";

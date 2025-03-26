@@ -7,7 +7,7 @@ import { PanelLeft } from "lucide-react"
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Separator } from "@/src/components/ui/separator"
-import { Sheet, SheetContent } from "@/src/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle } from "@/src/components/ui/sheet"
 import { Skeleton } from "@/src/components/ui/skeleton"
 import {
   Tooltip,
@@ -194,6 +194,7 @@ const Sidebar = React.forwardRef<
     if (isMobile) {
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
+          <SheetTitle title="sidebar"/>
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
@@ -319,7 +320,7 @@ const SidebarInset = React.forwardRef<
   React.ComponentProps<"main">
 >(({ className, ...props }, ref) => {
   return (
-    <main
+    <div
       ref={ref}
       className={cn(
         "relative flex min-h-svh flex-1 flex-col bg-background",
