@@ -12,42 +12,71 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
 } from "@/src/components/ui/sidebar"
-import { Home, Settings, ChevronRight } from "lucide-react"
+import { Home, Settings, ChevronRight, Bookmark, MessagesSquare, LibraryBig, ClipboardList } from "lucide-react"
 import { SidebarNavUser } from "./sidebar-nav-user"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
-import { User } from "@/src/types/models"
+import { User, UserRole } from "@/src/types/models"
 import { UserNavSkeleton } from "../skeletons/user-nav-skeleton"
-
-// Menu items.
-const menu = [
-    {
-        title: "Home",
-        url: "/profile/home",
-        icon: Home,
-    },
-    {
-        title: "Settings",
-        url: "/profile/settings",
-        icon: Settings,
-        items: [
-            {
-                title: "General",
-                url: "/profile/settings",
-            },
-            {
-                title: "Reset Password",
-                url: "/profile/settings/reset-password",
-            },
-            {
-                title: "Delete Account",
-                url: "/profile/settings/delete-account",
-            },
-        ],
-    },
-]
+import Link from "next/link"
 
 
 export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: string) => boolean, inUrl: (url: string) => boolean, user: User | null }) => {
+    // Menu items.
+    const menu = [
+        {
+            title: "Home",
+            url: "/profile/home",
+            icon: Home,
+        },
+        {
+            title: user?.role === UserRole.RESEARCHER ? "Projects" : "Contributions",
+            url: user?.role === UserRole.RESEARCHER ? "/profile/projects" : "/profile/contributions",
+            icon: user?.role === UserRole.RESEARCHER ? LibraryBig : ClipboardList,
+            items: user?.role === UserRole.RESEARCHER ? [
+                {
+                    title: "Published",
+                    url: "/profile/projects?status=published",
+                },
+                {
+                    title: "Pending",
+                    url: "/profile/projects?status=pending",
+                },
+                {
+                    title: "Draft",
+                    url: "/profile/projects?status=draft",
+                },
+            ] : [],
+        },
+        {
+            title: "Discussions",
+            url: "/profile/discussions",
+            icon: MessagesSquare,
+        },
+        {
+            title: "Bookmarks",
+            url: "/profile/bookmarks",
+            icon: Bookmark,
+        },
+        {
+            title: "Settings",
+            url: "/profile/settings",
+            icon: Settings,
+            items: [
+                {
+                    title: "General",
+                    url: "/profile/settings",
+                },
+                {
+                    title: "Reset Password",
+                    url: "/profile/settings/reset-password",
+                },
+                {
+                    title: "Delete Account",
+                    url: "/profile/settings/delete-account",
+                },
+            ],
+        },
+    ]
     return (
         <Sidebar collapsible="icon">
             <SidebarContent>
@@ -66,8 +95,10 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
                                         <SidebarMenuItem key={item.title}>
                                             <CollapsibleTrigger asChild>
                                                 <SidebarMenuButton tooltip={item.title} className={inUrl(item.url) ? "text-green" : ""}>
-                                                    {item.icon && <item.icon />}
-                                                    <span>{item.title}</span>
+                                                    <Link href={item.url} className="flex items-center gap-2">
+                                                        {item.icon && <item.icon size={16}/>}
+                                                        <span>{item.title}</span>
+                                                    </Link>
                                                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                                                 </SidebarMenuButton>
                                             </CollapsibleTrigger>
@@ -76,12 +107,12 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
                                                     {item.items.map((subItem) => (
                                                         <SidebarMenuSubItem key={subItem.title}>
                                                             <SidebarMenuSubButton asChild>
-                                                                <a href={subItem.url}>
+                                                                <Link href={subItem.url}>
                                                                     {isActive(subItem.url) ?
                                                                         <><ChevronRight className="text-green" /><span className="text-sm">{subItem.title}</span></>
                                                                         : <span >{subItem.title}</span>
                                                                     }
-                                                                </a>
+                                                                </Link>
                                                             </SidebarMenuSubButton>
                                                         </SidebarMenuSubItem>
                                                     ))}
@@ -91,11 +122,11 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
                                     </Collapsible>
                                 ) : (
                                     <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton asChild>
-                                            <a href={item.url} className={isActive(item.url) ? "text-green" : ""}>
+                                        <SidebarMenuButton tooltip={item.title} asChild>
+                                            <Link href={item.url} className={isActive(item.url) ? "text-green" : ""}>
                                                 <item.icon />
                                                 <span>{item.title}</span>
-                                            </a>
+                                            </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 )
@@ -111,7 +142,7 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
                             <SidebarNavUser user={{
                                 name: user.username,
                                 email: user.email,
-                                avatar: user.profile_picture || '/images/avatar.png'
+                                avatar: user.profile_picture
                             }} />
                             : <UserNavSkeleton />
                         }

@@ -13,7 +13,7 @@ export default function AuthButtons() {
       <NavUser user={{
         name: user.username,
         email: user.email,
-        avatar: user.profile_picture || '/images/avatar.png'
+        avatar: user.profile_picture
       }}/>
   ) : (
     <div className="flex gap-2">

@@ -1,5 +1,6 @@
 import { ResearcherType, User } from "@/src/types/models";
 import { Building, Check, Globe2, GraduationCap, Link, Mail, MapPin, Phone, School, TestTube2, User as UserIcon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export function ResearcherProfile({ user }: { user: User }) {
     return (
@@ -14,11 +15,12 @@ export function ResearcherProfile({ user }: { user: User }) {
                     }
                 </span>
                 <div className="flex items-center lg:border-r lg:pr-8 lg:border-b-0 lg:pb-0 border-b pb-8">
-                    <img
-                        src={user.profile_picture || "/images/avatar.png"}
-                        alt="Profile Picture"
-                        className="w-32 h-32 rounded-full mx-4"
-                    />
+                    <Avatar className="flex shrink-0 overflow-hidden h-32 w-32 rounded-fully hover:shadow-lg hover:bg-muted">
+                        <AvatarImage src={user.profile_picture} alt={user.username} />
+                        <AvatarFallback className="rounded-lg text-2xl">
+                            {user.username?.slice(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                    </Avatar>
                     <div className="flex flex-col gap-2 items-center space-x-4">
                         <h2 className="text-xl font-semibold">{user.username}</h2>
                         <p className="text-[12px] text-primary uppercase tracking-[.25em]">{user.role}</p>
@@ -84,6 +86,22 @@ export function ResearcherProfile({ user }: { user: User }) {
                     </p>
                 </div>
             }
+            {user.metadata?.researcherType === ResearcherType.CASUAL &&
+                <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 ">
+                    <p className="flex flex-wrap items-center gap-2 text-sm ">
+                        <Globe2 size={"15"} />
+                        Country :
+                        <span className="text-muted-foreground">{user.country}</span>
+                    </p>
+                    <p className="flex flex-wrap items-center gap-2 text-sm ">
+                        <TestTube2 size={"15"} />
+                        Fields of Interest :
+                        {user.metadata.interests?.map((field, index) =>
+                            <span key={index} className="text-muted-foreground border border-green rounded-xl px-4 py-1">{field}</span>
+                        )}
+                    </p>
+                </div>
+            }
             <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 ">
                 {user.metadata?.contactEmail &&
                     <p className="flex items-center gap-2 text-sm ">
@@ -106,6 +124,9 @@ export function ResearcherProfile({ user }: { user: User }) {
                         <a className="text-muted-foreground underline" href={contact}>{contact}</a>
                     </p>
                 )}
+                {!user.metadata?.contacts && !user.metadata?.phone && !user.metadata?.contactEmail &&
+                    <p className="text-center">No contacts available</p>
+                }
             </div>
         </div >
     );

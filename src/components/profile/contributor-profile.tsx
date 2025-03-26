@@ -1,16 +1,18 @@
 import { User } from "@/src/types/models";
 import { Globe2, Link, Mail, Phone, TestTube2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export function ContributorProfile({ user }: { user: User }) {
     return (
         <div className="max-w-[1000px] grid grid-rows-2 grid-cols-1 lg:grid-cols-2 gap-8 justify-center">
             <div className="relative col-span-full flex lg:flex-row flex-col gap-x-4 gap-y-8 items-center justify-center rounded-lg border border-green py-8 px-16">
                 <div className="flex items-center lg:border-r lg:pr-8 lg:border-b-0 lg:pb-0 border-b border-green pb-8">
-                    <img
-                        src={user.profile_picture || "/images/avatar.png"}
-                        alt="Profile Picture"
-                        className="w-32 h-32 rounded-full mx-4"
-                    />
+                    <Avatar className="flex shrink-0 overflow-hidden h-32 w-32 rounded-fully hover:shadow-lg hover:bg-muted">
+                        <AvatarImage src={user.profile_picture} alt={user.username} />
+                        <AvatarFallback className="rounded-lg text-2xl">
+                            {user.username?.slice(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                    </Avatar>
                     <div className="flex flex-col gap-2 items-center space-x-4">
                         <h2 className="text-xl font-semibold">{user.username}</h2>
                         <p className="text-[12px] text-green uppercase tracking-[.25em]">{user.role}</p>
