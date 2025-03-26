@@ -73,28 +73,71 @@ const config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			keyframes: {
-				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+				"accordion-down": {
+					from: { height: "0" },
+					to: { height: "var(--radix-accordion-content-height)" },
 				},
-				'accordion-up': {
+				"accordion-up": {
+					from: { height: "var(--radix-accordion-content-height)" },
+					to: { height: "0" },
+				},
+				"glow-animation": {
 					from: {
-						height: 'var(--radix-accordion-content-height)'
+						textShadow:
+							"0 0 1px currentColor, 0 0 4px currentColor",
 					},
 					to: {
-						height: '0'
-					}
-				}
+						textShadow:
+							"0 0 2px currentColor, 0 0 4px currentColor, 0 0 7px currentColor",
+					},
+				},
+				'card-hover': {
+					'0%': {
+						transform: 'scale(1) rotate(0)',
+						boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
+					},
+					'25%': {
+						transform: 'scale(1.05) rotate(1deg)',
+						boxShadow: '0px 15px 30px rgba(0, 0, 0, 0.15)',
+					},
+					'50%': {
+						transform: 'scale(1.05) rotate(1deg)',
+						boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)',
+					},
+					'100%': {
+						transform: 'scale(1) rotate(1deg)',
+						boxShadow: '0px 15px 30px rgba(0, 0, 0, 0.15)',
+					},
+				},
+				"shine": {
+					'0%': { 'background-position': '100%' },
+					'100%': { 'background-position': '-100%' },
+				},
+				"borderPulse": {
+					"0%": { borderColor: "transparent" },
+					"50%": { borderColor: "currentColor" },
+					"100%": { borderColor: "transparent" },
+				},
+				"rotate": {
+					"0%": { transform: "rotate(0deg) scale(10)" },
+					"100%": { transform: "rotate(-360deg) scale(10)" },
+				},
+				'fade-slide': {
+					'0%': { opacity: '0', transform: 'translateY(20px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' },
+				},
 			},
 			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
-		}
+				"accordion-down": "accordion-down 0.2s ease-out",
+				"accordion-up": "accordion-up 0.2s ease-out",
+				"glow": "glow-animation 1.5s ease-in-out infinite alternate",
+				"card-hover": 'card-hover 0.3s ease-in-out',
+				"shine": 'shine 5s linear infinite',
+				"border-pulse": "borderPulse 2s infinite",
+				"rotate": "rotate 10s linear infinite",
+				'fade-slide': 'fade-slide 0.5s ease-out',
+			},
+		},
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;

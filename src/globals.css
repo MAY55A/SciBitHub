@@ -4,9 +4,7 @@
 
 @layer base {
   :root {
-    --orange: hsl(5, 100%, 69%);
-    --black: hsl(240, 6%, 6%);
-    --green: 76 71% 53%;
+    --green: 76, 65%, 45%;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -60,7 +58,7 @@
     --muted-foreground: 0 0% 63.9%;
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0, 70%, 37%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
@@ -83,18 +81,23 @@
   }
 }
 
-.wmde-markdown, .wmde-markdown-var {
+.wmde-markdown,
+.wmde-markdown-var {
   --color-canvas-default: var(--canvas-default) !important;
   --color-canvas-subtle: var(--canvas-subtle) !important;
   --color-fg-default: hsl(var(--foreground)) !important;
+
+  ol, ul {
+    list-style: auto !important;
+  }
 }
 
-.w-md-editor-toolbar li > button:hover {
-    background-color: hsl(var(--muted)) !important;
-    color: hsl(var(--green)) !important;
+.w-md-editor-toolbar li>button:hover {
+  background-color: hsl(var(--muted)) !important;
+  color: hsl(var(--green)) !important;
 }
 
-.w-md-editor-toolbar li > button:disabled {
+.w-md-editor-toolbar li>button:disabled {
   color: hsl(var(--muted-foreground)) !important;
 }
 
@@ -107,6 +110,9 @@
   border-radius: 10px;
 }
 
+.wmde-markdown pre>code {
+  white-space: pre-line !important;
+}
 
 @layer base {
   * {
@@ -124,6 +130,7 @@
     margin: auto;
     overflow: visible;
   }
+
   .text-copy {
     fill: none;
     stroke: white;

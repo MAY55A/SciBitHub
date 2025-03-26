@@ -57,7 +57,7 @@ export const CustomAlertDialog = ({
                     <AlertDialogTitle>{title}</AlertDialogTitle>
                     <AlertDialogDescription>{description}</AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
+                <AlertDialogFooter className='w-full flex sm:justify-between justify-between'>
                     <AlertDialogCancel onClick={onCancel}>{cancelText}</AlertDialogCancel>
                     <AlertDialogAction onClick={onConfirm} variant={confirmButtonVariant}>{confirmText}</AlertDialogAction>
                 </AlertDialogFooter>

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { format } from "date-fns";
 
 /**
  * Redirects to a specified path with an encoded message as a query parameter.
@@ -51,6 +52,12 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
 
   return debouncedFunction as T & { cancel: () => void };
 }
+
+export const formatDate = (dateString: string, showTime: boolean = false): string => {
+  if(showTime)
+    return format(new Date(dateString), 'MMM dd, yyyy HH:mm')
+  return format(new Date(dateString), 'MMM dd, yyyy')
+};
 
 /**
  * Checks if an email is already registered in Supabase.
