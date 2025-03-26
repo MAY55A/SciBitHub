@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../ui/card
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { formatDate } from "@/src/utils/utils";
 
 export function Step2Card({ data, onEdit }: { data: ProjectInputData, onEdit: (step: number) => void }) {
     return (
@@ -47,7 +48,7 @@ export function Step2Card({ data, onEdit }: { data: ProjectInputData, onEdit: (s
                     </div>
                     <div className="flex flex-col space-y-1.5">
                         <Label className="text-primary">Deadline</Label>
-                        <Input value={data.deadline?.toDateString() || "not specified"} readOnly />
+                        <Input value={formatDate(data.deadline?.toString() || "", true) || "not specified"} readOnly />
                     </div>
                 </div>
             </CardContent>

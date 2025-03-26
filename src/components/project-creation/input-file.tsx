@@ -5,28 +5,42 @@ import Image from 'next/image'
 import { Input } from '@/src/components/ui/input';
 import { fileToBase64 } from '@/src/utils/utils';
 
-export default function InputFile({ onFileSelect, file }: { onFileSelect: (file: string | undefined) => void, file: string | undefined }) {
+export default function InputFile({ onFileSelect, file, setError }: { onFileSelect: (file: string | undefined) => void, file: string | undefined, setError: (error?: string) => void, }) {
     const [selectedFile, setSelectedFile] = useState<string | undefined>(file);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        let url = undefined;
-        if (file) {
-            url = await fileToBase64(file);
+        if (!file) return;
+    
+        const maxSizeBytes = 500 * 1024;
+    
+        if (file.size > maxSizeBytes) {
+            setError("Image must be less than 500 KB.");
+            return;
         }
+    
+        const isValidResolution = await checkImageResolution(file, 1000, 1000);
+        if (!isValidResolution) {
+            setError("Image must be at least 1000x1000 pixels.");
+            return;
+        }
+    
+        const url = await fileToBase64(file);
         setSelectedFile(url);
         onFileSelect(url);
+        setError(undefined);
     };
 
     const handleRemoveClick = () => {
         setSelectedFile(undefined);
         onFileSelect(undefined);
         if (fileInputRef.current) {
-            fileInputRef.current.value = ""; // Reset the file input
+            fileInputRef.current.value = "";
         }
     };
-
+console.log(file);
+console.log(selectedFile);
     return (
         <div className="flex flex-wrap items-center justify-center gap-2">
             <Input type="file" onChange={handleFileChange} ref={fileInputRef} />
@@ -52,3 +66,16 @@ export default function InputFile({ onFileSelect, file }: { onFileSelect: (file:
         </div>
     );
 }
+
+const checkImageResolution = (file: File, minWidth: number, minHeight: number): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+        const img = new window.Image();
+        img.onload = () => {
+            resolve(img.width >= minWidth && img.height >= minHeight);
+        };
+        img.onerror = (err) => {
+            reject(err);
+        };
+        img.src = URL.createObjectURL(file);
+    });
+};

@@ -5,6 +5,9 @@ import { ProjectInputData } from "../types/project-form-data";
 import { ProjectVisibility, ParticipationLevel, ModerationLevel, Scope } from "../types/models";
 
 
+export type TaskFilesMap = {
+    [taskId: string]: File[];
+};
 // Default values for the form
 const defaultFormData: ProjectInputData = {
     name: "",
@@ -26,6 +29,8 @@ const MultistepProjectFormContext = createContext<{
     setCurrentStep: (step: number) => void;
     completedSteps: number;
     setCompletedSteps: (steps: number) => void;
+    files: TaskFilesMap;
+    setFiles: (files: TaskFilesMap) => void;
 }>({
     data: defaultFormData,
     currentStep: 1,
@@ -34,6 +39,8 @@ const MultistepProjectFormContext = createContext<{
     resetForm: () => { },
     setCurrentStep: () => { },
     setCompletedSteps: () => { },
+    files: {},
+    setFiles: () => { },
 });
 
 const DATA_STORAGE_KEY = "multistep_project_form_data";
@@ -54,6 +61,8 @@ export function MultistepProjectFormProvider({ children }: { children: ReactNode
         const steps = sessionStorage.getItem(COMPLETED_STEPS_STORAGE_KEY);
         return Number(steps ?? "0");
     });
+    const [files, setFiles] = useState<TaskFilesMap>({});
+
 
     // Update sessionStorage whenever data changes
     useEffect(() => {
@@ -84,7 +93,7 @@ export function MultistepProjectFormProvider({ children }: { children: ReactNode
     };
 
     return (
-        <MultistepProjectFormContext.Provider value={{ data, updateData, resetForm, currentStep, setCurrentStep, completedSteps, setCompletedSteps }}>
+        <MultistepProjectFormContext.Provider value={{ data, updateData, resetForm, currentStep, setCurrentStep, completedSteps, setCompletedSteps, files, setFiles }}>
             {children}
         </MultistepProjectFormContext.Provider>
     );

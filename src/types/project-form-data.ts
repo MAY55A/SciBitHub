@@ -13,14 +13,21 @@ export const fieldInputDataSchema = z.object({
 });
 
 export const taskInputDataSchema = z.object({
+    id: z.string().optional(),
     title: z.string().nonempty("Required").min(10, "Title must be at least 10 characters"),
     description: z.string().nonempty("Required").min(10, "Description must be at least 10 characters"),
     tutorial: z.string().nonempty("Required").min(20, "Tutorial must be at least 20 characters"),
     type: z.enum(Object.values(TaskType) as [string, ...string[]], {
         errorMap: () => ({ message: "Required" }),
     }),
-    dataSource: z.string().url().optional(),
-    targetCount: z.number().nonnegative().nullable(),
+    dataSource: z
+        .custom<File[]>((val) => val instanceof FileList || Array.isArray(val), {
+            message: "You must upload at least one file",
+        })
+        .optional(),
+    datasetPath: z.string().optional(),
+    dataType: z.string().nullable().optional(),
+    targetCount: z.number().min(1).nullable(),
     fields: z.array(fieldInputDataSchema).refine(fields => fields.length > 0, {
         message: "Task needs at least one field",
     }),
@@ -42,8 +49,11 @@ export const projectInputDataSchema = z.object({
     links: z.array(z.string().url()).optional(),
     files: z.array(z.string().url()).optional(),
     coverImage: z.string().optional(),
-    participants: z.array(z.object({id: z.string(), username: z.string(), profile_picture: z.string()})).optional(),
-    tasks: z.array(taskInputDataSchema)
+    participants: z.array(z.object({ id: z.string(), username: z.string(), profile_picture: z.string().optional() })).optional(),
+    tasks: z.array(taskInputDataSchema),
+    status: z.string().optional(),
+    creator: z.string().optional(),
+    id: z.string().optional(),
 });
 
 export type FieldInputData = z.infer<typeof fieldInputDataSchema>;

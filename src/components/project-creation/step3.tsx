@@ -1,6 +1,6 @@
 "use client"
 
-import { useMultistepProjectForm } from "@/src/contexts/multistep-project-form-context";
+import { TaskFilesMap } from "@/src/contexts/multistep-project-form-context";
 import { ProjectInputData, TaskInputData } from "@/src/types/project-form-data";
 import { X, ChevronLeft, ChevronRight, PlusCircle, Edit } from "lucide-react";
 import { Button } from "../ui/button";
@@ -9,10 +9,10 @@ import { useEffect, useState } from "react";
 import { FormMessage } from "../custom/form-message";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
 import { ProjectStatus } from "@/src/types/models";
+import { motion } from "framer-motion";
 
 
-export function Step3({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void}) {
-    const { data, updateData } = useMultistepProjectForm();
+export function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, files, updateFiles, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, files: TaskFilesMap, updateFiles: (files: TaskFilesMap) => void, dataChanged?: boolean }) {
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [editForm, setEditForm] = useState(-1);
     const [error, setError] = useState("");
@@ -53,19 +53,29 @@ export function Step3({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
             setError("Project needs at least one task");
             return;
         }
-        updateData({ tasks: tasks });
+        updateFiles(
+            tasks.reduce((acc: any, task, index) => {
+                acc[index] = task.dataSource;
+                task.dataSource = undefined;
+                return acc;
+            }, {})
+        );
+        onUpdate({ tasks: tasks });
         setIsSaved(true);
         onSaveStep();
     };
 
 
     const handleBack = () => {
-        //updateData({ tasks: tasks });
         onBack();
     };
 
     return (
-        <div
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            exit={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="w-full flex flex-col gap-4 p-6 shadow-lg rounded-lg border min-h-[400px] justify-between">
             <div>
                 <h2 className="text-primary">Tasks</h2>
@@ -81,7 +91,12 @@ export function Step3({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
                             className="bg-muted rounded-lg border border-primary"
                             key={index}
                         >
-                            <TaskSetup buttonText="Save Task" data={task} onSubmit={(data) => editTask(index, data)} onChange={() => { }} />
+                            <TaskSetup
+                                buttonText="Save Task"
+                                data={{ ...task, dataSource: task.dataSource || files[index] }}
+                                onSubmit={(data) => editTask(index, data)} onChange={() => { }}
+                                canEditType={!(data.status && data.status === "published")}
+                            />
                             <Button
                                 type="button"
                                 variant="secondary"
@@ -126,7 +141,8 @@ export function Step3({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
 
             <div className="w-full flex justify-between">
                 <CancelAlertDialog
-                    saveDraft={() => onSaveProject(data, ProjectStatus.DRAFT)}
+                    projectStatus={data.status}
+                    saveProject={() => data.status && !dataChanged ? undefined : onSaveProject(data, data.status as ProjectStatus || ProjectStatus.DRAFT)}
                 />
                 <div className="flex gap-4">
                     <Button
@@ -154,7 +170,7 @@ export function Step3({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
                     }
                 </div>
             </div>
-        </div>
+        </motion.div>
 
     );
 }

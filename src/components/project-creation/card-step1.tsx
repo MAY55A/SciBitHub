@@ -22,12 +22,17 @@ export function Step1Card({ data, onEdit }: { data: ProjectInputData, onEdit: (s
                         <Label className="text-primary">Description</Label>
                         <MDEditor.Markdown
                             source={data.description}
-                            className="border border-input rounded-lg p-2"
+                            className="w-full border border-input rounded-lg p-2"
                             style={{
                                 maxHeight: '10rem',
+                                maxWidth: '100%',
                                 overflowY: 'auto',
+                                overflowX: 'auto',
                                 scrollbarWidth: 'thin',
                                 scrollbarColor: "hsl(var(--background)) hsl(var(--muted))",
+                                overflowWrap: "break-word", // Prevents text overflow
+                                wordBreak: "break-word",
+                                whiteSpace: "pre-wrap",
                             }} />
                     </div>
                     <div className="flex flex-col space-y-1.5">

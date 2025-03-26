@@ -10,14 +10,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import TagsInput from "../custom/tags-input";
-import { useMultistepProjectForm } from "@/src/contexts/multistep-project-form-context";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
 
-export function Step1({ onNext, onSaveStep, onSaveProject }: { onNext: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void }) {
-    const { data, updateData } = useMultistepProjectForm();
+export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveProject, dataChanged }: { initialName?: string, data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const [isVerifiying, setIsVerifying] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const form = useForm({
@@ -27,24 +25,26 @@ export function Step1({ onNext, onSaveStep, onSaveProject }: { onNext: () => voi
 
     const saveData = async (data: Partial<ProjectInputData>) => {
         try {
-            setIsVerifying(true);
-            const response = await fetch("/api/check-exists", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ table: "projects", attribute: "name", value: data.name }),
-            });
-
-            const result = await response.json();
-            setIsVerifying(false);
-
-            if (result.exists) {
-                form.setError("name", {
-                    type: "manual",
-                    message: "There exists already a project with this name",
+            if (initialName !== data.name) {
+                setIsVerifying(true);
+                const response = await fetch("/api/check-exists", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ table: "projects", attribute: "name", value: data.name }),
                 });
-                return;
+
+                const result = await response.json();
+                setIsVerifying(false);
+
+                if (result.exists) {
+                    form.setError("name", {
+                        type: "manual",
+                        message: "There exists already a project with this name",
+                    });
+                    return;
+                }
             }
-            updateData({ ...data });
+            onUpdate({ ...data });
             setIsSaved(true);
             onSaveStep();
         } catch (error) {
@@ -65,7 +65,7 @@ export function Step1({ onNext, onSaveStep, onSaveProject }: { onNext: () => voi
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(saveData)}
-                className="w-full flex flex-col gap-8 p-6 shadow-lg rounded-lg border">
+                className="w-full flex flex-col gap-8 p-6 shadow-lg rounded-lg border animate-fade-slide">
                 <FormField
                     control={form.control}
                     name="name"
@@ -132,7 +132,8 @@ export function Step1({ onNext, onSaveStep, onSaveProject }: { onNext: () => voi
                 />
                 <div className="w-full flex justify-between">
                     <CancelAlertDialog
-                        saveDraft={data.name.length === 0 ? undefined : () => onSaveProject(data, ProjectStatus.DRAFT)}
+                        projectStatus={data.status}
+                        saveProject={data.name.length === 0 || !dataChanged ? undefined : () => onSaveProject(data, data.status as ProjectStatus ?? ProjectStatus.DRAFT)}
                     />
                     {isSaved ?
                         <Button

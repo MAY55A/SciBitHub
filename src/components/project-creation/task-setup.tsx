@@ -7,19 +7,23 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { TaskType } from "@/src/types/models";
+import { DataType, TaskType } from "@/src/types/models";
 import { ArrowDown, ArrowUp, Edit2, PlusCircle, X } from "lucide-react";
 import TaskFieldSetup from "./task-field-setup";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function TaskSetup({ buttonText, data, onSubmit, onChange }: { buttonText: string, data?: Partial<TaskInputData>, onSubmit: (data: TaskInputData) => void, onChange: (data: any) => void }) {
+export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEditType = true }: { buttonText: string, data?: Partial<TaskInputData>, onSubmit: (data: TaskInputData) => void, onChange: (data: any) => void, canEditType?: boolean }) {
     const form = useForm({
-        resolver: zodResolver(taskInputDataSchema),
-        defaultValues: { title: "", description: "", type: "", tutorial: "", targetCount: null, fields: [] as FieldInputData[], ...data },
+        resolver: zodResolver(taskInputDataSchema.omit({ datasetPath: true, })),
+        defaultValues: { title: "", description: "", type: "", tutorial: "", targetCount: null, fields: [] as FieldInputData[], dataSource: [], ...data },
     });
-
+    const [selectedFiles, setSelectedFiles] = useState<File[]>(data?.dataSource || []);
     const { fields, append, remove, update, move } = useFieldArray({ control: form.control, name: "fields" });
+    const selectRef = useRef<HTMLButtonElement | null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
     const type = form.watch("type");
+    const dataType = form.watch("dataType");
 
     useEffect(() => {
         const subscription = form.watch((values) => {
@@ -29,22 +33,38 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange }: { bu
         return () => subscription.unsubscribe();
     }, [form.watch]);
 
-    const handleSubmit = (data: TaskInputData) => {
-        if (data.type === TaskType.DATALABELLING) {
-            if (!data.dataSource) {
-                form.setError("dataSource", { type: "required", message: "Data source is required for data labelling tasks" });
+    useEffect(() => {
+        if (type !== TaskType.DATALABELLING) {
+            form.setValue("dataType", undefined);
+            form.setValue("dataSource", undefined);
+            setSelectedFiles([]);
+        }
+    }, [type]);
+
+    const handleSubmit = (formData: TaskInputData) => {
+        if (formData.type === TaskType.DATALABELLING) {
+            if (!formData.dataType) {
+                form.setError("dataType", { type: "required", message: "A type for the data is required" });
+                selectRef.current?.focus();
                 return;
             }
-        } else {
-            data.dataSource = undefined;
+            if (selectedFiles.length === 0 && !data?.datasetPath) {
+                form.setError("dataSource", { type: "required", message: "A data set is required" });
+                fileInputRef.current?.focus();
+                return;
+            }
+            formData.dataSource = selectedFiles;
         }
-        onSubmit({...data, fields});
+        onSubmit({ ...formData, fields });
     };
-
+    //console.log(form.getValues("dataType"));
     return (
 
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 p-4 border rounded">
+            <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="space-y-4 p-4 border rounded animate-fade-slide"
+            >
                 <FormField
                     control={form.control}
                     name="title"
@@ -77,7 +97,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange }: { bu
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!data?.datasetPath || !canEditType}>
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select a type" />
@@ -89,6 +109,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange }: { bu
                                     ))}
                                 </SelectContent>
                             </Select>
+                            {field.value === TaskType.SURVEY && <FormDescription>*Each user can contribute only once to a survey.</FormDescription>}
                             <FormMessage></FormMessage>
                         </FormItem>
                     )}
@@ -96,22 +117,61 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange }: { bu
                 {type === TaskType.DATALABELLING &&
                     <FormField
                         control={form.control}
-                        name="dataSource"
+                        name="dataType"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-primary">Data Source</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="source url/api"
-                                        className="border p-2 w-full"
-                                        value={field.value ?? ""}
-                                        onChange={(e) => field.onChange(e.target.value !== "" ? e.target.value : undefined)}
-                                    />
-                                </FormControl>
+                                <FormLabel className="text-primary">Data Type</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value ?? undefined} disabled={!!data?.datasetPath}>
+                                    <FormControl>
+                                        <SelectTrigger ref={selectRef}>
+                                            <SelectValue placeholder="Select a type" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {Object.values(DataType).map((type) => (
+                                            <SelectItem value={type} key={type}>{type}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage></FormMessage>
                             </FormItem>
                         )}
-                    />}
+                    />
+                }
+                {!data?.datasetPath && !!dataType &&
+                    <FormField
+                        control={form.control}
+                        name="dataSource"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className="text-primary">Dataset</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        multiple
+                                        accept={
+                                            dataType === "image"
+                                                ? "image/jpeg, image/png, image/webp, image/gif, image/svg+xml"
+                                                : dataType === "audio"
+                                                    ? "audio/mpeg, audio/wav, audio/ogg, audio/flac"
+                                                    : "*"
+                                        }
+                                        onChange={(e) => setSelectedFiles(Array.from(e.target.files ?? []))}
+                                    />
+                                </FormControl>
+                                {/* Display selected files */}
+                                {selectedFiles.length > 0 &&
+                                    <p className="text-sm text-muted-foreground">Selected Files: {selectedFiles.length}</p>
+                                }
+                                <FormMessage></FormMessage>
+                            </FormItem>
+                        )}
+                    />
+                }
+                {!!data?.datasetPath &&
+                    <a href="" className="text-sm underline">see dataset</a>
+                }
                 < FormField
                     control={form.control}
                     name="targetCount"
@@ -121,7 +181,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange }: { bu
                             <FormControl>
                                 <Input
                                     type="number"
-                                    placeholder="target number of contribuions"
+                                    placeholder="target number of contributions"
                                     className="border p-2 w-full"
                                     value={field.value ?? ""}
                                     onChange={(e) => field.onChange(e.target.value !== "" ? Number(e.target.value) : null)}
@@ -139,7 +199,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange }: { bu
                             <FormLabel className="text-primary">Tutorial</FormLabel>
                             <FormControl>
                                 <MDEditor
-                                    onFocus={() => {}}
+                                    onFocus={() => { }}
                                     preview="edit"
                                     previewOptions={{
                                         rehypePlugins: [[rehypeSanitize]],
@@ -160,7 +220,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange }: { bu
                                 Fields
                                 <TaskFieldSetup className="p-2 h-5" icon={PlusCircle} title="Add Field" onSubmit={(data) => append(data)} />
                             </FormLabel>
-                            <FormDescription>Form fields that the user can interact with.</FormDescription>
+                            <FormDescription>Form fields where the user can input data.</FormDescription>
                             <div className="flex flex-col gap-4 text-sm">
                                 {!fields.length &&
                                     <div className="text-muted-foreground mb-8 text-center p-2 border rounded">No fields added</div>

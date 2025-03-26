@@ -20,11 +20,10 @@ import CountrySelector from "../custom/countries-selector";
 import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
 
-export function Step2({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void }) {
-    const { data, updateData } = useMultistepProjectForm();
+export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const form = useForm({
         resolver: zodResolver(projectInputDataSchema.pick({ visibility: true, participationLevel: true, moderationLevel: true, participants: true, scope: true, countries: true, deadline: true })),
-        defaultValues: data,
+        defaultValues: { ...data, countries: data.countries || undefined },
     });
     const [isSaved, setIsSaved] = useState(false);
 
@@ -43,7 +42,7 @@ export function Step2({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
         if (data.scope === Scope.GLOBAL) {
             data.countries = undefined;
         }
-        updateData({ ...data });
+        onUpdate({ ...data });
         setIsSaved(true);
         onSaveStep();
     };
@@ -60,11 +59,12 @@ export function Step2({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
             areEqualArrays(watchedFields.participants, data.participants);
         setIsSaved(same);
     }, [JSON.stringify(watchedFields)]);
+
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(saveData)}
-                className="w-full flex flex-col gap-12 p-6 shadow-lg rounded-lg border">
+                onSubmit={form.handleSubmit(saveData, (error) => console.log(error))}
+                className="w-full flex flex-col gap-12 p-6 shadow-lg rounded-lg border animate-fade-slide">
                 <FormField
                     control={form.control}
                     name="visibility"
@@ -247,7 +247,8 @@ export function Step2({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
                 />
                 <div className="w-full flex justify-between">
                     <CancelAlertDialog
-                        saveDraft={() => onSaveProject(data, ProjectStatus.DRAFT)}
+                        projectStatus={data.status}
+                        saveProject={() => data.status && !dataChanged ? undefined : onSaveProject(data, data.status as ProjectStatus || ProjectStatus.DRAFT)}
                     />
                     <div className="flex gap-4">
                         <Button

@@ -6,7 +6,6 @@ import { ProjectInputData, projectInputDataSchema } from "@/src/types/project-fo
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { useMultistepProjectForm } from "@/src/contexts/multistep-project-form-context";
 import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import InputFile from "./input-file";
 import { useEffect, useState } from "react";
@@ -14,8 +13,7 @@ import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
 import { ProjectStatus } from "@/src/types/models";
 
-export function Step4({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void}) {
-    const { data, updateData } = useMultistepProjectForm();
+export function Step4({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const form = useForm({
         resolver: zodResolver(projectInputDataSchema.pick({ coverImage: true, links: true })),
         defaultValues: data,
@@ -49,8 +47,7 @@ export function Step4({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
 
 
     const saveData = (data: Partial<ProjectInputData>) => {
-        console.log("saved data ", data);
-        updateData(data);
+        onUpdate(data);
         setIsSaved(true);
         onSaveStep();
     };
@@ -62,7 +59,7 @@ export function Step4({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(saveData, handleError)}
-                className="w-full flex flex-col gap-8 p-6 shadow-lg rounded-lg border">
+                className="w-full flex flex-col gap-8 p-6 shadow-lg rounded-lg border animate-fade-slide">
                 <FormField
                     control={form.control}
                     name="coverImage"
@@ -70,7 +67,7 @@ export function Step4({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
                         <FormItem>
                             <FormLabel className="text-primary">Cover Image (optional)</FormLabel>
                             <FormControl>
-                                <InputFile onFileSelect={(file) => field.onChange(file)} file={field.value}></InputFile>
+                                <InputFile onFileSelect={(file) => field.onChange(file)} file={field.value} setError={(error) => form.setError("coverImage", {"message": error})}></InputFile>
                             </FormControl>
                             <FormMessage></FormMessage>
                         </FormItem>
@@ -81,7 +78,7 @@ export function Step4({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
                     name="links"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-primary">External Links</FormLabel>
+                            <FormLabel className="text-primary">External Links (optional)</FormLabel>
                             <FormControl>
                                 <div className="space-y-4">
                                     <div className="space-y-2">
@@ -129,9 +126,10 @@ export function Step4({ onNext, onBack, onSaveStep, onSaveProject }: { onNext: (
                     )}
                 />
                 <div className="w-full flex justify-between">
-                <CancelAlertDialog
-                    saveDraft={() => onSaveProject(data, ProjectStatus.DRAFT)}
-                />
+                    <CancelAlertDialog
+                        projectStatus={data.status}
+                        saveProject={() => data.status && !dataChanged ? undefined : onSaveProject(data, data.status as ProjectStatus || ProjectStatus.DRAFT)}
+                    />
                     <div className="flex gap-4">
                         <Button
                             type="button"

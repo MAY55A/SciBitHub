@@ -43,6 +43,7 @@ export interface PublicUser {
     username: string;
     profile_picture?: string;
     role?: UserRole;
+    metadata?: Metadata;
 }
 
 // Project related models
@@ -54,7 +55,7 @@ export enum ProjectStatus {
 
 export enum ProjectProgress {
     ACTIVE = 'active',
-    CLOSED = 'closed',
+    COMPLETED = 'completed',
 }
 
 export enum ProjectDomain {
@@ -169,19 +170,35 @@ export enum TaskStatus {
     COMPLETED = 'completed',
 }
 
+export enum DataType {
+    IMAGE = 'image',
+    AUDIO = 'audio',
+}
+
+export interface FieldConfig {
+    type: string;
+    label: string;
+    description?: string;
+    placeholder?: string;
+    required: boolean;
+    params?: Map<string, any>;
+}
+
 export interface Task {
     id?: string;
     title: string;
     description: string;
     tutorial: string;
     type: TaskType;
-    fields: Map<string, any>[];
-    dataSource?: string;
-    targetCount?: number;
+    fields: FieldConfig[];
+    data_source?: string;
+    data_type?: string;
+    target_count?: number;
     status?: TaskStatus;
-    createdAt: string;
-    updatedAt?: string;
-    project?: Project;
+    created_at?: string;
+    updated_at?: string;
+    project: Project;
+    contributions?: number;
 }
 
 export interface ParticipationRequest {
@@ -190,7 +207,7 @@ export interface ParticipationRequest {
     user: PublicUser;
     type: RequestType;
     status: ValidationStatus;
-    requested_at: string;
+    requested_at?: string;
 }
 
 export enum RequestType {
@@ -205,10 +222,10 @@ export enum ValidationStatus {
 }
 
 export interface Contribution {
-    id: string;
+    id?: string;
     task: Task;
-    user: User;
+    user: PublicUser;
     data: Map<string, any>;
     status: ValidationStatus;
-    createdAt: string;
+    created_at?: string;
 }

@@ -30,9 +30,16 @@ export default function TaskFieldSetup({ className, icon: Icon, triggerText, tit
 
     const handleSubmit = (data: FieldInputData) => {
         const params = fieldForm.getValues("params");
-        if (data.type === "select" && (!params?.options || !params.options.length)) {
-            fieldForm.setError("params.options", { type: "required", message: "Select field must have options" });
-            return;
+        if (data.type === "select") {
+            if (!params?.options || params.options.length < 2) {
+                fieldForm.setError("params.options", { type: "required", message: "Select field must have at least two options" });
+                return;
+            }
+            const uniqueOptions = new Set(params.options);
+            if (uniqueOptions.size !== params.options.length) {
+                fieldForm.setError("params.options", { type: "required", message: "Each option must be unique" });
+                return;
+            }
         }
         onSubmit({ ...data, params });
         fieldForm.reset();
@@ -89,7 +96,7 @@ export default function TaskFieldSetup({ className, icon: Icon, triggerText, tit
                                 <FormItem>
                                     <FormLabel className="text-green">Placeholder</FormLabel>
                                     <FormControl>
-                                        <Input {...field} placeholder="Field placeholder" value={field.value || ""}/>
+                                        <Input {...field} placeholder="Field placeholder" value={field.value || ""} />
                                     </FormControl>
                                     <FormMessage></FormMessage>
                                 </FormItem>
