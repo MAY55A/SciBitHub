@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectsCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectsCommand, DeleteObjectCommand, GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const s3Client = new S3Client({
@@ -62,6 +62,29 @@ export const deleteFromMinIO = async (filePath: string, isFolder: boolean = fals
 
         await s3Client.send(deleteCommand);
         console.log(`Deleted file: ${filePath}`);
+    }
+};
+
+export const getFile = async (filePath: string) => {
+    try {
+        // Check if the file exists
+        await s3Client.send(new HeadObjectCommand({
+            Bucket: bucketName,
+            Key: filePath,
+        }));
+
+        // If the file exists, generate a signed URL (valid for 1 hour)
+        const getCommand = new GetObjectCommand({
+            Bucket: bucketName,
+            Key: filePath,
+        });
+
+        const fileUrl = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
+        return fileUrl;
+
+    } catch (error) {
+        console.error("Error fetching file:", error);
+        return null;
     }
 };
 

@@ -166,8 +166,33 @@ export const fetchContributions = async (
     }
 
     return data;
-    //        },
-    //        [`project ${id}`],
-    //        { revalidate: 300, tags: ["project"] }
-    //    )();
+};
+
+export const fetchContribution = async (
+    id: string
+): Promise<Contribution | null> => {
+    const supabase = await createClient();
+    return unstable_cache(
+        async () => {
+            const { data, error } = await supabase
+                .from("contributions")
+                .select(` *,
+                        task:tasks(id, title, type, project:projects(id, name, creator, moderation_level)),
+                        user:users(id, username, profile_picture)
+                    `)
+                .eq("id", id)
+                .maybeSingle();
+
+            if (error) {
+                console.error("Error fetching contribution:", error);
+                return null;
+            }
+            if (data) {
+                data.task.project.creator = { id: data.task.project.creator };
+            }
+            return data;
+        },
+        [`contribution ${id}`],
+        { revalidate: 60, tags: ["contribution"] }
+    )();
 }

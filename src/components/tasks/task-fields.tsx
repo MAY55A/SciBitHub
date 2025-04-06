@@ -29,7 +29,7 @@ export function TaskFields({ task }: { task: Task }) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (file) {
-            formData.file_path = file.filePath;
+            formData.data_file = file.filePath;
         }
         console.log('Form Data:', formData);
         setLoading(true);

@@ -26,7 +26,7 @@ export const FormGenerator = (
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData((prev: any) => ({ ...prev, [name]: value }));
+        setFormData((prev: any) => ({ ...prev, [name]: { value } }));
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, field: any) => {
@@ -52,7 +52,7 @@ export const FormGenerator = (
         // Proceed with setting the file
         setFormData((prev) => ({
             ...prev,
-            [field.label]: files,
+            [field.label]: { files },
         }));
     };
 
@@ -71,7 +71,7 @@ export const FormGenerator = (
                     name={field.label}
                     placeholder={field.placeholder}
                     required={field.required}
-                    value={formData[field.label] || ''}
+                    value={formData[field.label]?.value || ''}
                     onChange={handleChange}
                     minLength={field.params?.minLength}
                     maxLength={field.params?.maxLength}
@@ -89,7 +89,7 @@ export const FormGenerator = (
                     name={field.label}
                     placeholder={field.placeholder}
                     required={field.required}
-                    value={formData[field.label] || ''}
+                    value={formData[field.label]?.value || ''}
                     onChange={handleChange}
                     min={field.params?.minValue}
                     max={field.params?.maxValue}
@@ -125,7 +125,7 @@ export const FormGenerator = (
                     name={field.label}
                     placeholder={field.placeholder}
                     required={field.required}
-                    value={formData[field.label] || ''}
+                    value={formData[field.label]?.value || ''}
                     onChange={handleChange}
                     className="p-2 border rounded w-full resize-none"
                 ></textarea>
@@ -147,11 +147,11 @@ export const FormGenerator = (
                                         formData[field.label] === option ? "border-green text-green" : "hover:border-green/50")
                                 }
                                 onClick={() =>
-                                    handleChange({
-                                        target: {
-                                            name: field.label,
+                                            handleChange({
+                                                target: {
+                                                    name: field.label,
                                             value: option,
-                                        },
+                                                },
                                     } as React.ChangeEvent<HTMLInputElement>)}
                             >
                                 <p>{option}</p>
@@ -191,7 +191,7 @@ export const FormGenerator = (
                             }),
                         }}
                     />
-                }
+                )}
             </div>
         ),
     };

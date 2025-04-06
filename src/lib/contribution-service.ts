@@ -32,11 +32,9 @@ export const createContribution = async (data: any, taskId: string, moderation: 
     // Process data fields, replacing files with storage paths
     const processedData = { ...data };
     for (const key in data) {
-        if (data[key] instanceof File) {
-            processedData[key] = await uploadFile(data[key]);
-        } else if (data[key] instanceof FileList) {
-            const fileArray = Array.from(data[key] as FileList);
-            processedData[key] = await Promise.all(fileArray.map(uploadFile));
+        if (data[key].files) {
+            const fileArray = Array.from(data[key].files as FileList);
+            processedData[key].files = await Promise.all(fileArray.map(uploadFile));
         }
     }
 
