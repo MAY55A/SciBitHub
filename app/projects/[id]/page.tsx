@@ -20,7 +20,7 @@ export default async function ProjectPage({ params, searchParams }: { params: { 
         <div className="w-full mx-auto p-6">
             <ProjectHeader project={project} />
             <Tabs defaultValue={currentTab} className="mt-4 p-8">
-            <TabsList className="w-full flex justify-evenly bg-muted/50 m-4">
+            <TabsList className="flex justify-evenly bg-muted/50 my-4">
                     <Link href={`?tab=overview`} scroll={false} className="w-full">
                         <TabsTrigger value="overview" className="w-full">Overview</TabsTrigger>
                     </Link>

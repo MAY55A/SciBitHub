@@ -55,7 +55,7 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
 
 export const formatDate = (dateString: string, showTime: boolean = false): string => {
   if(showTime)
-    return format(new Date(dateString), 'MMM dd, yyyy HH:mm')
+    return format(new Date(dateString), "MMM dd, yyyy 'at' HH:mm")
   return format(new Date(dateString), 'MMM dd, yyyy')
 };
 

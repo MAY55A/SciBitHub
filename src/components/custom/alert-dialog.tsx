@@ -19,7 +19,7 @@ interface AlertDialogProps {
     buttonSize?: "default" | "sm" | "lg" | "icon" | null | undefined;
     buttonClass?: string;
     buttonDisabled?: boolean;
-    triggerText: string;
+    triggerText?: string;
     title: string;
     description: string;
     confirmText?: string;
@@ -47,9 +47,9 @@ export const CustomAlertDialog = ({
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant={buttonVariant} size={buttonSize} className={buttonClass} disabled={buttonDisabled}>
-                    {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
-                    {triggerText}
+                <Button variant={buttonVariant} size={buttonSize} className={buttonClass} disabled={buttonDisabled} title={triggerText}>
+                    {ButtonIcon && <ButtonIcon className="h-4 w-4" />}
+                    {triggerText && <span className="ml-2">{triggerText}</span>}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
