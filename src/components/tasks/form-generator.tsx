@@ -137,26 +137,40 @@ export const FormGenerator = (
                     {field.label}
                 </Label>
                 {field.description && <p className="text-sm text-muted-foreground pb-4">{field.description}</p>}
-                {field.params.options?.length < 6 ?
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        {field.params.options.map((option, index) => (
-                            <div
-                                key={index}
-                                className={
-                                    cn("text-sm text-muted-foreground p-4 border rounded-lg cursor-pointer transition-all",
-                                        formData[field.label] === option ? "border-green text-green" : "hover:border-green/50")
-                                }
-                                onClick={() =>
+                {!!field.params?.options && (field.params.options.length < 6 ?
+                    <div role="radiogroup" className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {field.params?.options?.map(option => {
+                            const isSelected = formData[field.label]?.value === option;
+
+                            return (
+                                <label
+                                    key={option}
+                                    htmlFor={option}
+                                    className={cn("p-4 rounded-xl border cursor-pointer transition-all text-foreground block",
+                                        isSelected ? 'bg-muted ring-1 ring-ring' : 'bg-background'
+                                    )}
+                                >
+                                    <input
+                                        type="radio"
+                                        id={option}
+                                        name={field.label}
+                                        value={option}
+                                        required={field.required}
+                                        checked={isSelected}
+                                        onChange={(e) =>
                                             handleChange({
                                                 target: {
                                                     name: field.label,
-                                            value: option,
+                                                    value: e.target.value,
                                                 },
-                                    } as React.ChangeEvent<HTMLInputElement>)}
-                            >
-                                <p>{option}</p>
-                            </div>
-                        ))}
+                                            } as React.ChangeEvent<HTMLInputElement>)
+                                        }
+                                        className="sr-only"
+                                    />
+                                    {option}
+                                </label>
+                            );
+                        })}
                     </div>
                     :
                     <Select

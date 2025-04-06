@@ -181,7 +181,18 @@ export interface FieldConfig {
     description?: string;
     placeholder?: string;
     required: boolean;
-    params?: Map<string, any>;
+    params?: FieldParams;
+}
+
+export interface FieldParams {
+    minLength?: number;
+    maxLength?: number;
+    minValue?: number;
+    maxValue?: number;
+    extensions?: string;
+    fileType?: string;
+    maxFiles?: number;
+    options?: string[];
 }
 
 export interface Task {
