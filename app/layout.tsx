@@ -3,6 +3,7 @@ import "@/src/globals.css";
 import Header from "@/src/components/navigation/Header";
 import { AuthProvider } from "@/src/contexts/AuthContext";
 import { ClientThemeProvider } from "@/src/components/wrappers/client-theme-provider";
+import { Toaster } from "@/src/components/ui/toaster";
 
 const orbitron = Orbitron({
   display: "swap",
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={orbitron.className}>
       <body className="bg-background text-foreground">
-        <ClientThemeProvider        >
+        <ClientThemeProvider>
           <AuthProvider>
             <main className="min-h-screen flex flex-col items-center">
               <div className="flex-1 w-full flex flex-col items-center">
@@ -27,6 +28,7 @@ export default function RootLayout({
                 </div>
               </div>
             </main>
+            <Toaster />
           </AuthProvider>
         </ClientThemeProvider>
       </body>
