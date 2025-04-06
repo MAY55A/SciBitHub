@@ -1,11 +1,10 @@
-import Link from "@/src/components/custom/Link";
-import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/src/components/ui/card";
-import { Progress } from "@/src/components/ui/progress";
 import ShinyText from "@/src/components/ui/shiny-text";
 import { cn } from "@/src/lib/utils";
 import { Task, TaskStatus } from "@/src/types/models";
-import { ChevronRight } from "lucide-react";
+import { TaskCardButton } from "./task-card-button";
+import { Suspense } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 export function TaskCard({ task }: { task: Task }) {
     return (
@@ -29,11 +28,9 @@ export function TaskCard({ task }: { task: Task }) {
                 </p>
             </CardContent>
             <CardFooter>
-                <Button className="flex items-center gap-1 mr-4" size={"sm"}>
-                    <Link href="/tasks/[id]" as={`/tasks/${task.id}`}>Contribute</Link>
-                    <ChevronRight size={14} />
-                </Button>
-                <Progress title={"10"} value={10} className="h-3 border border-primary" />
+                <Suspense fallback={<Skeleton className="w-32 h-10 rounded-lg bg-muted mr-4" />}>
+                    <TaskCardButton taskId={task.id!} status={task.status!} />
+                </Suspense>
             </CardFooter>
         </Card>
     );
