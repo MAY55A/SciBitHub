@@ -40,7 +40,7 @@ export function TaskHeader({ task }: { task: Task }) {
                 <div className="mt-8">
                     <p><strong className="text-green mr-2">+ Target Contributions Count :</strong> {task.target_count ?? "---"} </p>
                     <p><strong className="text-green mr-2">+ Contributions :</strong> {task.contributions ?? 0} </p>
-                    <p><strong className="text-green mr-2">+ Progress :</strong> {task.target_count ? Math.round(100 * (task.contributions ?? 0) / task.target_count) : "---"} %</p>
+                    <p><strong className="text-green mr-2">+ Progress :</strong> {task.target_count ? (100 * (task.contributions ?? 0) / task.target_count).toFixed(1) : "---"} %</p>
                 </div>
             </div>
         </div>
