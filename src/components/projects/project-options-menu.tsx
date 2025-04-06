@@ -19,7 +19,7 @@ export function ProjectDropdownMenu({ project }: { project: Project }) {
             <DropdownMenuContent className="w-56">
                 <DropdownMenuGroup>
                     <DropdownMenuItem disabled={project.status !== "published"} onClick={() => router.push(`/projects/${project.id}`)}>
-                        View
+                        Visit
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push(`/projects/${project.id}/edit`)}>
                         Edit
@@ -43,7 +43,7 @@ export function ProjectDropdownMenu({ project }: { project: Project }) {
                             </DropdownMenuPortal>
                         </DropdownMenuSub>
                     }
-                    <DropdownMenuItem disabled={project.status !== "published"}>
+                    <DropdownMenuItem disabled={project.status !== "published"}  onClick={() => router.push(`/projects/${project.id}/contributions`)}>
                         Manage Contributions
                     </DropdownMenuItem>
                 </DropdownMenuGroup>

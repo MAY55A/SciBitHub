@@ -145,27 +145,76 @@ export const fetchTasks = async (
 
 export const fetchContributions = async (
     tasks: string[],
-    limit: number = 5
+    page?: number,
+    pageSize: number = 10
 ): Promise<Contribution[] | null> => {
     const supabase = await createClient();
-    //    return unstable_cache(
-    //        async () => {
-    const { data, error } = await supabase
-        .from("contributions")
-        .select(`
-                    *,
-                    user:users(id, username),
-                    task:tasks(id, title)
-                    `)
-        .in("task", tasks)
-        .limit(limit)
+    return unstable_cache(
+        async () => {
+            const queryBuilder = supabase
+                .from("contributions")
+                .select(
+                    `
+            *,
+            user:users(id, username),
+            task:tasks(id, title)
+            `
+                )
+                .in("task", tasks)
 
-    if (error) {
-        console.error("Error fetching contributions:", error);
-        return null;
-    }
+            if (page) {
+                const start = (page - 1) * pageSize;
+                const end = start + pageSize - 1;
+                queryBuilder.range(start, end);
+            }
 
-    return data;
+            const { data, error } = await queryBuilder;
+
+            if (error) {
+                console.error("Error fetching contributions:", error);
+                return null;
+            }
+
+            return data;
+        },
+        [`contributions ${tasks.join(",")}`, page?.toString() || "all"],
+        { revalidate: 60, tags: ["contributions"] }
+    )();
+};
+
+export const fetchFirstTaskContributions = async (
+    project: string
+): Promise<{ contributions: Contribution[], task: string } | null> => {
+    const supabase = await createClient();
+    return unstable_cache(
+        async () => {
+            const { data: task } = await supabase
+                .from("tasks")
+                .select(`id`)
+                .eq("project", project)
+                .order("created_at")
+                .limit(1)
+                .single();
+            const { data, error } = await supabase
+                .from("contributions")
+                .select(
+                    `
+            *,
+            user:users(id, username)
+            `
+                )
+                .eq("task", task?.id)
+
+            if (error) {
+                console.error("Error fetching contributions:", error);
+                return null;
+            }
+
+            return { contributions: data, task: task?.id };
+        },
+        [`contributions ${project}`],
+        { revalidate: 60, tags: ["contributions"] }
+    )();
 };
 
 export const fetchContribution = async (
