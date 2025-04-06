@@ -14,17 +14,20 @@ import { useAuth } from "@/src/contexts/AuthContext";
 import Link from "../custom/Link";
 import { usePathname } from "next/navigation";
 import { Checkbox } from "../ui/checkbox";
+import { useToast } from "@/src/hooks/use-toast";
 
 export function TaskFields({ task }: { task: Task }) {
     const { user } = useAuth();
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
     const [message, setMessage] = useState<Message | undefined>(undefined);
     const [loading, setLoading] = useState(false);
-    const [canSubmit, setCanSubmit] = useState(true);
+    const [isFirstSurvey, setIsFirstSurvey] = useState(true);
     const [accepted, setAccepted] = useState(false);
     const [file, setFile] = useState<{ filePath: string; fileUrl: string } | null>(null);
     const formRef = useRef<HTMLFormElement | null>(null);
     const pathname = usePathname();
+    const { toast } = useToast()
+    const isContributor = user && user.role === "contributor";
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,11 +38,12 @@ export function TaskFields({ task }: { task: Task }) {
         setLoading(true);
         const res = await createContribution(formData, task.id!, task.project.moderation_level);
         setLoading(false);
+        toast({
+            description: res.message,
+            variant: res.success ? "default" : "destructive"
+        });
         if (res.success) {
-            setMessage({ success: res.message });
             setTimeout(() => reset(), 3000);
-        } else {
-            setMessage({ error: res.message });
         }
     };
 
@@ -52,7 +56,7 @@ export function TaskFields({ task }: { task: Task }) {
 
     const checkContribution = async () => {
         const result = await hasUserContributed(user!.id, task.id!);
-        setCanSubmit(!result);
+        setIsFirstSurvey(!result);
     };
 
     useEffect(() => {
@@ -61,7 +65,7 @@ export function TaskFields({ task }: { task: Task }) {
     }, []);
 
     useEffect(() => {
-        if (user && task.type === TaskType.SURVEY)
+        if (isContributor && task.type === TaskType.SURVEY)
             checkContribution();
     }, [user]);
 
@@ -75,9 +79,9 @@ export function TaskFields({ task }: { task: Task }) {
             fetchRandomFile();
     };
 
-    if (!canSubmit) {
+    if (!isFirstSurvey) {
         return (
-            <div className="w-full flex-col justify-center rounded-lg p-10 py-16 my-8 border">
+            <div className="w-full flex-col justify-center rounded-lg p-10 py-24 my-8 border">
                 <h3 className="text-center">You have already contributed to this task</h3>
                 <p className="text-center text-sm text-muted-foreground">You can only contribute once to a survey type task</p>
             </div>
@@ -100,7 +104,7 @@ export function TaskFields({ task }: { task: Task }) {
                     formData={formData}
                     setFormData={setFormData}>
 
-                    <div className="items-top flex space-x-2">
+                    <div className="items-top flex space-x-2 pt-12">
                         <Checkbox id="terms1"
                             onCheckedChange={(checked) => setAccepted(checked.valueOf() as boolean)} />
                         <div className="grid gap-1.5 leading-none">
@@ -116,8 +120,8 @@ export function TaskFields({ task }: { task: Task }) {
                         </div>
                     </div>
                     <ul className="text-xs text-muted-foreground">
-                        <li className="flex gap-1"> <Info size={15} />Once submitted, the contribution cannot be deleted.</li>
-                        {task.type === TaskType.SURVEY && <li className="flex gap-1"> <Info size={15} />You can only sumbit once to this task.</li>}
+                        <li className="flex gap-1"> <Info size={15} />Once submitted, contributions cannot be deleted.</li>
+                        {task.type === TaskType.SURVEY && <li className="flex gap-1"> <Info size={15} />Each user can submit only once to survey type tasks.</li>}
                     </ul>
 
                     {!!message && <FormMessage message={message} />}
@@ -125,10 +129,10 @@ export function TaskFields({ task }: { task: Task }) {
                     <div className="flex justify-between items-end space-y-4">
                         <Flag color="red" opacity={0.3} size={15} />
                         <div className="flex items-center gap-2">
-                            {!user && <Link href={`/sign-in?redirect_to=${pathname}`} className="flex items-center gap-1 text-muted-foreground text-xs">
-                                <Info size={15} /> You need to login first
+                            {!isContributor && <Link href={`/sign-in?redirect_to=${pathname}`} className="flex items-center gap-1 text-muted-foreground text-xs">
+                                <Info size={15} /> You need to login as a contributor first
                             </Link>}
-                            <Button type="submit" disabled={loading || !user || !accepted}>
+                            <Button type="submit" disabled={loading || !isContributor || !accepted || (task.type === TaskType.DATALABELLING && !file)}>
                                 {loading ? 'Submitting...' : 'Submit'}
                             </Button>
                             {task.type === TaskType.DATALABELLING && <Button type="button" variant="secondary" disabled={loading} onClick={reset}>
@@ -152,5 +156,5 @@ function FileDisplay({ type, source }: { type: DataType, source: { filePath: str
         }
     }
 
-    return <span className="flex justify-center items-align bg-muted text-muted-foreground border rounded-lg m-8 p-8">No more files are available</span>;
+    return <span className="h-80 min-w-80 flex justify-center items-center bg-muted text-muted-foreground border rounded-lg">No Available File</span>;
 }

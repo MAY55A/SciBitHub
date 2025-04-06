@@ -17,7 +17,13 @@ export default async function TaskPage({ params }: { params: { id: string } }) {
             <TaskHeader task={task} />
             <div className="w-full flex-col gap-8">
                 <TaskTutorial tutorial={task.tutorial} />
-                <TaskFields task={task} />
+                {task.status === "active" ?
+                    <TaskFields task={task} /> :
+                    <div className="w-full flex-col justify-center rounded-lg p-10 py-24 my-8 border">
+                        <h3 className="text-center">This task has been marked as Completed</h3>
+                        <p className="text-center text-sm text-muted-foreground">You can no longer contribute to this task</p>
+                    </div>
+                }
             </div>
         </div>
     );
