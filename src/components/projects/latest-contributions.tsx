@@ -7,7 +7,7 @@ export async function LatestContributions({tasks}: {tasks: string[]}) {
     const contributions = await fetchContributions(tasks);
 
     return (
-        <div className="w-full max-w-[1000px] flex flex-col items-center gap-4">
+        <div className="w-full max-w-[1000px] flex flex-col items-center gap-4 mb-12">
             <h2 className="text-lg font-semibold">Latest Contributions</h2>
             <Table>
                 <TableHeader>
@@ -19,14 +19,20 @@ export async function LatestContributions({tasks}: {tasks: string[]}) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {contributions?.map((contribution) => (
+                    {contributions && contributions.length ? contributions.map((contribution) => (
                         <TableRow key={contribution.id!}>
                             <TableCell className="font-medium">{contribution.user.username}</TableCell>
                             <TableCell>{contribution.task.title}</TableCell>
                             <TableCell><ValidationStatusUI status={contribution.status}/></TableCell>
                             <TableCell className="text-right">{formatDate(contribution.created_at!, true)}</TableCell>
                         </TableRow>
-                    ))}
+                    )):
+                    <TableRow>
+                    <TableCell colSpan={4} className="h-24 text-center">
+                        No contributions yet.
+                    </TableCell>
+                </TableRow>
+                }
                 </TableBody>
             </Table>
         </div>
