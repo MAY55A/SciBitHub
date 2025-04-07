@@ -11,6 +11,8 @@ import { DataType, TaskType } from "@/src/types/models";
 import { ArrowDown, ArrowUp, Edit2, PlusCircle, X } from "lucide-react";
 import TaskFieldSetup from "./task-field-setup";
 import { useEffect, useRef, useState } from "react";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Label } from "../ui/label";
 
 export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEditType = true }: { buttonText: string, data?: Partial<TaskInputData>, onSubmit: (data: TaskInputData) => void, onChange: (data: any) => void, canEditType?: boolean }) {
     const form = useForm({
@@ -71,6 +73,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Title</FormLabel>
+                            <FormDescription>Task title shown to contributors</FormDescription>
                             <FormControl>
                                 <Input {...field} placeholder="Task Title" className="border p-2 w-full" />
                             </FormControl>
@@ -84,6 +87,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Description</FormLabel>
+                            <FormDescription>Details about what the task involves and expectations</FormDescription>
                             <FormControl>
                                 <textarea {...field} placeholder="Task Description" className="border p-2 w-full rounded placeholder:text-muted-foreground text-sm" />
                             </FormControl>
@@ -97,19 +101,25 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!data?.datasetPath || !canEditType}>
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a type" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {Object.values(TaskType).map((type) => (
-                                        <SelectItem value={type} key={type}>{type}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {field.value === TaskType.SURVEY && <FormDescription>*Each user can contribute only once to a survey.</FormDescription>}
+                            <FormDescription>Type of contribution needed</FormDescription>
+                            <RadioGroup
+                                {...field}
+                                defaultValue={field.value}
+                                onValueChange={field.onChange}
+                                className="w-full flex gap-8 px-6 pt-4"
+                                disabled={!!data?.datasetPath || !canEditType}
+                            >
+                                {Object.values(TaskType).map(type => (
+                                    <div className="flex items-center space-x-2" key={type}>
+                                        <RadioGroupItem
+                                            value={type}
+                                            id={type}
+                                        />
+                                        <Label htmlFor={type}>{type}</Label>
+                                    </div>
+                                ))}
+                            </RadioGroup>
+                            {field.value === TaskType.SURVEY && <FormDescription>*Each user can contribute only once to a survey</FormDescription>}
                             <FormMessage></FormMessage>
                         </FormItem>
                     )}
@@ -121,6 +131,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="text-primary">Data Type</FormLabel>
+                                <FormDescription>Type of data to be labeled</FormDescription>
                                 <Select onValueChange={field.onChange} defaultValue={field.value ?? undefined} disabled={!!data?.datasetPath}>
                                     <FormControl>
                                         <SelectTrigger ref={selectRef}>
@@ -145,6 +156,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="text-primary">Dataset</FormLabel>
+                                <FormDescription>Upload files for contributors to work on</FormDescription>
                                 <FormControl>
                                     <Input
                                         ref={fileInputRef}
@@ -178,6 +190,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Target Count (optional)</FormLabel>
+                            <FormDescription>Optional goal for how many contributions are needed</FormDescription>
                             <FormControl>
                                 <Input
                                     type="number"
@@ -197,6 +210,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Tutorial</FormLabel>
+                            <FormDescription>Guide or example showing how to contribute correctly</FormDescription>
                             <FormControl>
                                 <MDEditor
                                     onFocus={() => { }}
@@ -220,7 +234,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                                 Fields
                                 <TaskFieldSetup className="p-2 h-5" icon={PlusCircle} title="Add Field" onSubmit={(data) => append(data)} />
                             </FormLabel>
-                            <FormDescription>Form fields where the user can input data.</FormDescription>
+                            <FormDescription>Custom form fields contributors can fill out when submitting</FormDescription>
                             <div className="flex flex-col gap-4 text-sm">
                                 {!fields.length &&
                                     <div className="text-muted-foreground mb-8 text-center p-2 border rounded">No fields added</div>

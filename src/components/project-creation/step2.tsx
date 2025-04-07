@@ -1,6 +1,5 @@
 "use client"
 
-import { useMultistepProjectForm } from "@/src/contexts/multistep-project-form-context";
 import { ModerationLevel, ModerationLevelDescriptions, ParticipationLevel, ParticipationLevelDescriptions, ProjectStatus, ProjectVisibility, ProjectVisibilityDescriptions, Scope } from "@/src/types/models";
 import { projectInputDataSchema, ProjectInputData } from "@/src/types/project-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -71,6 +70,7 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Visibility Level</FormLabel>
+                            <FormDescription>Controls who can view the project's results</FormDescription>
                             <FormControl>
                                 <RadioGroup {...field}
                                     value={field.value}
@@ -112,6 +112,7 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="text-primary">Participation Level</FormLabel>
+                                    <FormDescription>Controls who can participate in tasks</FormDescription>
                                     <FormControl>
                                         <RadioGroup
                                             {...field}
@@ -161,6 +162,7 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Research Scope</FormLabel>
+                            <FormDescription>Defines the geographical focus of the project</FormDescription>
                             <FormControl>
                                 <RadioGroup {...field} value={field.value} onValueChange={field.onChange} className="w-full flex gap-8 px-6 pt-4">
                                     {Object.values(Scope).map(value =>
@@ -187,6 +189,7 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Moderation Level</FormLabel>
+                            <FormDescription>Defines how much moderation is applied to contributions</FormDescription>
                             <FormControl>
                                 <RadioGroup {...field} value={field.value} onValueChange={field.onChange} className="w-full flex gap-8 px-6 pt-4">
                                     {Object.values(ModerationLevel).map(value =>
@@ -210,6 +213,7 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
                             <FormLabel className="text-primary">Deadline (optional)</FormLabel>
+                            <FormDescription>Project end date or goal completion timeline</FormDescription>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <FormControl>

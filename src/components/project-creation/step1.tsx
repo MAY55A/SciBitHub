@@ -8,12 +8,13 @@ import { ProjectDomain, ProjectStatus } from "@/src/types/models";
 import { ProjectInputData, projectInputDataSchema } from "@/src/types/project-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import TagsInput from "../custom/tags-input";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveProject, dataChanged }: { initialName?: string, data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const [isVerifiying, setIsVerifying] = useState(false);
@@ -74,6 +75,7 @@ export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveP
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Project Name</FormLabel>
+                            <FormDescription>Unique identifier for the project</FormDescription>
                             <FormControl>
                                 <Input placeholder="Enter project name" {...field} />
                             </FormControl>
@@ -101,6 +103,7 @@ export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveP
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Detailed Description</FormLabel>
+                            <FormDescription>Full explanation of the project, goals, and context</FormDescription>
                             <FormControl>
                                 <MDEditor
                                     height={300}
@@ -122,13 +125,19 @@ export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveP
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Research Domain</FormLabel>
-                            <FormControl>
-                                <select {...field} className="w-full p-2 border rounded mt-1">
-                                    {["select a domain", ...Object.values(ProjectDomain).sort()].map(value =>
-                                        <option key={value} value={value}>{value}</option>
+                            <FormDescription>Main field of study the project belongs to</FormDescription>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="select a domain" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {Object.values(ProjectDomain).sort().map(value =>
+                                        <SelectItem key={value} value={value}>{value}</SelectItem>
                                     )}
-                                </select>
-                            </FormControl>
+                                </SelectContent>
+                            </Select>
                             <FormMessage></FormMessage>
                         </FormItem>
                     )}
@@ -138,7 +147,8 @@ export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveP
                     name="tags"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-primary">Relevant Tags</FormLabel>
+                            <FormLabel className="text-primary">Relevant Tags (optional)</FormLabel>
+                            <FormDescription>Keywords to improve discoverability through search</FormDescription>
                             <FormControl>
                                 <TagsInput onChange={field.onChange} tags={field.value ?? []} />
                             </FormControl>

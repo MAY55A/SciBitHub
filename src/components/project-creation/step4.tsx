@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { ProjectInputData, projectInputDataSchema } from "@/src/types/project-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import InputFile from "./input-file";
 import { useEffect, useState } from "react";
@@ -66,6 +66,7 @@ export function Step4({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Cover Image (optional)</FormLabel>
+                            <FormDescription>Visual thumbnail or banner for project branding</FormDescription>
                             <FormControl>
                                 <InputFile onFileSelect={(file) => field.onChange(file)} file={field.value} setError={(error) => form.setError("coverImage", {"message": error})}></InputFile>
                             </FormControl>
@@ -79,6 +80,7 @@ export function Step4({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">External Links (optional)</FormLabel>
+                            <FormDescription>Related URLs, datasets, or documentation for more info</FormDescription>
                             <FormControl>
                                 <div className="space-y-4">
                                     <div className="space-y-2">
