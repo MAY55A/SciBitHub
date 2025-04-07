@@ -5,8 +5,8 @@ import MDEditor from "@uiw/react-md-editor";
 
 export function ProjectOverview({ project }: { project: Project }) {
     return (
-        <div className="mt-8">
-            <MDEditor.Markdown source={project.description} className="p-8" style={{backgroundColor: "transparent"}}/>
+            <MDEditor.Markdown source={project.long_description} className="p-8" style={{ backgroundColor: "transparent" }} />
+            {project.links &&
         </div>
     );
 }

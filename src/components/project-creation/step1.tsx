@@ -19,7 +19,7 @@ export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveP
     const [isVerifiying, setIsVerifying] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const form = useForm({
-        resolver: zodResolver(projectInputDataSchema.pick({ name: true, description: true, domain: true, tags: true })),
+        resolver: zodResolver(projectInputDataSchema.pick({ name: true, shortDescription: true, longDescription: true, domain: true, tags: true })),
         defaultValues: data,
     });
 
@@ -57,7 +57,9 @@ export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveP
     };
     const watchedFields = form.watch();
     useEffect(() => {
-        const same = watchedFields.name.length > 0 && watchedFields.name === data.name && watchedFields.description === data.description && watchedFields.domain === data.domain && areEqualArrays(watchedFields.tags, data.tags);
+        const same = watchedFields.name.length > 0 && watchedFields.name === data.name &&
+            watchedFields.shortDescription === data.shortDescription && watchedFields.longDescription === data.longDescription &&
+            watchedFields.domain === data.domain && areEqualArrays(watchedFields.tags, data.tags);
         setIsSaved(same);
     }, [JSON.stringify(watchedFields)]);
 
@@ -81,10 +83,24 @@ export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveP
                 />
                 <FormField
                     control={form.control}
-                    name="description"
+                    name="shortDescription"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-primary">Description</FormLabel>
+                            <FormLabel className="text-primary">Short Description</FormLabel>
+                            <FormDescription>Brief summary shown on project cards or listings</FormDescription>
+                            <FormControl>
+                                <textarea {...field} placeholder="Task Description" className="border p-2 w-full rounded placeholder:text-muted-foreground text-sm" />
+                            </FormControl>
+                            <FormMessage></FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="longDescription"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="text-primary">Detailed Description</FormLabel>
                             <FormControl>
                                 <MDEditor
                                     height={300}

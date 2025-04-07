@@ -19,9 +19,13 @@ export function Step1Card({ data, onEdit }: { data: ProjectInputData, onEdit: (s
                         <Input value={data.name} readOnly />
                     </div>
                     <div className="flex flex-col space-y-1.5">
-                        <Label className="text-primary">Description</Label>
+                        <Label className="text-primary">Short Description</Label>
+                        <textarea value={data.shortDescription} className="border p-2 w-full rounded text-sm" />
+                    </div>
+                    <div className="flex flex-col space-y-1.5">
+                        <Label className="text-primary">Detailed Description</Label>
                         <MDEditor.Markdown
-                            source={data.description}
+                            source={data.longDescription}
                             className="w-full border border-input rounded-lg p-2"
                             style={{
                                 maxHeight: '10rem',

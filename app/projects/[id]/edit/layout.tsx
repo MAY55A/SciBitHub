@@ -33,6 +33,8 @@ export default async function Layout({
     const { participation_level, moderation_level, cover_image, creator, ...data } = project;
     const projectData = {
         ...data,
+        shortDescription: project.short_description,
+        longDescription: project.long_description,
         coverImage: cover_image,
         participants: project.participants,
         participationLevel: project.participation_level,

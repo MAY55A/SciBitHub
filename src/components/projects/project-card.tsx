@@ -65,9 +65,9 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
                     </h2></Link>
 
                 <p
-                    className="text-muted-foreground max-h-40 overflow-hidden whitespace-normal line-clamp-6 pl-2"
+                    className="text-muted-foreground max-h-40 overflow-hidden whitespace-normal pl-2"
                 >
-                    {project.description}
+                    {project.short_description}
                 </p>
             </CardContent>
             <CardFooter>

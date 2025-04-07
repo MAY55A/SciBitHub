@@ -35,7 +35,8 @@ export const taskInputDataSchema = z.object({
 
 export const projectInputDataSchema = z.object({
     name: z.string().max(150, "Name must contain at most 150 characters").min(5, "Name must contain at least 5 characters"),
-    description: z.string().min(200, "Description must contain at least 200 characters"),
+    shortDescription: z.string().min(30, "Short description must contain at least 30 characters").max(200, "Short description must contain at most 200 characters"),
+    longDescription: z.string().min(200, "Long description must contain at least 200 characters"),
     domain: z.enum(Object.values(ProjectDomain) as [string, ...string[]], {
         errorMap: () => ({ message: "Please select a domain" }),
     }),

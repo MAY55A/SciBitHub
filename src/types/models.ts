@@ -129,7 +129,8 @@ export enum Scope {
 export interface Project {
     id?: string;
     name: string;
-    description: string;
+    short_description: string;
+    long_description: string;
     domain: ProjectDomain;
     scope: string;
     countries?: string[];

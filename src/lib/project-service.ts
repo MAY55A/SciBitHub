@@ -19,11 +19,13 @@ export const createProject = async (inputData: Partial<ProjectInputData>, status
     }
 
     // Insert the new project into the database
-    const { coverImage, tasks, participants, participationLevel, moderationLevel, ...filteredInputData } = inputData;
+    const { shortDescription, longDescription, coverImage, tasks, participants, participationLevel, moderationLevel, ...filteredInputData } = inputData;
     const { data: projectData, error: projectError } = await supabase
         .from("projects")
         .insert({
             ...filteredInputData,
+            short_description: shortDescription,
+            long_description: longDescription,
             participation_level: participationLevel,
             moderation_level: moderationLevel,
             creator: user.data.user.id,
@@ -152,7 +154,7 @@ export const updateProject = async (initialData: Partial<ProjectInputData>, newD
     if (!newData) {
         return { success: false, message: "Project's new data is required." };
     }
-    const { coverImage, tasks, participants, participationLevel, moderationLevel, ...filteredInputData } = newData;
+    const { shortDescription, longDescription, coverImage, tasks, participants, participationLevel, moderationLevel, ...filteredInputData } = newData;
 
     if (initialData.coverImage !== coverImage) {
         console.log("updating cover image");
@@ -185,6 +187,8 @@ export const updateProject = async (initialData: Partial<ProjectInputData>, newD
     const { error: updateError } = await supabase.from("projects").update(
         {
             ...filteredInputData,
+            short_description: shortDescription,
+            long_description: longDescription,
             participation_level: participationLevel,
             moderation_level: moderationLevel,
             updated_at: new Date().toISOString()
@@ -325,11 +329,11 @@ const deleteCoverImage = async (supabase: SupabaseClient<any, "public", any>, pr
 
 const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: any, oldParticipants: any, projectId: string, status: string) => {
     if (participants.length > 0) {
-        const existingInvitationIds = new Set(oldParticipants?.map(p => p.user_id) ?? []);
-        const newInvitations = [];
+        const existingInvitationIds = new Set(oldParticipants?.map((p: any) => p.user_id) ?? []);
+        const newInvitations: any[] = [];
         const invitationsToKeep = new Set();
 
-        participants.forEach(p => {
+        participants.forEach((p: any) => {
             if (!existingInvitationIds.has(p.id)) {
                 newInvitations.push({
                     user_id: p.id,
