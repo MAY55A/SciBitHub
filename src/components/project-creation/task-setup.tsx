@@ -43,6 +43,24 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
         }
     }, [type]);
 
+    function addField(field: FieldInputData) {
+        if (fields.find(f => f.label === field.label)) {
+            form.setError("fields", { message: "A Field with the same label already exists" });
+            return;
+        }
+        form.clearErrors("fields");
+        append(field);
+    }
+
+    function updateField(index: number, updatedField: FieldInputData) {
+        if (updatedField.label !== fields[index].label && fields.find(f => f.label === updatedField.label)) {
+            form.setError("fields", { message: "A Field with the same label already exists" });
+            return;
+        }
+        form.clearErrors("fields");
+        update(index, updatedField);
+    }
+
     const handleSubmit = (formData: TaskInputData) => {
         if (formData.type === TaskType.DATALABELLING) {
             if (!formData.dataType) {
@@ -59,7 +77,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
         }
         onSubmit({ ...formData, fields });
     };
-    //console.log(form.getValues("dataType"));
+
     return (
 
         <Form {...form}>
@@ -232,7 +250,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                         <FormItem className="pb-12">
                             <FormLabel className="flex justify-between text-primary">
                                 Fields
-                                <TaskFieldSetup className="p-2 h-5" icon={PlusCircle} title="Add Field" onSubmit={(data) => append(data)} />
+                                <TaskFieldSetup className="p-2 h-5" icon={PlusCircle} title="Add Field" onSubmit={(data) => addField(data)} />
                             </FormLabel>
                             <FormDescription>Custom form fields contributors can fill out when submitting</FormDescription>
                             <div className="flex flex-col gap-4 text-sm">
@@ -248,7 +266,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                                         <div className="flex">
                                             {index > 0 && <Button title="move up" variant="ghost" className="p-2" onClick={() => move(index, index - 1)}><ArrowUp size={15} /></Button>}
                                             {index < fields.length - 1 && <Button title="move down" variant="ghost" className="p-2" onClick={() => move(index, index + 1)}><ArrowDown size={15} /></Button>}
-                                            <TaskFieldSetup className="text-green p-2" icon={Edit2} title="Edit Field" data={field} onSubmit={(data) => update(index, data)} />
+                                            <TaskFieldSetup className="text-green p-2" icon={Edit2} title="Edit Field" data={field} onSubmit={(data) => updateField(index, data)} />
                                             <Button title="remove" variant="ghost" className="text-primary p-2" onClick={() => remove(index)}><X size={15} /></Button>
                                         </div>
                                     </div>
