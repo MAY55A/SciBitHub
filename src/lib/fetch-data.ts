@@ -20,7 +20,9 @@ export const fetchProjects = async (
     try {
         let queryBuilder = supabase
             .from("projects")
-            .select("*", { count: "exact" });
+            .select(`*,
+                creator:users(id, username, profile_picture, metadata)`,
+                { count: "exact" });
 
         // Apply filters
         if (creator) {

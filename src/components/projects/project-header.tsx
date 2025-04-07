@@ -1,12 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
 import ShinyText from "@/src/components/ui/shiny-text";
-import { Project, ResearcherType } from "@/src/types/models";
+import { Project } from "@/src/types/models";
 import { formatDate } from "@/src/utils/utils";
-import { Building, CheckCircle2, GraduationCap, UserIcon } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import { ResearcherIcon } from "../custom/researcher-icon";
 
 export function ProjectHeader({ project }: { project: Project }) {
-    const Icon = ResearcherIcon(project.creator.metadata!.researcherType!);
     return (
         <div className="relative w-full min-h-[50vh] p-4 rounded-lg">
             {project.cover_image !== undefined &&
@@ -20,15 +20,15 @@ export function ProjectHeader({ project }: { project: Project }) {
             }
             <div className="relative w-full flex justify-between">
                 <div className="flex items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-muted/20 rounded-lg">
-                    <Avatar className="flex shrink-0 overflow-hidden h-10 w-10 rounded-fully hover:shadow-lg hover:bg-muted">
+                    <Avatar className="flex shrink-0 overflow-hidden h-10 w-10 rounded-lg hover:shadow-lg hover:bg-muted">
                         <AvatarImage src={project.creator.profile_picture} alt={project.creator.username} />
                         <AvatarFallback className="rounded-lg">
                             {project.creator.username?.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="flex items-center gap-1 truncate font-semibold text-red-700 text-xs"><Icon size={16} />{project.creator.metadata!.researcherType}</span>
-                        <span className="ml-2 truncate font-semibold text-red-700">{project.creator.username}</span>
+                        <span className="flex items-center gap-1 truncate font-semibold text-muted-foreground text-xs"><ResearcherIcon type={project.creator.metadata!.researcherType!} size={16} />{project.creator.metadata!.researcherType} researcher</span>
+                        <span className="ml-2 truncate font-semibold">{project.creator.username}</span>
                         {project.creator.metadata!.isVerified ? (
                             <span className="flex items-center gap-1 text-xs text-green-900"><CheckCircle2 size={13} />verified</span>
                         ) : null
@@ -62,15 +62,4 @@ export function ProjectHeader({ project }: { project: Project }) {
             </div>
         </div>
     );
-}
-
-export function ResearcherIcon(type: ResearcherType) {
-    switch (type) {
-        case ResearcherType.ACADEMIC:
-            return GraduationCap;
-        case ResearcherType.ORGANIZATION:
-            return Building;
-        default:
-            return UserIcon;
-    }
 }

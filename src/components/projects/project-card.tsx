@@ -6,6 +6,7 @@ import { ChevronRight } from "lucide-react";
 import { formatDate } from "@/src/utils/utils";
 import ShinyText from "../ui/shiny-text";
 import { ProjectDropdownMenu } from "./project-options-menu";
+import { UserHoverCard } from "../custom/user-hover-card";
 
 
 export function ProjectCard({ project, editable = false }: { project: Project, editable?: boolean }) {
@@ -45,15 +46,17 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
                         >
                             {project.status}
                         </span>
-                        <ProjectDropdownMenu project={project}/>
-                    </div>
-                }
-                <div className="flex flex-row justify-between">
+                        <ProjectDropdownMenu project={project} />
+                    </div>}
+                <div className="flex flex-row justify-between gap-2">
                     <span className="italic text-muted-foreground text-xs mb-4">
                         {prefix + formattedDate}
                     </span>
-                    <ShinyText text={project.domain} disabled={false} speed={4} className='text-center text-green font-semibold uppercase tracking-[.1em] text-xs border border-green rounded-2xl px-3 py-2' />
+                    <ShinyText text={project.domain} disabled={false} speed={4} className='max-w-48 break-words text-center text-green font-semibold uppercase tracking-[.1em] text-xs border border-green rounded-2xl px-3 py-2' />
                 </div>
+                {!editable &&
+                    <div><strong className="text-muted-foreground">Creator :</strong> <UserHoverCard user={project.creator} /></div>
+                }
             </CardHeader>
             <CardContent>
                 <Link href="/projects/[id]" as={`/projects/${project.id}`}>
