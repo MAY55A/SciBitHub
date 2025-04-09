@@ -15,8 +15,6 @@ export const fetchProjects = async (
     limit: number = 10,
 ) => {
     const supabase = await createClient();
-    //    return unstable_cache(
-    //        async () => {
     try {
         let queryBuilder = supabase
             .from("projects")
@@ -60,18 +58,12 @@ export const fetchProjects = async (
         console.error("Error fetching projects:", error);
         return null;
     }
-    //        },
-    //        [`projects`, creator || "all", query || "all", status || "all", currentPage.toString(), orderBy, sort], // Cache key as an array
-    //        { revalidate: 300, tags: ["projects"] }
-    //    )();
 }
 
 export const fetchProject = async (
     id: string
 ): Promise<Project | null> => {
     const supabase = await createClient();
-    //    return unstable_cache(
-    //        async () => {
     const { data, error } = await supabase
         .from("projects")
         .select(`
@@ -86,18 +78,12 @@ export const fetchProject = async (
     }
 
     return data;
-    //        },
-    //        [`project ${id}`],
-    //        { revalidate: 300, tags: ["project"] }
-    //    )();
 }
 
 export const fetchTask = async (
     id: string
 ): Promise<Task | null> => {
     const supabase = await createClient();
-    //    return unstable_cache(
-    //        async () => {
     const { data, error } = await supabase
         .from("tasks")
         .select(`
@@ -114,18 +100,12 @@ export const fetchTask = async (
     }
     data.contributions = data.contributions[0].count;
     return data;
-    //        },
-    //        [`task ${id}`],
-    //        { revalidate: 3600, tags: ["task"] }
-    //    )();
 }
 
 export const fetchTasks = async (
     projectId: string
 ): Promise<Task[] | null> => {
     const supabase = await createClient();
-    //    return unstable_cache(
-    //        async () => {
     const { data, error } = await supabase
         .from("tasks")
         .select(`
@@ -139,10 +119,6 @@ export const fetchTasks = async (
     }
 
     return data;
-    //        },
-    //        [`project ${id}`],
-    //        { revalidate: 300, tags: ["project"] }
-    //    )();
 }
 
 export const fetchContributions = async (
@@ -151,8 +127,6 @@ export const fetchContributions = async (
     pageSize: number = 10
 ): Promise<Contribution[] | null> => {
     const supabase = await createClient();
-    return unstable_cache(
-        async () => {
             const queryBuilder = supabase
                 .from("contributions")
                 .select(
@@ -178,18 +152,12 @@ export const fetchContributions = async (
             }
 
             return data;
-        },
-        [`contributions ${tasks.join(",")}`, page?.toString() || "all"],
-        { revalidate: 60, tags: ["contributions"] }
-    )();
 };
 
 export const fetchFirstTaskContributions = async (
     project: string
 ): Promise<{ contributions: Contribution[], task: string } | null> => {
     const supabase = await createClient();
-    return unstable_cache(
-        async () => {
             const { data: task } = await supabase
                 .from("tasks")
                 .select(`id`)
@@ -213,18 +181,12 @@ export const fetchFirstTaskContributions = async (
             }
 
             return { contributions: data, task: task?.id };
-        },
-        [`contributions ${project}`],
-        { revalidate: 60, tags: ["contributions"] }
-    )();
 };
 
 export const fetchContribution = async (
     id: string
 ): Promise<Contribution | null> => {
     const supabase = await createClient();
-    return unstable_cache(
-        async () => {
             const { data, error } = await supabase
                 .from("contributions")
                 .select(` *,
@@ -242,8 +204,5 @@ export const fetchContribution = async (
                 data.task.project.creator = { id: data.task.project.creator };
             }
             return data;
-        },
-        [`contribution ${id}`],
-        { revalidate: 60, tags: ["contribution"] }
-    )();
+}
 }
