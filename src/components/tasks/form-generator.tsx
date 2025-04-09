@@ -1,9 +1,9 @@
 import { Input } from '@/src/components/ui/input';
 import { Label } from '@/src/components/ui/label';
-import Select from 'react-select';
 import React, { JSX, Ref } from 'react';
 import { FieldConfig } from '@/src/types/models';
 import { cn } from '@/src/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const fileTypeMap: Record<string, string> = {
     image: "image/*",
@@ -61,158 +61,122 @@ export const FormGenerator = (
         [key: string]: (field: FieldConfig) => JSX.Element;
     } = {
         text: (field) => (
-            <div key={field.label} className="flex flex-col space-y-2 w-full">
-                <Label htmlFor={field.label} className="font-medium">
-                    {field.label}
-                </Label>
-                {field.description && <p className="text-sm text-muted-foreground pb-4">{field.description}</p>}
-                <Input
-                    type="text"
-                    name={field.label}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                    value={formData[field.label]?.value || ''}
-                    onChange={handleChange}
-                    minLength={field.params?.minLength}
-                    maxLength={field.params?.maxLength}
-                />
-            </div>
+            <Input
+                type="text"
+                name={field.label}
+                placeholder={field.placeholder}
+                required={field.required}
+                value={formData[field.label]?.value || ''}
+                onChange={handleChange}
+                minLength={field.params?.minLength}
+                maxLength={field.params?.maxLength}
+            />
         ),
         number: (field) => (
-            <div key={field.label} className="flex flex-col space-y-2 w-full">
-                <Label htmlFor={field.label} className="font-medium">
-                    {field.label}
-                </Label>
-                {field.description && <p className="text-sm text-muted-foreground pb-4">{field.description}</p>}
-                <Input
-                    type="number"
-                    name={field.label}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                    value={formData[field.label]?.value || ''}
-                    onChange={handleChange}
-                    min={field.params?.minValue}
-                    max={field.params?.maxValue}
-                />
-            </div>
+            <Input
+                type="number"
+                name={field.label}
+                placeholder={field.placeholder}
+                required={field.required}
+                value={formData[field.label]?.value || ''}
+                onChange={handleChange}
+                min={field.params?.minValue}
+                max={field.params?.maxValue}
+            />
         ),
         file: (field) => (
-            <div key={field.label} className="flex flex-col space-y-2 w-full">
-                <Label htmlFor={field.label} className="font-medium">
-                    {field.label}
-                </Label>
-                {field.description && <p className="text-sm text-muted-foreground pb-4">{field.description}</p>}
-                <Input
-                    type="file"
-                    name={field.label}
-                    placeholder={field.placeholder}
-                    accept={field.params?.extensions
-                        ? field.params.extensions.split(",").map(ext => `.${ext.trim()}`).join(",")
-                        : field.params?.fileType ? fileTypeMap[field.params.fileType] : undefined}
-                    required={field.required}
-                    multiple={!field.params?.maxFiles || field.params.maxFiles > 1}
-                    onChange={(e) => handleFileChange(e, field)}
-                />
-            </div>
+            <Input
+                type="file"
+                name={field.label}
+                placeholder={field.placeholder}
+                accept={field.params?.extensions
+                    ? field.params.extensions.split(",").map(ext => `.${ext.trim()}`).join(",")
+                    : field.params?.fileType ? fileTypeMap[field.params.fileType] : undefined}
+                required={field.required}
+                multiple={!field.params?.maxFiles || field.params.maxFiles > 1}
+                onChange={(e) => handleFileChange(e, field)}
+            />
         ),
         textarea: (field) => (
-            <div key={field.label} className="flex flex-col space-y-2 w-full">
-                <Label htmlFor={field.label} className="font-medium">
-                    {field.label}
-                </Label>
-                {field.description && <p className="text-sm text-muted-foreground pb-4">{field.description}</p>}
-                <textarea
-                    name={field.label}
-                    placeholder={field.placeholder}
+            <textarea
+                name={field.label}
+                placeholder={field.placeholder}
+                required={field.required}
+                value={formData[field.label]?.value || ''}
+                onChange={handleChange}
+                className="p-2 border rounded w-full resize-none"
+            ></textarea>
+        ),
+        select: (field) =>
+            !!field.params?.options && field.params.options.length < 6 ?
+                <div role="radiogroup" className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {field.params?.options?.map(option => {
+                        const isSelected = formData[field.label]?.value === option;
+                        return (
+                            <label
+                                key={option}
+                                htmlFor={option}
+                                className={cn("p-4 rounded-xl border cursor-pointer transition-all text-foreground block",
+                                    isSelected ? 'bg-muted ring-1 ring-ring' : 'bg-background'
+                                )}
+                            >
+                                <input
+                                    type="radio"
+                                    id={option}
+                                    name={field.label}
+                                    value={option}
+                                    required={field.required}
+                                    checked={isSelected}
+                                    onChange={(e) =>
+                                        handleChange({
+                                            target: {
+                                                name: field.label,
+                                                value: e.target.value,
+                                            },
+                                        } as React.ChangeEvent<HTMLInputElement>)
+                                    }
+                                    className="sr-only"
+                                />
+                                {option}
+                            </label>
+                        );
+                    })}
+                </div>
+                :
+                <Select
                     required={field.required}
-                    value={formData[field.label]?.value || ''}
-                    onChange={handleChange}
-                    className="p-2 border rounded w-full resize-none"
-                ></textarea>
-            </div>
-        ),
-        select: (field) => (
-            <div key={field.label} className="flex flex-col space-y-2 w-full">
-                <Label htmlFor={field.label} className="font-medium">
-                    {field.label}
-                </Label>
-                {field.description && <p className="text-sm text-muted-foreground pb-4">{field.description}</p>}
-                {!!field.params?.options && (field.params.options.length < 6 ?
-                    <div role="radiogroup" className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        {field.params?.options?.map(option => {
-                            const isSelected = formData[field.label]?.value === option;
-
-                            return (
-                                <label
-                                    key={option}
-                                    htmlFor={option}
-                                    className={cn("p-4 rounded-xl border cursor-pointer transition-all text-foreground block",
-                                        isSelected ? 'bg-muted ring-1 ring-ring' : 'bg-background'
-                                    )}
-                                >
-                                    <input
-                                        type="radio"
-                                        id={option}
-                                        name={field.label}
-                                        value={option}
-                                        required={field.required}
-                                        checked={isSelected}
-                                        onChange={(e) =>
-                                            handleChange({
-                                                target: {
-                                                    name: field.label,
-                                                    value: e.target.value,
-                                                },
-                                            } as React.ChangeEvent<HTMLInputElement>)
-                                        }
-                                        className="sr-only"
-                                    />
-                                    {option}
-                                </label>
-                            );
-                        })}
-                    </div>
-                    :
-                    <Select
-                        name={field.label}
-                        required={field.required}
-                        value={field.params?.options
-                            ?.map(option => ({ value: option, label: option }))
-                            .find(option => option.value === formData[field.label]) || null}
-                        onChange={(selectedOption) =>
-                            handleChange({
-                                target: {
-                                    name: field.label,
-                                    value: selectedOption ? selectedOption.value : '',
-                                },
-                            } as React.ChangeEvent<HTMLInputElement>)}
-                        options={field.params?.options?.map(option => ({ value: option, label: option }))}
-                        className="w-full"
-                        styles={{
-                            control: (provided) => ({
-                                ...provided,
-                                background: "hsl(var(--background))",
-                                borderColor: "hsl(var(--border))",
-                            }),
-                            menu: (provided) => ({
-                                ...provided,
-                                background: "hsl(var(--background))",
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isSelected ? "hsl(var(--muted))" : state.isFocused ? "hsl(var(--muted))" : "hsl(var(--background))",
-                                color: "hsl(var(--foreground))",
-                            }),
-                        }}
-                    />
-                )}
-            </div>
-        ),
+                    onValueChange={(selectedOption) =>
+                        handleChange({
+                            target: {
+                                name: field.label,
+                                value: selectedOption ?? '',
+                            },
+                        } as React.ChangeEvent<HTMLInputElement>)}
+                    defaultValue={formData[field.label]?.value ?? ''}
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select an option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {field.params?.options?.map(value =>
+                            <SelectItem key={value} value={value}>{value}</SelectItem>
+                        )}
+                    </SelectContent>
+                </Select>
     };
 
     return (
         <form ref={ref} onSubmit={handleSubmit} className="space-y-8 p-6">
-            {fields.map((field: any) => (fieldRenderers[field.type] ? fieldRenderers[field.type](field) : null))}
+            {fields.map((field: any) => (fieldRenderers[field.type] ?
+                <div key={field.label} className="flex flex-col space-y-2 w-full">
+                    <Label htmlFor={field.label} className="font-medium">
+                        {field.label}
+                        {field.required && <span className="ml-1 text-red-500">*</span>}
+                    </Label>
+                    {field.description && <p className="text-sm text-muted-foreground pb-4">{field.description}</p>}
+                    {fieldRenderers[field.type](field)}
+                </div>
+                : null))}
             {children}
         </form>
     );
