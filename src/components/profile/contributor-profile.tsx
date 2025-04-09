@@ -22,7 +22,7 @@ export function ContributorProfile({ user }: { user: User }) {
                     {user.metadata?.bio ? user.metadata.bio : "Hi, welcome to my profile!"}
                 </p>
             </div>
-            <div className="flex flex-col gap-2 items-center justify-center space-x-4 rounded-lg border p-8 ">
+            <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 ">
                 <p className="flex flex-wrap items-center gap-2 text-sm ">
                     <Globe2 size={"15"} />
                     Country :
@@ -58,6 +58,9 @@ export function ContributorProfile({ user }: { user: User }) {
                         <a className="text-muted-foreground underline" href={contact}>{contact}</a>
                     </p>
                 )}
+                {!user.metadata?.contacts && !user.metadata?.phone && !user.metadata?.contactEmail &&
+                    <p className="text-center">No contacts available</p>
+                }
             </div>
         </div >
     );

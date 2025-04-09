@@ -35,7 +35,7 @@ export function ResearcherProfile({ user }: { user: User }) {
                 </p>
             </div>
             {user.metadata?.researcherType === ResearcherType.ORGANIZATION &&
-                <div className="flex flex-col gap-2 items-center justify-center space-x-4 rounded-lg border p-8 ">
+                <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 ">
                     <p className="flex items-center gap-2 text-sm ">
                         <Building size={"15"} />
                         Organization :
