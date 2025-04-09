@@ -75,8 +75,11 @@ export function TaskFields({ task }: { task: Task }) {
         }
         setFormData({});
         setMessage(undefined);
-        if (task.type === TaskType.DATALABELLING)
+        if (task.type === TaskType.DATALABELLING) {
             fetchRandomFile();
+        } else if(task.type === TaskType.SURVEY) {
+            setIsFirstSurvey(false);
+        }
     };
 
     if (!isFirstSurvey) {
