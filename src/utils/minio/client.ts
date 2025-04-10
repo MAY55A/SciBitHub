@@ -83,7 +83,34 @@ export const getFile = async (filePath: string) => {
         return fileUrl;
 
     } catch (error) {
-        console.error("Error fetching file:", error);
+        console.log("Error fetching file:", error);
+        return null;
+    }
+};
+
+export const getFileWithMetadata = async (filePath: string) => {
+    try {
+        const headResult = await s3Client.send(new HeadObjectCommand({
+            Bucket: bucketName,
+            Key: filePath,
+        }));
+
+        const getCommand = new GetObjectCommand({
+            Bucket: bucketName,
+            Key: filePath,
+        });
+
+        const fileUrl = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
+
+        return {
+            path: filePath,
+            preview: fileUrl,
+            name: filePath.split("/").pop() || "",
+            type: headResult.ContentType || "application/octet-stream",
+            size: headResult.ContentLength || 0,
+        };
+    } catch (error) {
+        console.log("Error fetching file:", error);
         return null;
     }
 };
@@ -100,7 +127,7 @@ export const getRandomFile = async (folderPath: string) => {
         const files = response.Contents?.map((obj) => obj.Key) || [];
 
         if (files.length === 0) {
-            console.error("No files found in folder:", folderPath);
+            console.log("No files found in folder:", folderPath);
             return null;
         }
 
@@ -108,7 +135,7 @@ export const getRandomFile = async (folderPath: string) => {
         const randomFile = files[Math.floor(Math.random() * files.length)];
 
         if (!randomFile) {
-            console.error("No file found in folder:", folderPath);
+            console.log("No file found in folder:", folderPath);
             return null;
         }
 
@@ -121,7 +148,7 @@ export const getRandomFile = async (folderPath: string) => {
 
         return { filePath: randomFile, fileUrl };
     } catch (error) {
-        console.error("Error fetching random file:", error);
+        console.log("Error fetching random file:", error);
         return null;
     }
 };
