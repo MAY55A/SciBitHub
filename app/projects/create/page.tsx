@@ -9,7 +9,7 @@ import { Step4 } from "@/src/components/project-creation/step4";
 import { Step5 } from "@/src/components/project-creation/step5";
 import { useMultistepProjectForm } from "@/src/contexts/multistep-project-form-context";
 import { createProject } from "@/src/lib/project-service";
-import { ProjectStatus } from "@/src/types/models";
+import { ProjectStatus } from "@/src/types/enums";
 import { ProjectInputData } from "@/src/types/project-form-data";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

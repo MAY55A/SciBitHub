@@ -8,9 +8,9 @@ import { InterestsForm } from "../../../src/components/account-settings/interest
 import { ProfilePictureUpload } from "../../../src/components/account-settings/profile-picture-form";
 import { AccountSettingsSkeleton } from "@/src/components/skeletons/account-settings-skeleton";
 import { Suspense } from "react";
-import { ResearcherType } from "@/src/types/models";
 import { OraganizationDetailsForm } from "@/src/components/account-settings/organization-details-form";
 import { EducationDetailsForm } from "@/src/components/account-settings/Education-details-form copy";
+import { ResearcherType } from "@/src/types/enums";
 
 export default function Settings() {
     const { user, loading } = useAuth();

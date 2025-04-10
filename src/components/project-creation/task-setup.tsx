@@ -7,12 +7,12 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { DataType, TaskType } from "@/src/types/models";
 import { ArrowDown, ArrowUp, Edit2, PlusCircle, X } from "lucide-react";
 import TaskFieldSetup from "./task-field-setup";
 import { useEffect, useRef, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
+import { TaskType, DataType } from "@/src/types/enums";
 
 export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEditType = true }: { buttonText: string, data?: Partial<TaskInputData>, onSubmit: (data: TaskInputData) => void, onChange: (data: any) => void, canEditType?: boolean }) {
     const form = useForm({

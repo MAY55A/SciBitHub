@@ -1,6 +1,5 @@
 "use client"
 
-import { ValidationStatus } from "@/src/types/models";
 import { Button } from "../ui/button";
 import { Check, Flag, Trash2, X } from "lucide-react";
 import { deleteContributions, updateContributionStatus } from "@/src/utils/contribution-actions";
@@ -10,6 +9,7 @@ import { useToast } from "@/src/hooks/use-toast";
 import { ValidationStatusUI } from "../custom/validation-status";
 import { useRouter } from "next/navigation";
 import { cn } from "@/src/lib/utils";
+import { ValidationStatus } from "@/src/types/enums";
 
 
 

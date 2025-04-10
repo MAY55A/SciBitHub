@@ -1,7 +1,8 @@
 import Link from "@/src/components/custom/Link";
 import ShinyText from "@/src/components/ui/shiny-text";
 import { cn } from "@/src/lib/utils";
-import { Task, TaskStatus } from "@/src/types/models";
+import { TaskStatus } from "@/src/types/enums";
+import { Task } from "@/src/types/models";
 import { formatDate } from "@/src/utils/utils";
 import { ChevronLeft } from "lucide-react";
 

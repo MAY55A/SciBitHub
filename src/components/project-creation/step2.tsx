@@ -1,7 +1,7 @@
 "use client"
 
-import { ModerationLevel, ModerationLevelDescriptions, ParticipationLevel, ParticipationLevelDescriptions, ProjectStatus, ProjectVisibility, ProjectVisibilityDescriptions, Scope } from "@/src/types/models";
 import { projectInputDataSchema, ProjectInputData } from "@/src/types/project-form-data";
+import { ProjectStatus, ParticipationLevel, Scope, ProjectVisibility, ProjectVisibilityDescriptions, ParticipationLevelDescriptions, ModerationLevelDescriptions, ModerationLevel } from "@/src/types/enums";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage, Form, FormDescription } from "../ui/form";

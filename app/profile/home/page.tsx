@@ -2,9 +2,9 @@
 
 import ProfileSkeleton from "@/src/components/skeletons/profile-skeleton";
 import { useAuth } from "@/src/contexts/AuthContext";
-import { UserRole } from "@/src/types/models";
 import { ResearcherProfile } from "../../../src/components/profile/researcher-profile";
 import { ContributorProfile } from "../../../src/components/profile/contributor-profile";
+import { UserRole } from "@/src/types/enums";
 
 export default function MyProfile() {
     const { user, loading } = useAuth();

@@ -1,6 +1,7 @@
-import { ResearcherType, User } from "@/src/types/models";
+import { User } from "@/src/types/models";
 import { Building, Check, Globe2, GraduationCap, Link, Mail, MapPin, Phone, School, TestTube2, User as UserIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { ResearcherType } from "@/src/types/enums";
 
 export function ResearcherProfile({ user }: { user: User }) {
     return (

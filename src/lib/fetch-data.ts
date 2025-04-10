@@ -1,6 +1,6 @@
-import { unstable_cache } from "next/cache";
 import { createClient } from "../utils/supabase/server";
-import { Contribution, Project, ProjectProgress, ProjectStatus, Task } from "../types/models";
+import { Contribution, Project, Task } from "../types/models";
+import { ProjectStatus, ProjectProgress } from "../types/enums";
 
 
 

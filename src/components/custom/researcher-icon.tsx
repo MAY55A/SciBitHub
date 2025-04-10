@@ -1,4 +1,4 @@
-import { ResearcherType } from "@/src/types/models";
+import { ResearcherType } from "@/src/types/enums";
 import { GraduationCap, Building, UserIcon } from "lucide-react";
 
 export function ResearcherIcon({ type, size = 15 }: { type: ResearcherType, size?: number }) {

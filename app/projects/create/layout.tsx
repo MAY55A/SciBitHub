@@ -1,7 +1,7 @@
 import { NotAuthorized } from "@/src/components/errors/not-authorized";
 import { MultistepProjectFormProvider } from "@/src/contexts/multistep-project-form-context";
 import { getCurrentUserRole } from "@/src/lib/user-service";
-import { UserRole } from "@/src/types/models";
+import { UserRole } from "@/src/types/enums";
 
 export default async function Layout({
   children,

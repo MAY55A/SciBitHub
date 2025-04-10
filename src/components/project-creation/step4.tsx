@@ -11,7 +11,7 @@ import InputFile from "./input-file";
 import { useEffect, useState } from "react";
 import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
-import { ProjectStatus } from "@/src/types/models";
+import { ProjectStatus } from "@/src/types/enums";
 
 export function Step4({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const form = useForm({

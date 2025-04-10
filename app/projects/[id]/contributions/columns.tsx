@@ -5,12 +5,13 @@ import { DataTableColumnHeader } from "@/src/components/data-table/table-column-
 import { Button } from "@/src/components/ui/button";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
-import { Contribution, ValidationStatus } from "@/src/types/models"
+import { Contribution } from "@/src/types/models"
 import { formatDate } from "@/src/utils/utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Actions } from "@/src/components/contributions/actions";
+import { ValidationStatus } from "@/src/types/enums";
 
 export const columns: ColumnDef<Contribution>[] = [
     {

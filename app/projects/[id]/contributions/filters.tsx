@@ -1,4 +1,4 @@
-import { ValidationStatus } from "@/src/types/models";
+import { ValidationStatus } from "@/src/types/enums";
 import { Check, Hourglass, X } from "lucide-react";
 
 export const contributionsFilters = [

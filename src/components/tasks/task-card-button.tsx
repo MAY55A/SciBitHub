@@ -1,8 +1,8 @@
 import { ChevronRight } from "lucide-react";
 import Link from "../custom/Link";
 import { Button } from "../ui/button";
-import { TaskStatus, UserRole } from "@/src/types/models";
 import { getCurrentUserRole } from "@/src/lib/user-service";
+import { TaskStatus, UserRole } from "@/src/types/enums";
 
 export const TaskCardButton = async ({taskId, status}: {taskId: string, status: TaskStatus}) => {
     const userRole = await getCurrentUserRole();

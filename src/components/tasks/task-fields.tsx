@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { FormGenerator } from "./form-generator";
 import { Button } from "../ui/button";
 import { createContribution, hasUserContributed } from "@/src/lib/contribution-service";
-import { DataType, Task, TaskType } from "@/src/types/models";
 import { FormMessage, Message } from "../custom/form-message";
 import { Flag, Info } from "lucide-react";
 import ImageViewer from "../custom/image-viewer";
@@ -15,6 +14,8 @@ import Link from "../custom/Link";
 import { usePathname } from "next/navigation";
 import { Checkbox } from "../ui/checkbox";
 import { useToast } from "@/src/hooks/use-toast";
+import { TaskType, DataType } from "@/src/types/enums";
+import { Task } from "@/src/types/models";
 
 export function TaskFields({ task }: { task: Task }) {
     const { user } = useAuth();

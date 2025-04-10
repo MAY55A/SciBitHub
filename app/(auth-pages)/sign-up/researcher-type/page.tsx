@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/src/components/ui/button";
 import Card from "@/src/components/ui/motion-card";
 import { Building, GraduationCap, User } from "lucide-react";
-import { ResearcherType } from "@/src/types/models";
+import { ResearcherType } from "@/src/types/enums";
 
 
 export default function ResearcherTypeSelection() {

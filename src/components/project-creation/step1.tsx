@@ -4,7 +4,6 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
-import { ProjectDomain, ProjectStatus } from "@/src/types/models";
 import { ProjectInputData, projectInputDataSchema } from "@/src/types/project-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import { useEffect, useState } from "react";
 import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { ProjectStatus, ProjectDomain } from "@/src/types/enums";
 
 export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveProject, dataChanged }: { initialName?: string, data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const [isVerifiying, setIsVerifying] = useState(false);

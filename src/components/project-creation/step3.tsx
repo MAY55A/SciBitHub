@@ -8,8 +8,8 @@ import TaskSetup from "./task-setup";
 import { useEffect, useState } from "react";
 import { FormMessage } from "../custom/form-message";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
-import { ProjectStatus } from "@/src/types/models";
 import { motion } from "framer-motion";
+import { ProjectStatus } from "@/src/types/enums";
 
 
 export function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, files, updateFiles, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, files: TaskFilesMap, updateFiles: (files: TaskFilesMap) => void, dataChanged?: boolean }) {

@@ -3,7 +3,7 @@ import { TaskCard } from "../tasks/task-card";
 import { fetchTasks } from "@/src/lib/fetch-data";
 import { notFound } from "next/navigation";
 import { LatestContributions } from "./latest-contributions";
-import { TaskStatus } from "@/src/types/models";
+import { TaskStatus } from "@/src/types/enums";
 
 export async function ProjectContribution({ projectId }: { projectId: string }) {
     const tasks = await fetchTasks(projectId);

@@ -1,9 +1,9 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { RequestType } from "../types/models";
 import { encodedRedirect } from "./utils";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { RequestType } from "../types/enums";
 
 const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: any, oldParticipants: any, projectId: string, status: string) => {
     if (participants.length > 0) {

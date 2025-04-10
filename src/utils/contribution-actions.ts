@@ -1,8 +1,8 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { ValidationStatus } from "../types/models";
 import { deleteFromMinIO } from "./minio/client";
+import { ValidationStatus } from "../types/enums";
 
 export const updateContributionStatus = async (ids: string[], status: ValidationStatus) => {
     if (ids.length === 0) {

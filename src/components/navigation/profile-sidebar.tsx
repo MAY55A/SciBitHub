@@ -15,9 +15,10 @@ import {
 import { Home, Settings, ChevronRight, Bookmark, MessagesSquare, LibraryBig, ClipboardList } from "lucide-react"
 import { SidebarNavUser } from "./sidebar-nav-user"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
-import { User, UserRole } from "@/src/types/models"
+import { User } from "@/src/types/models"
 import { UserNavSkeleton } from "../skeletons/user-nav-skeleton"
 import Link from "next/link"
+import { UserRole } from "@/src/types/enums"
 
 
 export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: string) => boolean, inUrl: (url: string) => boolean, user: User | null }) => {

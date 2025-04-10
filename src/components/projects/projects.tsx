@@ -1,6 +1,7 @@
 import { ProjectCard } from "@/src/components/projects/project-card";
 import { fetchProjects } from "@/src/lib/fetch-data";
-import { Project, ProjectProgress, ProjectStatus } from "@/src/types/models";
+import { ProjectStatus, ProjectProgress } from "@/src/types/enums";
+import { Project } from "@/src/types/models";
 import { FolderOpen, X } from "lucide-react";
 
 export default async function Projects({

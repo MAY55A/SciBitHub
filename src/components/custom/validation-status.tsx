@@ -1,5 +1,5 @@
 import { cn } from "@/src/lib/utils";
-import { ValidationStatus } from "@/src/types/models";
+import { ValidationStatus } from "@/src/types/enums";
 import { Check, X, Hourglass } from "lucide-react";
 
 export function ValidationStatusUI({ status, withBorder = false }: { status: ValidationStatus, withBorder?: boolean}) {

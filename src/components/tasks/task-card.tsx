@@ -1,10 +1,11 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/src/components/ui/card";
 import ShinyText from "@/src/components/ui/shiny-text";
 import { cn } from "@/src/lib/utils";
-import { Task, TaskStatus } from "@/src/types/models";
+import { Task } from "@/src/types/models";
 import { TaskCardButton } from "./task-card-button";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { TaskStatus } from "@/src/types/enums";
 
 export function TaskCard({ task }: { task: Task }) {
     return (

@@ -2,7 +2,7 @@
 
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { ProjectInputData } from "../types/project-form-data";
-import { ProjectVisibility, ParticipationLevel, ModerationLevel, Scope } from "../types/models";
+import { ModerationLevel, ParticipationLevel, ProjectVisibility, Scope } from "../types/enums";
 
 
 export type TaskFilesMap = {
@@ -11,7 +11,8 @@ export type TaskFilesMap = {
 // Default values for the form
 const defaultFormData: ProjectInputData = {
     name: "",
-    description: "",
+    shortDescription: "",
+    longDescription: "",
     domain: "",
     scope: Scope.GLOBAL,
     visibility: ProjectVisibility.PUBLIC,

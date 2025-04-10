@@ -1,4 +1,4 @@
-import { ModerationLevel, ValidationStatus } from "../types/models";
+import { ModerationLevel, ValidationStatus } from "../types/enums";
 import { uploadFileToMinIO } from "../utils/minio/client";
 import { createClient } from "../utils/supabase/client";
 

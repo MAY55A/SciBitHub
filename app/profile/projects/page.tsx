@@ -6,9 +6,9 @@ import Projects from "../../../src/components/projects/projects";
 import Pagination from "../../../src/components/custom/pagination";
 import { fetchProjects } from "@/src/lib/fetch-data";
 import ProjectsSkeleton from "@/src/components/skeletons/projects-skeleton";
-import { ProjectStatus } from "@/src/types/models";
 import { FormMessage } from "@/src/components/custom/form-message";
 import ClearSearchParams from "./clear-search-params";
+import { ProjectStatus } from "@/src/types/enums";
 
 export default async function MyProjects(props: {
     searchParams?: Promise<{

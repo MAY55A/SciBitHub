@@ -1,4 +1,4 @@
-import { UserRole } from "../types/models";
+import { UserRole } from "../types/enums";
 import { createClient } from "../utils/supabase/server";
 
 export async function getCurrentUserRole(): Promise<UserRole | null> {
