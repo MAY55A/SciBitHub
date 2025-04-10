@@ -1,12 +1,11 @@
-import Link from "@/src/components/custom/Link";
-import { Suspense } from "react";
-import { fetchProjects } from "@/src/lib/fetch-data";
-import ProjectsSkeleton from "@/src/components/skeletons/projects-skeleton";
 import Search from "@/src/components/custom/search-bar";
+import { Suspense } from "react";
+import ProjectsSkeleton from "@/src/components/skeletons/projects-skeleton";
 import Pagination from "@/src/components/custom/pagination";
+import { fetchDiscussions } from "@/src/lib/fetch-data";
 import { HeroSection } from "@/src/components/custom/hero-section";
-import Projects from "@/src/components/projects/projects";
-import { ProjectProgress } from "@/src/types/enums";
+import Discussions from "@/src/components/discussions/discussions";
+import DiscussionFormDialog from "@/src/components/discussions/discussion-form-dialog.tsx";
 
 export default async function Page(props: {
     searchParams?: Promise<{
@@ -15,7 +14,6 @@ export default async function Page(props: {
         sort?: "asc" | "desc";
         orderBy?: string;
         creator?: string;
-        progress?: ProjectProgress;
     }>;
 }) {
 
@@ -24,35 +22,27 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
     const sort = searchParams?.sort;
     const orderBy = searchParams?.orderBy;
-    const progress = searchParams?.progress;
-    //const status = ProjectStatus.PUBLISHED;
-    const status = undefined;
 
     const creator = searchParams?.creator;
-    const pages = await fetchProjects(
+    const pages = await fetchDiscussions(
         creator,
         query,
-        status,
-        progress
     );
     const totalPages = pages?.totalPages;
 
-
     return (
         <div className="w-full flex flex-col items-center">
-            <HeroSection image="/images/bg-6.jpg" title="Projects" subtitle="Discover projects in various domains">
-            <div className="text-right">
-                    <Link href={'/projects/create'} className='text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 hover:text-secondary-foreground py-2 px-4 border border-primary rounded-lg'>
-                        start a project
-                    </Link>
+            <HeroSection image="/images/bg-9.jpg" title="Discussions" subtitle="Engage in meaningful discussions with the community">
+                <div className="text-right">
+                    <DiscussionFormDialog />
                 </div>
             </HeroSection>
             <div className="w-full flex flex-col gap-8 items-center rounded-lg mt-6 p-4">
                 <div className="w-full flex justify-between gap-8 border-b border-muted-foreground/30 p-8 rounded-t-lg">
-                    <Search placeholder="Search projects..." />
+                    <Search placeholder="Search discussions..." />
                 </div>
                 <Suspense key={query || '' + currentPage} fallback={<ProjectsSkeleton />}>
-                    <Projects creator={creator} query={query} status={status} currentPage={currentPage} orderBy={orderBy} sort={sort} progress={progress} />
+                    <Discussions creator={creator} query={query} currentPage={currentPage} orderBy={orderBy} sort={sort} />
                 </Suspense>
                 <div className="mt-5 flex w-full justify-center">
                     {totalPages ? <Pagination totalPages={totalPages} /> : undefined}
