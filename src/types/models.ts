@@ -116,3 +116,16 @@ export interface Contribution {
     status: ValidationStatus;
     created_at?: string;
 }
+
+
+export interface Discussion {
+    id?: string;
+    title: string;
+    body: string;
+    category: DiscussionCategory;
+    files?: string[];
+    tags?: string[];
+    created_at?: string;
+    updated_at?: string;
+    creator: PublicUser;
+}
