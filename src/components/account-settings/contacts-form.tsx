@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export function ContactsForm({ ...contacts }: { contactEmail: string, phone: string, contacts: string[] }) {
+    const [initialContacts, setInitialContacts] = useState(contacts);
     const form = useForm({
         resolver: zodResolver(inputDataSchema.pick({ contactEmail: true, phone: true, contacts: true })),
         defaultValues: contacts,
@@ -38,7 +39,7 @@ export function ContactsForm({ ...contacts }: { contactEmail: string, phone: str
     }
     const onSubmit = async (data: Partial<InputData>) => {
         setMessage(null);
-        if (JSON.stringify(data) === JSON.stringify(contacts)) {
+        if (JSON.stringify(data) === JSON.stringify(initialContacts)) {
             setMessage({ error: "No changes were made." });
             return;
         }
@@ -53,6 +54,7 @@ export function ContactsForm({ ...contacts }: { contactEmail: string, phone: str
 
         const res = await updateMetadata(data);
         if(res.success) {
+            setInitialContacts({...initialContacts, ...data});
             setMessage({ success: res.message });
         } else {
             setMessage({ error: res.message });
@@ -60,7 +62,9 @@ export function ContactsForm({ ...contacts }: { contactEmail: string, phone: str
     }
 
     const reset = () => {
-        form.reset();
+        form.setValue("contactEmail", initialContacts.contactEmail);
+        form.setValue("contacts", initialContacts.contacts);
+        form.setValue("phone", initialContacts.phone);
         setNewContact('');
         setMessage(null);
     }

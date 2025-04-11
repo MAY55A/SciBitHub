@@ -11,21 +11,24 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export function EducationDetailsForm({ ...details }: { degree: string, institution: string }) {
+        const [initialDetails, setInitialDetails] = useState({ academicDegree: details.degree, institutionName: details.institution });
+
     const form = useForm({
         resolver: zodResolver(inputDataSchema.pick({ academicDegree: true, institutionName: true })),
-        defaultValues: { academicDegree: details.degree, institutionName: details.institution }
+        defaultValues: initialDetails
     });
     const [message, setMessage] = useState<Message | null>(null);
 
     const onSubmit = async (data: Partial<InputData>) => {
         setMessage(null);
-        if (data.academicDegree === details.degree && data.institutionName === details.institution) {
+        if (data.academicDegree === initialDetails.academicDegree && data.institutionName === initialDetails.academicDegree) {
             setMessage({ error: "No changes were made." });
             return;
         }
 
         const res = await updateMetadata(data);
         if (res.success) {
+            setInitialDetails({...initialDetails, ...data});
             setMessage({ success: res.message });
         } else {
             setMessage({ error: res.message });
@@ -33,7 +36,8 @@ export function EducationDetailsForm({ ...details }: { degree: string, instituti
     }
 
     const reset = () => {
-        form.reset();
+        form.setValue("academicDegree", initialDetails.academicDegree);
+        form.setValue("institutionName", initialDetails.institutionName);
         setMessage(null);
     }
 

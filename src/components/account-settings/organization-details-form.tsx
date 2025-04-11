@@ -11,21 +11,23 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export function OraganizationDetailsForm({ ...details }: { name: string, location: string }) {
+    const [initialDetails, setInitialDetails] = useState({ organizationName: details.name, organizationLocation: details.location });
     const form = useForm({
         resolver: zodResolver(inputDataSchema.pick({ organizationName: true, organizationLocation: true })),
-        defaultValues: { organizationName: details.name, organizationLocation: details.location }
+        defaultValues: initialDetails
     });
     const [message, setMessage] = useState<Message | null>(null);
 
     const onSubmit = async (data: Partial<InputData>) => {
         setMessage(null);
-        if (data.organizationName === details.name && data.organizationLocation === details.location) {
+        if (data.organizationName === initialDetails.organizationName && data.organizationLocation === initialDetails.organizationLocation) {
             setMessage({ error: "No changes were made." });
             return;
         }
 
         const res = await updateMetadata(data);
         if (res.success) {
+            setInitialDetails({...initialDetails, ...data});
             setMessage({ success: res.message });
         } else {
             setMessage({ error: res.message });
@@ -33,7 +35,8 @@ export function OraganizationDetailsForm({ ...details }: { name: string, locatio
     }
 
     const reset = () => {
-        form.reset();
+        form.setValue("organizationName", initialDetails.organizationName);
+        form.setValue("organizationLocation", initialDetails.organizationLocation);
         setMessage(null);
     }
 

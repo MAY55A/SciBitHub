@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export function PersonalInformationForm({ ...info }: { username: string, country: string, bio: string }) {
+    const [initialInfo, setInitialInfo] = useState(info);
     const form = useForm({
         resolver: zodResolver(inputDataSchema.pick({ username: true, country: true, bio: true })),
         defaultValues: info
@@ -21,16 +22,17 @@ export function PersonalInformationForm({ ...info }: { username: string, country
 
     const onSubmit = async (data: Partial<InputData>) => {
         setMessage(null);
-        if (JSON.stringify(data) === JSON.stringify(info)) {
+        if (JSON.stringify(data) === JSON.stringify(initialInfo)) {
             setMessage({ error: "No changes were made." });
             return;
         }
-        if (data.bio === info.bio) {
+        if (data.bio === initialInfo.bio) {
             data = { username: data.username, country: data.country }
         }
 
         const res = await updateInfo(data);
         if (res.success) {
+            setInitialInfo({ ...initialInfo, ...data });
             setMessage({ success: res.message });
         } else {
             setMessage({ error: res.message });
@@ -38,7 +40,9 @@ export function PersonalInformationForm({ ...info }: { username: string, country
     }
 
     const reset = () => {
-        form.reset();
+        form.setValue("username", initialInfo.username);
+        form.setValue("country", initialInfo.country);
+        form.setValue("bio", initialInfo.bio);
         setMessage(null);
     }
 
