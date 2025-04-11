@@ -2,9 +2,11 @@ import { FormMessage, Message } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
 import CardGridSelect from "@/src/components/ui/card-grid-select";
 import { researchDomains } from "@/src/data/fields";
+import { updateMetadata } from "@/src/utils/account-actions";
 import { useState } from "react";
 
 export function InterestsForm({ interests }: { interests: string[] }) {
+    const [initialInterests, setInitialInterests] = useState(interests);
     const [selected, setSelected] = useState(interests);
     const [message, setMessage] = useState<Message | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,7 +16,7 @@ export function InterestsForm({ interests }: { interests: string[] }) {
         setMessage(null);
     };
     const reset = () => {
-        setSelected([...interests]);
+        setSelected([...initialInterests]);
         setMessage(null);
     }
     const onSubmit = async () => {
@@ -23,19 +25,19 @@ export function InterestsForm({ interests }: { interests: string[] }) {
             return;
         }
 
-        if (JSON.stringify(selected) === JSON.stringify(interests)) {
+        if (JSON.stringify(selected) === JSON.stringify(initialInterests)) {
             setMessage({ error: 'No changes were made.' });
             return;
         }
         setIsSubmitting(true);
-        /*
-        if (res.success) {
-            setMessage(res.message);
-        } else {
-            setMessage(res.message);
-        }
-            */
+        const res = await updateMetadata({interests: selected})
         setIsSubmitting(false);
+        if (res.success) {
+            setInitialInterests(selected);
+            setMessage({success: "Interests updated successfully."});
+        } else {
+            setMessage({error: "Error updating interests."});
+        }
     }
 
     return (
