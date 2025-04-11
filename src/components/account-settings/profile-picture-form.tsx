@@ -9,14 +9,15 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 
-export const ProfilePictureUpload = ({ userId, image }: { userId: string, image?: string }) => {
+export const ProfilePictureUpload = ({ userId, image, imageFallback }: { userId: string, image?: string, imageFallback: string }) => {
     const [file, setFile] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [initialImage, setInitialImage] = useState<string | undefined>(image);
+    const [previewUrl, setPreviewUrl] = useState<string | undefined>(image);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<Message | null>(null);
     useEffect(() => {
         return () => {
-            if (previewUrl) {
+            if (previewUrl && previewUrl !== initialImage) {
                 URL.revokeObjectURL(previewUrl);
             }
         };
@@ -47,7 +48,7 @@ export const ProfilePictureUpload = ({ userId, image }: { userId: string, image?
     };
 
     const removePicture = async () => {
-        if (!image) {
+        if (!initialImage) {
             setMessage({ error: 'You do not have a profile picture to remove.' });
             return;
         }
@@ -55,8 +56,9 @@ export const ProfilePictureUpload = ({ userId, image }: { userId: string, image?
         const { success, message } = await removeProfilePicture(userId);
         setLoading(false);
         if (success) {
+            setInitialImage(undefined);
+            setPreviewUrl(undefined);
             setMessage({ success: message });
-            image = undefined;
         } else {
             setMessage({ error: message });
         }
@@ -70,8 +72,9 @@ export const ProfilePictureUpload = ({ userId, image }: { userId: string, image?
         }
         setLoading(true);
         const { success, message } = await updateProfilePicture(userId, file);
-        setLoading(true);
+        setLoading(false);
         if (success) {
+            setInitialImage(previewUrl);
             setMessage({ success: message });
         } else {
             setMessage({ error: message });
@@ -80,7 +83,7 @@ export const ProfilePictureUpload = ({ userId, image }: { userId: string, image?
 
     const reset = () => {
         setFile(null);
-        setPreviewUrl(null);
+        setPreviewUrl(initialImage);
         setMessage(null);
     }
 
@@ -94,14 +97,19 @@ export const ProfilePictureUpload = ({ userId, image }: { userId: string, image?
                 This picture will be your profile avatar.
             </p>
             <div className="flex items-center gap-4 text-muted-foreground">
-                <Image
-                    src={previewUrl || image || "/images/avatar.png"}
-                    alt="profile photo"
-                    width={previewUrl || image ? 96 : 45}
-                    height={previewUrl || image ? 96 : 45}
-                    priority
-                    className="rounded-full object-contain"
-                />
+                {previewUrl ?
+                    <Image
+                        src={previewUrl}
+                        alt="profile photo"
+                        width={96}
+                        height={96}
+                        priority
+                        className="rounded-2xl object-contain"
+                    /> :
+                    <div className="w-24 h-24 rounded-2xl bg-muted flex items-center justify-center text-muted-foreground font-semibold text-xl">
+                        {imageFallback}
+                    </div>
+                }
                 <Input
                     type="file"
                     accept="image/*"
@@ -112,7 +120,7 @@ export const ProfilePictureUpload = ({ userId, image }: { userId: string, image?
             </div>
             {message && <FormMessage message={message} />}
             <div className="mt-6 flex items-center justify-end gap-x-6">
-                {image && <CustomAlertDialog
+                {initialImage && <CustomAlertDialog
                     buttonVariant="ghost"
                     buttonClass="text-destructive hover:bg-destructive hover:text-primary-foreground"
                     buttonDisabled={loading}

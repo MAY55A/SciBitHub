@@ -23,9 +23,9 @@ export default function Settings() {
             <div className="flex flex-col gap-6">
                 <EmailForm currentEmail={user!.email} />
                 <PersonalInformationForm username={user!.username} country={user!.country} bio={user!.metadata?.bio || ""} />
-                <ProfilePictureUpload userId={user!.id} image={user!.profile_picture} />
-                { user!.metadata?.researcherType === ResearcherType.ORGANIZATION && <OraganizationDetailsForm name={user?.metadata.organizationName || ""} location={user?.metadata.location || ""}/>}
-                { user!.metadata?.researcherType === ResearcherType.ACADEMIC && <EducationDetailsForm degree={user?.metadata.academicDegree || ""} institution={user?.metadata.institutionName || ""}/>}
+                <ProfilePictureUpload userId={user!.id} image={user!.profile_picture} imageFallback={user.username.substring(0, 2).toUpperCase()} />
+                {user!.metadata?.researcherType === ResearcherType.ORGANIZATION && <OraganizationDetailsForm name={user?.metadata.organizationName || ""} location={user?.metadata.location || ""} />}
+                {user!.metadata?.researcherType === ResearcherType.ACADEMIC && <EducationDetailsForm degree={user?.metadata.academicDegree || ""} institution={user?.metadata.institutionName || ""} />}
                 <InterestsForm interests={user!.metadata?.interests ?? []} />
                 <ContactsForm contactEmail={user!.metadata?.contactEmail || ""} phone={user!.metadata?.phone || ""} contacts={user!.metadata?.contacts || []} />
             </div>
