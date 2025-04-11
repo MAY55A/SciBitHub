@@ -6,9 +6,9 @@ import { Step1Card } from "./card-step1";
 import { Step2Card } from "./card-step2";
 import { Step3Card } from "./card-step3";
 import { Step4Card } from "./card-step4";
-import { ProjectStatus } from "@/src/types/models";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
 import { ProjectInputData } from "@/src/types/project-form-data";
+import { ProjectStatus } from "@/src/types/enums";
 
 export function Step5({ data, onBack, onEdit, onSaveProject, dataChanged }: { data: ProjectInputData, onBack: () => void, onEdit: (step: number) => void, onSaveProject: (data: ProjectInputData, status?: ProjectStatus) => void, dataChanged?: boolean }) {
 

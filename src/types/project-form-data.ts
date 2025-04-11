@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FieldType, ModerationLevel, ParticipationLevel, ProjectDomain, ProjectVisibility, Scope, TaskType } from "./models";
+import { FieldType, ModerationLevel, ParticipationLevel, ProjectDomain, ProjectVisibility, Scope, TaskType } from "./enums";
 
 export const fieldInputDataSchema = z.object({
     label: z.string().nonempty("Required"),

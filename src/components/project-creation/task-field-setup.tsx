@@ -7,7 +7,6 @@ import { Input } from "../ui/input";
 import { FieldInputData, fieldInputDataSchema } from "@/src/types/project-form-data";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { FieldType } from "@/src/types/models";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { FileFieldParams } from "./file-field-params";
 import { NumberFieldParams } from "./number-field-params";
@@ -15,6 +14,7 @@ import { TextFieldParams } from "./text-field-params";
 import { SelectFieldParams } from "./select-field-params";
 import { useEffect, useState } from "react";
 import { LucideIcon } from "lucide-react";
+import { FieldType } from "@/src/types/enums";
 
 export default function TaskFieldSetup({ className, icon: Icon, triggerText, title, onSubmit, data }: { className: string, icon?: LucideIcon, triggerText?: string, title: string, onSubmit: (data: any) => void, data?: FieldInputData }) {
     const [open, setOpen] = useState(false);
