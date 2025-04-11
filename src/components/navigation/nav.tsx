@@ -37,10 +37,14 @@ const components = {
     ],
     "discussions": [
         {
-            title: "Alert Dialog",
-            href: "/docs/primitives/alert-dialog",
-            description:
-                "A modal dialog that interrupts the user with important content and expects a response.",
+            title: "Recent Discussions",
+            href: "/discussions?sort=recent",
+            description: "See the latest discussions from all topics.",
+        },
+        {
+            title: "Popular Discussions",
+            href: "/discussions?sort=popular",
+            description: "View trending and most active discussions.",
         },
     ]
 }
@@ -56,13 +60,14 @@ export function Nav() {
                             <li className="row-span-3">
                                 <NavigationMenuLink asChild>
                                     <a
-                                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                                        className="relative flex h-full w-full select-none flex-col justify-end rounded-md bg-[url('/images/bg-2.jpg')] bg-cover bg-center bg-no-repeat from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                                         href="/projects"
                                     >
-                                        <div className="mb-2 mt-4 text-lg font-medium">
+                                        <div className="absolute inset-0 bg-muted/70 rounded-md"></div>
+                                        <div className="z-10 mb-2 mt-4 text-lg font-medium">
                                             Explore Projects
                                         </div>
-                                        <p className="text-sm leading-tight text-muted-foreground">
+                                        <p className="z-10 text-sm leading-tight text-muted-foreground">
                                             Discover projects in various domains and see how others are collaborating.
                                         </p>
                                     </a>
