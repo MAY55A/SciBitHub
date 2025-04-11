@@ -52,7 +52,7 @@ export default function UserSearch({ onSelectUser }: UserSearchProps) {
                     aria-expanded={open}
                     className="w-[200px] justify-between justify-self-end"
                 >
-                    {value || "Add contributor..."}
+                    {"Add contributor..."}
                     <Plus className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -76,7 +76,7 @@ export default function UserSearch({ onSelectUser }: UserSearchProps) {
                                         value={user.username}
                                         onSelect={() => {
                                             onSelectUser(user);
-                                            setValue(user.username);
+                                            setValue("");
                                             setOpen(false);
                                         }}
                                     >

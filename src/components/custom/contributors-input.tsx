@@ -6,7 +6,7 @@ export default function ContributorsInput({ value, onChange }: { value?: PublicU
     const [contributors, setContributors] = useState<PublicUser[]>(value ?? []);
 
     function handleSelection(user: PublicUser) {
-        if (!contributors.includes(user)) {
+        if (!contributors.find(u => u.id === user.id)) {
             const newContributors = [...contributors, user];
             setContributors(newContributors);
             onChange(newContributors);
