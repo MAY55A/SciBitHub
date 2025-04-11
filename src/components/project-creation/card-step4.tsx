@@ -13,27 +13,28 @@ export function Step4Card({ data, onEdit }: { data: ProjectInputData, onEdit: (s
                 <CardTitle className="text-center text-md">* Resources *</CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="flex flex-wrap w-full items-center justify-center gap-4 text-sm">
+                <div className="w-full flex flex-col justify-center gap-4 text-sm">
                     {!data.coverImage && (!data.links || data.links?.length === 0) &&
                         <p className="self-center text-muted-foreground">No resources added</p>
                     }
-                    
+
                     {data.coverImage &&
-                        <div className="flex flex-col space-y-1.5">
+                        <div className="flex flex-col gap-2">
                             <Label className="text-primary">Cover Image</Label>
-                            <Image
-                                src={data.coverImage}
-                                alt="Preview"
-                                width={300}
-                                height={300}
-                                className='rounded-lg'
-                            />
+                            <div className="relative w-full h-40">
+                                <Image
+                                    src={data.coverImage}
+                                    alt="Preview"
+                                    fill
+                                    className='object-cover object-fit rounded-lg'
+                                />
+                            </div>
                         </div>
                     }
                     {data.links &&
                         <div className="flex flex-col space-y-1.5 whitespace-anywhere break-words">
                             <Label className="text-primary">External Links</Label>
-                            <ul className="list-disc text-sm pl-6 pt-6 underline decoration-primary">
+                            <ul className="list-disc text-sm pl-6 underline decoration-primary">
                                 {data.links.map((link, index) => (
                                     <li key={index} className="break-all" ><a href={link} className="break-all">{link}</a></li>
                                 ))}

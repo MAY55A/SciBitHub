@@ -29,7 +29,7 @@ export default function InputFile({ onFileSelect, file, setError }: { onFileSele
         const url = await fileToBase64(file);
         setSelectedFile(url);
         onFileSelect(url);
-        setError(undefined);
+        setError("");
     };
 
     const handleRemoveClick = () => {
@@ -39,19 +39,17 @@ export default function InputFile({ onFileSelect, file, setError }: { onFileSele
             fileInputRef.current.value = "";
         }
     };
-console.log(file);
-console.log(selectedFile);
+
     return (
         <div className="flex flex-wrap items-center justify-center gap-2">
             <Input type="file" onChange={handleFileChange} ref={fileInputRef} />
             {selectedFile && (
-                <div className="mt-2 relative">
+                <div className="mt-2 relative w-full h-80">
                     <Image
                         src={selectedFile}
                         alt="Preview"
-                        width={400}
-                        height={400}
-                        className='rounded-lg'
+                        fill
+                        className='object-fit object-cover rounded-lg'
                     />
                     <button
                         onClick={handleRemoveClick}

@@ -53,7 +53,7 @@ export function Step4({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
     };
     const handleError = (errors: any) => {
         if (errors.links)
-            form.setError("links", { message: "Invalid links" })
+            form.setError("links", { message: "Invalid links, please provide full links" })
     };
     return (
         <Form {...form}>

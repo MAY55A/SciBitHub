@@ -20,7 +20,7 @@ export function Step1Card({ data, onEdit }: { data: ProjectInputData, onEdit: (s
                     </div>
                     <div className="flex flex-col space-y-1.5">
                         <Label className="text-primary">Short Description</Label>
-                        <textarea value={data.shortDescription} className="border p-2 w-full rounded text-sm" />
+                        <textarea value={data.shortDescription} className="border p-2 w-full rounded text-sm" readOnly/>
                     </div>
                     <div className="flex flex-col space-y-1.5">
                         <Label className="text-primary">Detailed Description</Label>
