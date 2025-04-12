@@ -83,10 +83,6 @@
 
 .wmde-markdown,
 .wmde-markdown-var {
-  --color-canvas-default: var(--canvas-default) !important;
-  --color-canvas-subtle: var(--canvas-subtle) !important;
-  --color-fg-default: hsl(var(--foreground)) !important;
-
   ol,
   ul {
     list-style: auto !important;
@@ -94,13 +90,9 @@
 }
 
 .w-md-editor-toolbar li>button:hover {
-  background-color: hsl(var(--muted)) !important;
   color: hsl(var(--green)) !important;
 }
 
-.w-md-editor-toolbar li>button:disabled {
-  color: hsl(var(--muted-foreground)) !important;
-}
 
 .wmde-markdown pre>code {
   white-space: pre-line !important;
