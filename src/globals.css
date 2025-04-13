@@ -83,6 +83,7 @@
 
 .wmde-markdown,
 .wmde-markdown-var {
+
   ol,
   ul {
     list-style: auto !important;
@@ -96,6 +97,28 @@
 
 .wmde-markdown pre>code {
   white-space: pre-line !important;
+}
+
+
+/* make it grow with content */
+.w-md-editor-show-edit,
+.w-md-editor-show-live {
+  .w-md-editor-text {
+    resize: none;
+    overflow: hidden;
+    min-height: 50px;
+  }
+
+  .w-md-editor-textarea textarea {
+    height: auto !important;
+  }
+}
+
+.w-md-editor-show-preview {
+  .w-md-editor-preview {
+    position: static !important;
+    min-height: 50px;
+  }
 }
 
 /* Scrollbar styling */
