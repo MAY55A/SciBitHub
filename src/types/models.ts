@@ -129,4 +129,17 @@ export interface Discussion {
     created_at?: string;
     updated_at?: string;
     creator: PublicUser;
+    replies?: number;
+}
+
+export interface Comment {
+    id: string;
+    content: string;
+    created_at: string;
+    updated_at?: string;
+    creator: PublicUser;
+    discussion?: Discussion;
+    forum_topic?: ForumTopic;
+    parent_comment?: Comment;
+    replies?: number;
 }
