@@ -4,7 +4,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { useTheme } from "next-themes";
 import rehypeSanitize from "rehype-sanitize";
 
-export const MarkdownEditor = ({className, minHeight, maxHeight, value, onChange}: {className?: string, minHeight?: number, maxHeight?: number, value?: string, onChange: any}) => {
+export const MarkdownEditor = ({ className, minHeight, maxHeight, value, onChange }: { className?: string, minHeight?: number, maxHeight?: number, value?: string, onChange: any }) => {
     const { resolvedTheme } = useTheme();
     const currentTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
 
@@ -21,6 +21,12 @@ export const MarkdownEditor = ({className, minHeight, maxHeight, value, onChange
             maxHeight={maxHeight}
             value={value}
             onChange={onChange}
+            onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    // Prevent form submit if inside a form
+                    e.stopPropagation();
+                }
+            }}
         />
     );
 };
