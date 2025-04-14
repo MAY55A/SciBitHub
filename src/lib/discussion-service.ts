@@ -120,7 +120,7 @@ export const updateDiscussion = async (data: DiscussionInputData, newfiles: File
 
     const { error } = await supabase
         .from("discussions")
-        .update({ ...data, files: [...newFilesPaths, ...keptFiles] })
+        .update({ ...data, files: [...newFilesPaths, ...keptFiles], updated_at: new Date().toISOString() })
         .eq("id", data.id);
 
     if (error) {
