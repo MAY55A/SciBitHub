@@ -54,9 +54,15 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
 }
 
 export const formatDate = (dateString: string, showTime: boolean = false): string => {
+  const date = new Date(dateString);
+  const today = new Date();
+  const isToday = date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+  if(isToday) {
+    return format(new Date(dateString), " 'today at' HH:mm")
+  }
   if(showTime)
-    return format(new Date(dateString), "MMM dd, yyyy 'at' HH:mm")
-  return format(new Date(dateString), 'MMM dd, yyyy')
+    return format(new Date(dateString), "'at' HH:mm 'on' MMM dd, yyyy")
+  return format(new Date(dateString), "'on' MMM dd, yyyy")
 };
 
 /**
