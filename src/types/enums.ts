@@ -114,6 +114,11 @@ export enum ValidationStatus {
     REJECTED = 'rejected',
 }
 
+export enum DiscussionStatus {
+    OPEN = 'open',
+    CLOSED = 'closed',
+}
+
 export enum DiscussionCategory {
     RESEARCH = 'research',
 }

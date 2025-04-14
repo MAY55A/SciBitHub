@@ -1,4 +1,4 @@
-import { ResearcherType, UserRole, ProjectDomain, ProjectVisibility, ParticipationLevel, ModerationLevel, ProjectStatus, ProjectProgress, TaskType, TaskStatus, RequestType, ValidationStatus, DiscussionCategory } from "./enums";
+import { ResearcherType, UserRole, ProjectDomain, ProjectVisibility, ParticipationLevel, ModerationLevel, ProjectStatus, ProjectProgress, TaskType, TaskStatus, RequestType, ValidationStatus, DiscussionCategory, DiscussionStatus } from "./enums";
 
 interface Metadata {
     interests: string[];
@@ -123,6 +123,7 @@ export interface Discussion {
     title: string;
     body: string;
     category: DiscussionCategory;
+    status: DiscussionStatus;
     files?: string[];
     tags?: string[];
     created_at?: string;
