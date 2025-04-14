@@ -1,6 +1,7 @@
 import { createClient } from "../utils/supabase/server";
-import { Contribution, Project, Task } from "../types/models";
+import { Comment, Contribution, Discussion, Project, Task } from "../types/models";
 import { ProjectStatus, ProjectProgress } from "../types/enums";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 
 
@@ -218,14 +219,13 @@ export const fetchDiscussions = async (
     const supabase = await createClient();
     try {
         let queryBuilder = supabase
-            .from("discussions")
-            .select(`*,
-                creator:users(id, username, profile_picture, metadata)`,
+            .from("discussions_with_replies")
+            .select("*",
                 { count: "exact" });
 
         // Apply filters
         if (creator) {
-            queryBuilder = queryBuilder.eq("creator", creator);
+            queryBuilder = queryBuilder.eq("creator_id", creator);
         }
         if (query) {
             queryBuilder = queryBuilder.ilike("title", `%${query}%`);
@@ -253,4 +253,52 @@ export const fetchDiscussions = async (
         console.error("Error fetching discussions:", error);
         return null;
     }
+}
+
+export const fetchDiscussion = async (
+    id: string
+): Promise<Discussion | null> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("discussions_with_replies")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Error fetching discussion:", error);
+        return null;
+    }
+
+    return data;
+}
+
+export async function fetchSimilarDiscussions(
+    title: string,
+    tags: string[],
+    category: string,
+    excludeId?: string, // optional: exclude the current discussion
+    limit = 5
+): Promise<Discussion[]> {
+    const supabase = await createClient();
+
+    // Convert tags to lowercase for consistency
+    const normalizedTags = tags.map(tag => tag.toLowerCase());
+
+    // Build the full-text query from the title
+    const { data, error } = await supabase
+        .rpc("find_similar_discussions", {
+            search_text: title,
+            input_tags: normalizedTags,
+            input_category: category,
+            exclude_id: excludeId ?? null,
+            result_limit: limit
+        });
+
+    if (error) {
+        console.error("Error fetching similar discussions:", error);
+        return [];
+    }
+
+    return data;
 }
