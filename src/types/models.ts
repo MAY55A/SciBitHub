@@ -132,6 +132,20 @@ export interface Discussion {
     replies?: number;
 }
 
+export interface ForumTopic {
+    id: string;
+    title: string;
+    content: string;
+    tags?: string[];
+    is_featured: boolean;
+    views: number;
+    created_at: string;
+    updated_at: string;
+    project: Project;
+    creator: PublicUser;
+    replies?: number;
+}
+
 export interface Comment {
     id: string;
     content: string;
