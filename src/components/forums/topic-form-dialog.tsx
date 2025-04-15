@@ -87,7 +87,8 @@ export default function TopicFormDialog({ projectId, data }: { projectId: string
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        //fix overflow issue when dialog is closed
+        <Dialog open={open} onOpenChange={(open)=>{setOpen(open); if(!open) document.body.style.overflow = "";}}>
             <DialogTrigger asChild>
                 {data ?
                     <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :
