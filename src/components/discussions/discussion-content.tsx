@@ -13,6 +13,7 @@ import { MarkdownViewer } from "../custom/markdown-viewer";
 import Link from "next/link";
 import { createClient } from "@/src/utils/supabase/server";
 import { cn } from "@/src/lib/utils";
+import { UserAvatar } from "../custom/user-avatar";
 
 
 export function DiscussionContent({ discussion }: { discussion: Discussion }) {
@@ -40,21 +41,7 @@ export function DiscussionContent({ discussion }: { discussion: Discussion }) {
                     </div>
                 </div>
                 <div className="flex flex-row items-center justify-between pb-4">
-                    <div className="flex items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-muted/20 rounded-lg">
-                        <Avatar className="flex shrink-0 overflow-hidden h-10 w-10 rounded-lg hover:shadow-lg hover:bg-muted">
-                            <AvatarImage src={discussion.creator.profile_picture} alt={discussion.creator.username} />
-                            <AvatarFallback className="rounded-lg">
-                                {discussion.creator.username?.slice(0, 2).toUpperCase()}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div className="text-left text-sm ml-2">
-                            <span className="truncate font-semibold">{discussion.creator.username}</span>
-                            <span className="flex items-align gap-1 text-muted-foreground capitalize text-xs">
-                                {discussion.creator.role === UserRole.RESEARCHER ? <FlaskConicalIcon size={14} /> : <UserIcon size={14} />}
-                                {discussion.creator.role}
-                            </span>
-                        </div>
-                    </div>
+                    <UserAvatar user={discussion.creator} />
                     <ShinyText text={discussion.category} disabled={false} speed={4} className='max-w-48 break-words text-center text-green text-xs font-semibold uppercase tracking-[.1em] border border-green rounded-2xl px-3 py-2' />
                 </div>
 
