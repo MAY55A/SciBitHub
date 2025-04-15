@@ -350,3 +350,24 @@ export const fetchForumTopics = async (
         return null;
     }
 }
+
+export async function fetchFeaturedTopics(
+    project: string,
+    limit = 5
+): Promise<ForumTopic[]> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+    .from("topics_with_replies")
+    .select("*")
+    .eq("project_id", project)
+    .eq("is_featured", true)
+    .limit(limit);
+
+    if (error) {
+        console.error("Error fetching similar discussions:", error);
+        return [];
+    }
+
+    return data;
+}
