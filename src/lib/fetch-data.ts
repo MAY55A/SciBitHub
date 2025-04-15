@@ -1,5 +1,5 @@
 import { createClient } from "../utils/supabase/server";
-import { Comment, Contribution, Discussion, Project, Task } from "../types/models";
+import { Comment, Contribution, Discussion, ForumTopic, Project, Task } from "../types/models";
 import { ProjectStatus, ProjectProgress } from "../types/enums";
 import { SupabaseClient } from "@supabase/supabase-js";
 
@@ -207,7 +207,6 @@ export const fetchContribution = async (
     return data;
 }
 
-
 export const fetchDiscussions = async (
     creator?: string,
     query?: string,
@@ -301,4 +300,53 @@ export async function fetchSimilarDiscussions(
     }
 
     return data;
+}
+
+export const fetchForumTopics = async (
+    project: string,
+    query?: string,
+    creator?: string,
+    currentPage: number = 1,
+    orderBy: string = "created_at",
+    sort: "asc" | "desc" = "desc",
+    limit: number = 10,
+) => {
+    const supabase = await createClient();
+    try {
+        let queryBuilder = supabase
+            .from("topics_with_replies")
+            .select("*",
+                { count: "exact" })
+            .eq("project_id", project);
+
+        // Apply filters
+        if (creator) {
+            queryBuilder = queryBuilder.eq("creator_id", creator);
+        }
+        if (query) {
+            queryBuilder = queryBuilder.ilike("title", `%${query}%`);
+        }
+
+        // Apply sorting and pagination
+        const offset = (currentPage - 1) * limit;
+        queryBuilder = queryBuilder
+            .order(orderBy, { ascending: sort === "asc" })
+            .range(offset, offset + limit - 1);
+
+        const { data, count, error } = await queryBuilder;
+
+        if (error) {
+            throw error;
+        }
+
+        const totalPages = Math.ceil((count || 0) / limit);
+
+        return {
+            data,
+            totalPages,
+        };
+    } catch (error) {
+        console.error("Error fetching forum topics:", error);
+        return null;
+    }
 }
