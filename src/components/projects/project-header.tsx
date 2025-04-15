@@ -5,6 +5,9 @@ import { formatDate } from "@/src/utils/utils";
 import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import { ResearcherIcon } from "../custom/researcher-icon";
+import { ProjectDropdownMenu } from "./project-options-menu";
+import { createClient } from "@/src/utils/supabase/server";
+import { Suspense } from "react";
 
 export function ProjectHeader({ project }: { project: Project }) {
     return (
@@ -18,7 +21,7 @@ export function ProjectHeader({ project }: { project: Project }) {
                     className="z-[-1] object-cover object-center opacity-40 rounded-lg"
                 />
             }
-            <div className="relative w-full flex justify-between">
+            <div className="relative w-full flex justify-between gap-4">
                 <div className="flex items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-muted/20 rounded-lg">
                     <Avatar className="flex shrink-0 overflow-hidden h-10 w-10 rounded-lg hover:shadow-lg hover:bg-muted">
                         <AvatarImage src={project.creator.profile_picture} alt={project.creator.username} />
@@ -27,7 +30,7 @@ export function ProjectHeader({ project }: { project: Project }) {
                         </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="flex items-center gap-1 truncate font-semibold text-muted-foreground text-xs"><ResearcherIcon type={project.creator.metadata!.researcherType!} size={16} />{project.creator.metadata!.researcherType} researcher</span>
+                        <span className="flex items-center gap-1 font-semibold text-muted-foreground text-xs"><ResearcherIcon type={project.creator.metadata!.researcherType!} size={16} />{project.creator.metadata!.researcherType} researcher</span>
                         <span className="ml-2 truncate font-semibold">{project.creator.username}</span>
                         {project.creator.metadata!.isVerified ? (
                             <span className="flex items-center gap-1 text-xs text-green-900"><CheckCircle2 size={13} />verified</span>
@@ -35,16 +38,16 @@ export function ProjectHeader({ project }: { project: Project }) {
                         }
                     </div>
                 </div>
-                <div className="flex flex-col text-right">
-                    <span className="italic text-muted-foreground text-xs mb-4">published on {formatDate(project.created_at)}</span>
+                <div className="flex flex-col">
+                    <span className="text-muted-foreground text-xs mb-4 text-end">Published {formatDate(project.created_at)}</span>
                     <div className="bg-muted/50 rounded-2xl">
-                        <ShinyText text={project.domain} disabled={false} speed={4} className='text-green font-semibold uppercase tracking-[.1em] text-xs border border-green rounded-2xl px-3 py-2' />
+                        <ShinyText text={project.domain} disabled={false} speed={4} className='text-green text-center font-semibold uppercase tracking-[.1em] text-xs border border-green rounded-2xl px-2 py-2' />
                     </div>
                 </div>
             </div>
-            <div className="relative flex flex-col justify-between w-full max-w-[600px] h-full text-foreground p-8">
+            <div className="relative flex flex-col justify-between w-full h-full text-foreground p-8">
                 <div className="mt-16">
-                    <h1 className="text-2xl font-bold text-primary">{project.name}</h1>
+                    <h1 className="text-xl lg:text-2xl font-bold text-primary">{project.name}gfdfdhf f qdfgfdgqf gdfgqfg qdfgqdfdf</h1>
                     <p className="text-foreground"><strong>+ Scope:</strong> {project.scope}</p>
                     {project.countries &&
                         <p className="text-foreground"><strong>+ Countries:</strong> {project.countries.join(", ")}</p>
@@ -60,6 +63,23 @@ export function ProjectHeader({ project }: { project: Project }) {
                     )) || "No tags added"}
                 </div>
             </div>
+            <div className="absolute bottom-4 right-4">
+                <Suspense fallback={null}>
+                    <ProjectEditMenu creatorId={project.creator.id} project={project} />
+                </Suspense>
+            </div>
+
         </div>
+    );
+}
+
+async function ProjectEditMenu({ creatorId, project }: { creatorId: string, project: Project }) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user?.id !== creatorId) return null;
+
+    return (
+        <ProjectDropdownMenu project={project} showVisit={false} />
     );
 }

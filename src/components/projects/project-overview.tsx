@@ -1,16 +1,17 @@
-"use client"
-
 import { Project } from "@/src/types/models";
-import MDEditor from "@uiw/react-md-editor";
 import { Label } from "../ui/label";
 import { Card, CardContent, CardHeader } from "../ui/card";
+import { MarkdownViewer } from "../custom/markdown-viewer";
 
 export function ProjectOverview({ project }: { project: Project }) {
     return (
-        <div className="flex flex-col lg:flex-row mt-8">
-            <MDEditor.Markdown source={project.long_description} className="p-8" style={{ backgroundColor: "transparent" }} />
+        <div className="flex flex-col lg:flex-row mt-8 p-4">
+            <div>
+                <h2 className="text-lg font-semibold text-green">Description</h2>
+                <MarkdownViewer source={project.long_description} className="p-4" />
+            </div>
             {project.links &&
-                <Card className="my-12 bg-muted/50">
+                <Card className="bg-muted/50">
                     <CardHeader><Label className="text-green text-md">External Links</Label></CardHeader>
                     <CardContent>
                         <ul className="min-w-64 list-disc text-sm pl-6 pt-2 underline decoration-green">

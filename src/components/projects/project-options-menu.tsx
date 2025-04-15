@@ -2,13 +2,13 @@
 
 import { Ellipsis } from "lucide-react";
 import { Button } from "../ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Project } from "@/src/types/models";
 import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "../custom/alert-dialog";
 import { deleteProject } from "@/src/utils/project-actions";
 
-export function ProjectDropdownMenu({ project }: { project: Project }) {
+export function ProjectDropdownMenu({ project, showVisit = true }: { project: Project, showVisit?: boolean }) {
     const router = useRouter();
 
     return (
@@ -18,9 +18,11 @@ export function ProjectDropdownMenu({ project }: { project: Project }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuGroup>
-                    <DropdownMenuItem disabled={project.status !== "published"} onClick={() => router.push(`/projects/${project.id}`)}>
-                        Visit
-                    </DropdownMenuItem>
+                    {showVisit &&
+                        <DropdownMenuItem disabled={project.status !== "published"} onClick={() => router.push(`/projects/${project.id}`)}>
+                            Visit
+                        </DropdownMenuItem>
+                    }
                     <DropdownMenuItem onClick={() => router.push(`/projects/${project.id}/edit`)}>
                         Edit
                     </DropdownMenuItem>
@@ -43,7 +45,7 @@ export function ProjectDropdownMenu({ project }: { project: Project }) {
                             </DropdownMenuPortal>
                         </DropdownMenuSub>
                     }
-                    <DropdownMenuItem disabled={project.status !== "published"}  onClick={() => router.push(`/projects/${project.id}/contributions`)}>
+                    <DropdownMenuItem disabled={project.status !== "published"} onClick={() => router.push(`/projects/${project.id}/contributions`)}>
                         Manage Contributions
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
