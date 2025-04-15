@@ -5,7 +5,7 @@ import Pagination from "../../../src/components/custom/pagination";
 import { fetchDiscussions } from "@/src/lib/fetch-data";
 import ProjectsSkeleton from "@/src/components/skeletons/projects-skeleton";
 import { FormMessage } from "@/src/components/custom/form-message";
-import DiscussionFormDialog from "@/src/components/discussions/discussion-form-dialog.tsx";
+import DiscussionFormDialog from "@/src/components/discussions/discussion-form-dialog";
 import Discussions from "@/src/components/discussions/discussions";
 
 export default async function MyProjects(props: {

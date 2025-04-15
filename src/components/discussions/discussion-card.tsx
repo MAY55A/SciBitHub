@@ -12,7 +12,6 @@ import { DiscussionStatus } from "@/src/types/enums";
 
 export function DiscussionCard({ discussion, editable = false, showBody = true }: { discussion: Discussion, editable?: boolean, showBody?: boolean }) {
 
-    console.log(discussion.creator);
     return (
         <Card
             className="relative max-w-[500px] border-2 text-sm shadow-lg rounded-lg shadow-muted transform transition-all hover:scale-105 hover:shadow-2xl hover:shadow-muted"

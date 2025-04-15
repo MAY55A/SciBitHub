@@ -5,7 +5,7 @@ import Pagination from "@/src/components/custom/pagination";
 import { fetchDiscussions } from "@/src/lib/fetch-data";
 import { HeroSection } from "@/src/components/custom/hero-section";
 import Discussions from "@/src/components/discussions/discussions";
-import DiscussionFormDialog from "@/src/components/discussions/discussion-form-dialog.tsx";
+import DiscussionFormDialog from "@/src/components/discussions/discussion-form-dialog";
 
 export default async function Page(props: {
     searchParams?: Promise<{
