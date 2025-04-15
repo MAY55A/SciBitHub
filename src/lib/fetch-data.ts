@@ -371,3 +371,22 @@ export async function fetchFeaturedTopics(
 
     return data;
 }
+
+
+export const fetchForumTopic = async (
+    id: string
+): Promise<ForumTopic | null> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("topics_with_replies")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Error fetching topic:", error);
+        return null;
+    }
+    data.project.creator = { id: data.project.creator };
+    return data;
+}
