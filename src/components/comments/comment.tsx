@@ -33,7 +33,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
     const handleEdit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        const res = await editComment(comment.id, content);
+        const res = await editComment(comment.id, newContent);
         setIsSubmitting(false);
         if (res.success) {
             setIsEditing(false);
