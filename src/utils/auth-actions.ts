@@ -90,7 +90,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${origin}/auth/callback?redirect_to=/profile/settings/reset-password`,
+    redirectTo: `${origin}/auth/callback?redirect_to=/reset-password`,
   });
 
   if (error) {
@@ -115,22 +115,27 @@ export const forgotPasswordAction = async (formData: FormData) => {
 
 export const resetPasswordAction = async (formData: FormData) => {
   const supabase = await createClient();
+  const referer = (await headers()).get('referer')
+  if (!referer) return;
+
+  const url = new URL(referer);
+  const pathname = url.pathname;
 
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
 
   if (!password || !confirmPassword) {
-    encodedRedirect(
+    return encodedRedirect(
       "error",
-      "/profile/settings/reset-password",
+      pathname,
       "Password and confirm password are required",
     );
   }
 
   if (password !== confirmPassword) {
-    encodedRedirect(
+    return encodedRedirect(
       "error",
-      "/profile/settings/reset-password",
+      pathname,
       "Passwords do not match",
     );
   }
@@ -140,15 +145,29 @@ export const resetPasswordAction = async (formData: FormData) => {
   });
 
   if (error) {
-    console.log(error.message);
-    encodedRedirect(
+    return encodedRedirect(
       "error",
-      "/profile/settings/reset-password",
+      pathname,
       error.message,
     );
   }
 
-  encodedRedirect("success",
-    "/profile/settings/reset-password",
+  // Sign out the user after password reset in case of forgotten password
+  if (pathname === "/reset-password") {
+    const response = encodedRedirect(
+      "success",
+      pathname,
+      "Password updated! Now you can login with the new password."
+    );
+
+    setTimeout(async () => {
+      await supabase.auth.signOut();
+    }, 3000);
+
+    return response;
+  }
+
+  return encodedRedirect("success",
+    pathname,
     "Password updated");
 };

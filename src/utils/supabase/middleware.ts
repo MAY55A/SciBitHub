@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { cookies, headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const updateSession = async (request: NextRequest) => {
@@ -46,10 +47,18 @@ export const updateSession = async (request: NextRequest) => {
     if (request.nextUrl.pathname.startsWith("/projects/create") && user.error) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
-
-    //if (request.nextUrl.pathname === "/" && !user.error) {
-    //  return NextResponse.redirect(new URL("/protected", request.url));
-    //}
+    if (request.nextUrl.pathname.startsWith("/reset-password") && user.error) {
+      (await cookies()).set("on_reset_page", "false");
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
+    // prevent user from accessing other routes when logged in after forgot password (keep them on reset password page)
+    const onResetPage = request.cookies.get("on_reset_page")?.value === "true";
+    if (request.nextUrl.pathname === "/reset-password" && !onResetPage) {
+      (await cookies()).set("on_reset_page", "true");
+    }
+    if (request.nextUrl.pathname !== "/reset-password" && onResetPage) {
+      return NextResponse.redirect(new URL("/reset-password", request.url));
+    }
 
     return response;
   } catch (e) {
