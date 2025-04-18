@@ -79,7 +79,7 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
             description: res.message,
             variant: res.success ? "default" : "destructive",
         });
-        
+
         if (res.success) {
             startTransition(() => {
                 router.refresh();
@@ -131,13 +131,13 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
     }, [data]);
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                {data ?
-                    <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :
-                    <Button onClick={() => setOpen(true)}>open a discussion</Button>
-                }
-            </DialogTrigger>
+        //fix overflow issue when dialog is closed
+        <Dialog open={open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>            <DialogTrigger asChild>
+            {data ?
+                <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :
+                <Button onClick={() => setOpen(true)}>open a discussion</Button>
+            }
+        </DialogTrigger>
             <DialogContent className="lg:min-w-[700px] md:min-w-[700px] sm:max-w-[425px] max-h-[90vh]">
                 <DialogHeader>
                     <DialogTitle>{data ? "Edit Discussion" : "Create A New Discussion"}</DialogTitle>
