@@ -5,9 +5,17 @@ import { useAuth } from "@/src/contexts/AuthContext";
 import { ResearcherProfile } from "../../../src/components/profile/researcher-profile";
 import { ContributorProfile } from "../../../src/components/profile/contributor-profile";
 import { UserRole } from "@/src/types/enums";
+import { useEffect } from "react";
 
 export default function MyProfile() {
-    const { user, loading } = useAuth();
+    const { user, loading, fetchUser } = useAuth();
+
+    useEffect(() => {
+        if(!loading && !user) {
+            fetchUser();
+        }
+    }, []);
+
     if (loading || !user) {
         return <ProfileSkeleton />;
     }
