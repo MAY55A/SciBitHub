@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationEllipsis, PaginationNext } from '../ui/pagination';
+import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from '../ui/pagination';
 
 export default function CustomPagination({ totalPages }: { totalPages: number }) {
     const pathname = usePathname();
@@ -18,13 +18,13 @@ export default function CustomPagination({ totalPages }: { totalPages: number })
         <Pagination>
             <PaginationContent>
                 {/* Previous Button */}
-                {currentPage !== 1 &&
-                    <PaginationItem>
-                        <PaginationPrevious
-                            onClick={() => createPageURL(currentPage - 1)}
-                        />
-                    </PaginationItem>
-                }
+                <PaginationItem>
+                    <PaginationPrevious
+                        aria-disabled={currentPage === 1}
+                        className='text-xs text-foreground aria-disabled:text-muted-foreground'
+                        onClick={() => createPageURL(currentPage - 1)}
+                    />
+                </PaginationItem>
 
                 {/* Current Button */}
                 <PaginationItem>
@@ -36,13 +36,13 @@ export default function CustomPagination({ totalPages }: { totalPages: number })
                 </PaginationItem>
 
                 {/* Next Button */}
-                {currentPage !== totalPages &&
-                    <PaginationItem>
-                        <PaginationNext
-                            onClick={() => createPageURL(currentPage + 1)}
-                        />
-                    </PaginationItem>
-                }
+                <PaginationItem>
+                    <PaginationNext
+                        aria-disabled={currentPage === totalPages}
+                        className='text-xs text-foreground aria-disabled:text-muted-foreground'
+                        onClick={() => createPageURL(currentPage + 1)}
+                    />
+                </PaginationItem>
             </PaginationContent>
         </Pagination>
     );
