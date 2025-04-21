@@ -14,12 +14,13 @@ export async function ProjectContribution({ projectId }: { projectId: string }) 
 
     const completedTasks = tasks.filter(task => task.status === TaskStatus.COMPLETED).length;
     const totalTasks = tasks.length;
+    const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
     return (
         <div className="flex flex-col items-center mt-16 gap-16">
             <div className="w-full flex flex-col items-center gap-4">
                 <h2 className="text-lg font-semibold">Overall Progress</h2>
-                <Progress color="green" value={Number((completedTasks/totalTasks).toFixed(1))} className="max-w-[500px] border border-green"/>
+                <Progress color="green" value={progress} className="max-w-[500px] border border-green"/>
                 <p className="text-muted-foreground text-sm">{completedTasks} out of {totalTasks} task(s) completed</p>
             </div>
             <div className="flex flex-col items-center gap-4">
