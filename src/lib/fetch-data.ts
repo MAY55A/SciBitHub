@@ -20,6 +20,8 @@ export const fetchProjects = async (
             .from("projects")
             .select(`*,
                 creator:users(id, username, profile_picture, metadata, deleted_at)`,
+                { count: "exact" })
+            .is("deleted_at", null);
 
         // Apply filters
         if (creator) {

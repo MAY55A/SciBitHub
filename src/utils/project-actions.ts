@@ -1,9 +1,9 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { encodedRedirect } from "./utils";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { ActivityStatus, RequestType } from "../types/enums";
+import { deleteFromMinIO } from "./minio/client";
 
 const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: any, oldParticipants: any, projectId: string, status: string) => {
     if (participants.length > 0) {
@@ -45,6 +45,77 @@ const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, 
         }
     }
     return { success: true, message: "Participants updated successfully!" };
+}
+
+export async function softDeleteProject(projectId: string, projectName: string) {
+    const supabase = await createClient();
+    const currentDate = new Date().toISOString();
+    try {
+        const { error: projectError } = await supabase.from("projects")
+            .update({
+                name: `${projectName} (deleted)`,
+                deleted_at: currentDate,
+            })
+            .eq("id", projectId);
+        if (projectError) {
+            throw projectError;
+        }
+
+        const { error: tasksError } = await supabase.from("tasks")
+            .update({
+                deleted_at: currentDate,
+            })
+            .eq("project", projectId);
+        if (tasksError) {
+            throw tasksError;
+        }
+
+        const { error: requestsError } = await supabase.from("participation_requests")
+            .delete()
+            .eq("project_id", projectId);
+        if (requestsError) {
+            throw requestsError;
+        }
+
+        const { error: storageError } = await supabase.storage
+            .from("projects")
+            .remove([`cover_images/${projectId}`]);
+        if (storageError) {
+            throw storageError;
+        }
+
+        return { success: true, message: "Project deleted successfully." };
+
+    } catch (error) {
+        console.error("Error deleting project:", error);
+        return { success: false, message: "Failed to delete project." };
+    }
+}
+
+export async function hardDeleteProject(projectId: string) {
+    const supabase = await createClient();
+    try {
+        const { error: deleteError } = await supabase.from("projects").delete().eq("id", projectId);
+        if (deleteError) {
+            throw deleteError;
+        }
+
+        const { error: storageError } = await supabase.storage
+            .from("projects")
+            .remove([`cover_images/${projectId}`]);
+        if (storageError) {
+            throw storageError;
+        }
+
+        // Remove all associated task files from MinIO
+        await deleteFromMinIO(`/projects/${projectId}`, true);
+
+        return { success: true, message: "Project deleted successfully." };
+
+    } catch (error) {
+        console.error("Error deleting project:", error);
+        return { success: false, message: "Failed to delete project." };
+    }
 }
 
 export async function updateActivityStatus(id: string, activity_status: ActivityStatus) {

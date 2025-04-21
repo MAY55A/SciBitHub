@@ -1,4 +1,5 @@
 import { NotAuthorized } from "@/src/components/errors/not-authorized";
+import { NotAvailable } from "@/src/components/errors/not-available";
 import ProjectEditWrapper from "@/src/components/wrappers/project-edit-wrapper";
 import { ProjectEditProvider } from "@/src/contexts/project-edit-context";
 import { fetchProject } from "@/src/lib/fetch-data";
@@ -28,6 +29,8 @@ export default async function Layout({
     const { id } = await params;
     const { user, project } = await getProjectData(id);
     if (!project) return notFound();
+    if (project.deleted_at) return NotAvailable({ type: "project" });
+
     if (!user || project.creator.id !== user.id) return <NotAuthorized />;
 
     const { participation_level, moderation_level, cover_image, creator, ...data } = project;

@@ -4,6 +4,7 @@ import { TaskHeader } from "@/src/components/tasks/task-header";
 import { TaskTutorial } from "@/src/components/tasks/task-tutorial";
 import { TaskFields } from "@/src/components/tasks/task-fields";
 import { ActivityStatus } from "@/src/types/enums";
+import { NotAvailable } from "@/src/components/errors/not-available";
 
 export default async function TaskPage({ params }: { params: { id: string } }) {
     const { id } = await params;
@@ -11,6 +12,10 @@ export default async function TaskPage({ params }: { params: { id: string } }) {
 
     if (!task) {
         return notFound();
+    }
+
+    if(task.project.deleted_at) {
+        return NotAvailable({ type: "project" });
     }
 
     if(task.project.activity_status !== ActivityStatus.ONGOING) {

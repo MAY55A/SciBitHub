@@ -13,6 +13,25 @@ import { ActivityStatus, ProjectStatus } from "@/src/types/enums";
 export function ProjectDropdownMenu({ project, showVisit = true }: { project: Project, showVisit?: boolean }) {
     const router = useRouter();
     const { toast } = useToast();
+
+    const handleDelete = async () => {
+        let res;
+        if (project.status === ProjectStatus.PUBLISHED) {
+            res = await softDeleteProject(project.id!, project.name!);
+        } else {
+            res = await hardDeleteProject(project.id!);
+        }
+        toast({
+            description: res.message,
+            variant: res.success ? "default" : "destructive",
+        });
+
+        // Redirect to user profile projects page if deletion is successful
+        if (res.success) {
+            router.push("/profile/projects");
+        }
+    }
+
     const handleUpdateStatus = async (status: ActivityStatus) => {
         const res = await updateActivityStatus(project.id!, status);
 
@@ -69,8 +88,8 @@ export function ProjectDropdownMenu({ project, showVisit = true }: { project: Pr
                                 className="px-4"
                                 disabled={project.status !== "published"}
                                 onClick={() => handleUpdateStatus(ActivityStatus.COMPLETED)}>
-                        Mark as Completed
-                    </DropdownMenuItem>
+                                Mark as Completed
+                            </DropdownMenuItem>
                         </>
                     }
                     {project.activity_status !== ActivityStatus.CLOSED &&
@@ -107,7 +126,7 @@ export function ProjectDropdownMenu({ project, showVisit = true }: { project: Pr
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onSelect={(event) => {
-                        event.preventDefault(); // Prevent menu from closing
+                        event.preventDefault(); // Prevent dialog from closing immediately when opened
                     }}
                     className="hover:text-destructive">
                     <CustomAlertDialog
@@ -117,7 +136,7 @@ export function ProjectDropdownMenu({ project, showVisit = true }: { project: Pr
                         title="Are you Sure ?"
                         description="This action cannot be undone."
                         confirmText="Delete Project"
-                        onConfirm={() => deleteProject(project.id!)}
+                        onConfirm={handleDelete}
                         buttonClass="h-full hover:text-destructive pl-0"
                     />
                 </DropdownMenuItem>
