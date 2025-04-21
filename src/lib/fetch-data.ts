@@ -222,7 +222,8 @@ export const fetchDiscussions = async (
         let queryBuilder = supabase
             .from("discussions_with_replies")
             .select("*",
-                { count: "exact" });
+                { count: "exact" })
+            .is("deleted_at", null);
 
         // Apply filters
         if (creator) {

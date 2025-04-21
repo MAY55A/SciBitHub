@@ -4,7 +4,6 @@ import { createClient } from "@/src/utils/supabase/server";
 import { deleteFromMinIO } from "./minio/client";
 import { DiscussionStatus } from "../types/enums";
 
-// Change later to soft delete
 export async function updateDiscussionStatus(id: string, status: DiscussionStatus) {
     const supabase = await createClient();
     const { error } = await supabase.from("discussions").update({ status }).eq("id", id);
@@ -18,11 +17,29 @@ export async function updateDiscussionStatus(id: string, status: DiscussionStatu
 
 export async function deleteDiscussion(id: string) {
     const supabase = await createClient();
-    const { error } = await supabase.from("discussions").delete().eq("id", id);
-    if (error) {
-        console.error("Database error:", error.message);
-        return { success: false, message: "Failed to delete discussion." };
+    const { count } = await supabase.from("comments").select("*", { count: "exact", head: true }).eq("discussion", id);
+    // hard delete if no comments exist
+    if (!count) {
+        const { error: deleteError } = await supabase.from("discussions").delete().eq("id", id);
+        if (deleteError) {
+            console.error("Database error:", deleteError.message);
+            return { success: false, message: "Failed to delete discussion." };
+        }
+
+    // soft delete if comments exist
+    } else {
+        const { error } = await supabase.from("discussions")
+            .update({
+                files: null,
+                deleted_at: new Date().toISOString(),
+            })
+            .eq("id", id);
+        if (error) {
+            console.error("Database error:", error.message);
+            return { success: false, message: "Failed to delete discussion." };
+        }
     }
+    // Delete the discussion file from MinIO
     await deleteFromMinIO(`discussions/${id}`, true);
 
     return { success: true, message: "Discussion deleted successfully." };

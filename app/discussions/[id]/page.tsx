@@ -4,6 +4,7 @@ import { DiscussionContent } from "@/src/components/discussions/discussion-conte
 import { SimilarDiscussions } from "@/src/components/discussions/similar-discussions";
 import { DiscussionStatus } from "@/src/types/enums";
 import CommentsList from "@/src/components/comments/comments-list";
+import { NotAvailable } from "@/src/components/errors/not-available";
 
 export default async function DiscussionPage({ params }: { params: { id: string } }) {
     const { id } = await params;
@@ -11,6 +12,10 @@ export default async function DiscussionPage({ params }: { params: { id: string 
 
     if (!discussion) {
         return notFound();
+    }
+
+    if (discussion.deleted_at) {
+        return NotAvailable({ type: "discussion" });
     }
 
     return (

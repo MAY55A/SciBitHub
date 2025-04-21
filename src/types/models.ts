@@ -130,6 +130,7 @@ export interface Discussion {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
+    deleted_at?:string;
     creator: PublicUser;
     replies?: number;
 }
