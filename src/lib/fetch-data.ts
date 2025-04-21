@@ -320,7 +320,8 @@ export const fetchForumTopics = async (
             .from("topics_with_replies")
             .select("*",
                 { count: "exact" })
-            .eq("project_id", project);
+            .eq("project_id", project)
+            .is("deleted_at", null);
 
         // Apply filters
         if (creator) {
@@ -365,6 +366,7 @@ export async function fetchFeaturedTopics(
     .select("*")
     .eq("project_id", project)
     .eq("is_featured", true)
+        .is("deleted_at", null)
     .limit(limit);
 
     if (error) {

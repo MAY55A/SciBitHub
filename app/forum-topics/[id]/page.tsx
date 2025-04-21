@@ -1,4 +1,5 @@
 import CommentsList from "@/src/components/comments/comments-list";
+import { NotAvailable } from "@/src/components/errors/not-available";
 import { TopicContent } from "@/src/components/forums/topic-content";
 import ViewTracker from "@/src/components/forums/view-tracker";
 import { fetchForumTopic } from "@/src/lib/fetch-data";
@@ -12,6 +13,14 @@ export default async function TopicPage({ params }: { params: { id: string } }) 
 
     if (!topic) {
         return notFound();
+    }
+
+    if(topic.deleted_at) {
+        return NotAvailable({ type: "forum topic" });
+    }
+
+    if(topic.project.deleted_at) {
+        return NotAvailable({ type: "project" });
     }
 
     return (

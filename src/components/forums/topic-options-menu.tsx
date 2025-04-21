@@ -35,7 +35,7 @@ export function TopicDropdownMenu({ topic, canEdit = false, canSetAsFeatured = f
 
         // Redirect to project forum page if deletion is successful
         if (res.success) {
-            router.push(`/project/${topic.project.id}?tab=forum`);
+            router.push(`/projects/${topic.project.id}?tab=forum`);
         }
     }
 
@@ -48,7 +48,7 @@ export function TopicDropdownMenu({ topic, canEdit = false, canSetAsFeatured = f
                 <DropdownMenuGroup>
                     {canSetAsFeatured && topic.is_featured &&
                         <DropdownMenuItem
-                            title="UnMark As Featured"
+                            title="Unmark As Featured"
                             className="px-4"
                             onClick={() => handleFeature(false)}
                         >

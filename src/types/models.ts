@@ -144,6 +144,7 @@ export interface ForumTopic {
     views: number;
     created_at: string;
     updated_at: string;
+    deleted_at?:string;
     project: Project;
     creator: PublicUser;
     replies?: number;

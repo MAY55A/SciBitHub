@@ -32,7 +32,7 @@ export const createTopic = async (data: TopicInputData) => {
 export async function editTopic(data: TopicInputData) {
     const supabase = await createClient();
 
-    const { error } = await supabase.from("forum_topics").update({...data, updated_at: new Date().toISOString()}).eq("id", data.id);
+    const { error } = await supabase.from("forum_topics").update({ ...data, updated_at: new Date().toISOString() }).eq("id", data.id);
     if (error) {
         console.error("Database error:", error.message);
         return { success: false, message: "Failed to update topic." };
@@ -44,7 +44,7 @@ export async function editTopic(data: TopicInputData) {
 export async function toggleIsFeatured(is_featured: boolean, id: string) {
     const supabase = await createClient();
 
-    const { error } = await supabase.from("forum_topics").update({is_featured}).eq("id", id);
+    const { error } = await supabase.from("forum_topics").update({ is_featured }).eq("id", id);
     if (error) {
         console.error("Database error:", error.message);
         return { success: false, message: is_featured ? "Failed to mark topic as featured." : "Failed to unmark topic as featured." };
@@ -55,15 +55,26 @@ export async function toggleIsFeatured(is_featured: boolean, id: string) {
 
 export async function deleteTopic(id: string) {
     const supabase = await createClient();
+    const { count } = await supabase.from("comments").select("*", { count: "exact", head: true }).eq("forum_topic", id);
+    // hard delete if no comments exist
+    if (!count) {
+        const { error } = await supabase.from("forum_topics").delete().eq("id", id);
+        if (error) {
+            console.error("Database error:", error.message);
+            console.log("Database error:", error.message);
 
-    // all replies will also be deleted due to foreign key constraint (on cascade delete)
-    const { error } = await supabase.from("forum_topics").delete().eq("id", id);
-    if (error) {
-        console.error("Database error:", error.message);
-        console.log("Database error:", error.message);
+            return { success: false, message: "Failed to delete topic." };
+        }
 
-        return { success: false, message: "Failed to delete topic." };
+    // soft delete if comments exist
+    } else {
+        const { error } = await supabase.from("forum_topics").update({ deleted_at: new Date().toISOString() }).eq("id", id);
+        if (error) {
+            console.error("Database error:", error.message);
+            console.log("Database error:", error.message);
+
+            return { success: false, message: "Failed to delete topic." };
+        }
     }
-
     return { success: true, message: "Topic deleted successfully." };
 }
