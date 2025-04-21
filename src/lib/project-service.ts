@@ -284,15 +284,26 @@ export const updateTasks = async (supabase: SupabaseClient<any, "public", any>, 
 }
 
 const deleteTasks = async (supabase: SupabaseClient<any, "public", any>, tasks: TaskInputData[]) => {
-    const taskIds = tasks.map(t => t.id);
-    const { error: deleteError } = await supabase.from("tasks").delete().in("id", taskIds);
-    if (deleteError) {
-        console.error("Database error:", deleteError.message);
-        return { success: false, message: "Failed to delete tasks" };
-    }
     tasks.forEach(async (task) => {
-        if (task.datasetPath) {
-            await deleteFromMinIO(task.datasetPath, true);
+        const { count } = await supabase.from("contributions").select("*", { count: "exact", head: true }).eq("task", task.id);
+        // hard delete if no contributions exist
+        if (!count) {
+            const { error: deleteError } = await supabase.from("tasks").delete().eq("id", task.id);
+            if (deleteError) {
+                console.error("Database error:", deleteError.message);
+                return { success: false, message: "Failed to delete task." };
+            }
+            if (task.datasetPath) {
+                await deleteFromMinIO(task.datasetPath, true);
+            }
+
+        // soft delete if contributions exist
+        } else {
+            const { error: updateError } = await supabase.from("tasks").update({ deleted_at: new Date().toISOString() }).eq("id", task.id);
+            if (updateError) {
+                console.error("Database error:", updateError.message);
+                return { success: false, message: "Failed to delete task." };
+            }
         }
     });
     return { success: true, message: "Tasks deleted successfully!" };

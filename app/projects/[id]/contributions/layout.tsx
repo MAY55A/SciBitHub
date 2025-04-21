@@ -1,5 +1,6 @@
 import { NotAuthorized } from "@/src/components/errors/not-authorized";
 import { Tabs, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
+import { ProjectStatus } from "@/src/types/enums";
 import { createClient } from "@/src/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
 import Link from "next/link";
@@ -9,8 +10,9 @@ import { notFound } from "next/navigation";
 async function fetchTasks(supabase: SupabaseClient<any, "public", any>, projectId: string) {
     const { data, error } = await supabase
         .from("tasks")
-        .select(`id, title, project:projects(id,creator)`)
+        .select(`id, title, project:projects(id,creator, status)`)
         .eq("project", projectId)
+        .is("deleted_at", null)
         .order("created_at");
     if (error) return null;
     return data;
@@ -38,7 +40,7 @@ export default async function Layout({
 }) {
     const { id } = await params;
     const { user, tasks } = await getProjectTasks(id);
-    if (!tasks || tasks.length === 0) return notFound();
+    if (!tasks || tasks.length === 0 || tasks[0].project.status !== ProjectStatus.PUBLISHED) return notFound();
     if (!user || tasks[0].project.creator !== user.id) return <NotAuthorized />;
 
     return (

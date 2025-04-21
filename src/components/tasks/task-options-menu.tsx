@@ -1,0 +1,99 @@
+"use client"
+
+import { Ellipsis } from "lucide-react";
+import { Button } from "../ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Task } from "@/src/types/models";
+import { useRouter } from "next/navigation";
+import { CustomAlertDialog } from "../custom/alert-dialog";
+import { useToast } from "@/src/hooks/use-toast";
+import { deleteTask, updateStatus } from "@/src/utils/task-actions";
+import { TaskStatus } from "@/src/types/enums";
+import { useAuth } from "@/src/contexts/AuthContext";
+
+export function TaskDropdownMenu({ task, showVisit = true }: { task: Task, showVisit?: boolean }) {
+    const router = useRouter();
+    const { user } = useAuth();
+    const { toast } = useToast();
+
+    const handleDelete = async () => {
+        const res = await deleteTask(task.id!, task.project.id!, task.data_source);
+        toast({
+            description: res.message,
+            variant: res.success ? "default" : "destructive",
+        });
+
+        // Redirect to user profile tasks page if deletion is successful
+        if (res.success) {
+            router.push(`/projects/${task.project.id}?tab=contribution`);
+        }
+    }
+
+    const handleUpdateStatus = async (status: TaskStatus) => {
+        const res = await updateStatus(task.id!, status);
+
+        toast({
+            description: res.message,
+            variant: res.success ? "default" : "destructive",
+        });
+
+        if (res.success) {
+            router.refresh();
+        }
+    }
+    console.log(user, task.project.creator.id);
+    // Check if the user is authenticated and is the owner of the task
+    if (!user || user.id !== task.project.creator.id) {
+        return null;
+    }
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-6 w-6 p-0"><Ellipsis size={15} /></Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-48">
+                <DropdownMenuGroup>
+                    {showVisit &&
+                        <DropdownMenuItem
+                            className="px-4"
+                            onClick={() => router.push(`/tasks/${task.id}`)}>
+                            Visit
+                        </DropdownMenuItem>
+                    }
+                    {task.status !== TaskStatus.ACTIVE &&
+                        <DropdownMenuItem
+                            className="px-4"
+                            onClick={() => handleUpdateStatus(TaskStatus.ACTIVE)}>
+                            Reopen
+                        </DropdownMenuItem>
+                    }
+                    {task.status !== TaskStatus.COMPLETED &&
+                        <DropdownMenuItem
+                            className="px-4"
+                            onClick={() => handleUpdateStatus(TaskStatus.COMPLETED)}>
+                            Mark as Completed
+                        </DropdownMenuItem>
+                    }
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    onSelect={(event) => {
+                        event.preventDefault(); // Prevent dialog from closing immediately when opened
+                    }}
+                    className="hover:text-destructive">
+                    <CustomAlertDialog
+                        triggerText="Delete"
+                        buttonVariant="ghost"
+                        confirmButtonVariant="destructive"
+                        title="Are you Sure ?"
+                        description="This action cannot be undone."
+                        confirmText="Delete task"
+                        onConfirm={handleDelete}
+                        buttonClass="h-full hover:text-destructive pl-0"
+                    />
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu >
+    )
+}

@@ -5,10 +5,11 @@ import { TaskStatus } from "@/src/types/enums";
 import { Task } from "@/src/types/models";
 import { formatDate } from "@/src/utils/utils";
 import { ChevronLeft } from "lucide-react";
+import { TaskDropdownMenu } from "./task-options-menu";
 
 export function TaskHeader({ task }: { task: Task }) {
     return (
-        <div className="w-full flex flex-col min-h-[30vh] p-8 rounded-lg bg-muted/40">
+        <div className="relative w-full flex flex-col min-h-[30vh] p-8 rounded-lg bg-muted/40">
             <div className="w-full flex justify-between gap-4">
                 <Link href="/projects/[id]?tab=contribution" as={`/projects/${task.project.id}?tab=contribution`} className="">
                     <span className="flex items-center gap-1 font-semibold text-sm underline">
@@ -43,6 +44,9 @@ export function TaskHeader({ task }: { task: Task }) {
                     <p><strong className="text-green mr-2">+ Contributions :</strong> {task.contributions ?? 0} </p>
                     <p><strong className="text-green mr-2">+ Progress :</strong> {task.target_count ? (100 * (task.contributions ?? 0) / task.target_count).toFixed(1) : "---"} %</p>
                 </div>
+            </div>
+            <div className="absolute bottom-4 right-4">
+                <TaskDropdownMenu task={task} showVisit={false} />
             </div>
         </div>
     );

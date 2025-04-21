@@ -14,6 +14,10 @@ export default async function TaskPage({ params }: { params: { id: string } }) {
         return notFound();
     }
 
+    if(task.deleted_at) {
+        return NotAvailable({ type: "task" });
+    }
+
     if(task.project.deleted_at) {
         return NotAvailable({ type: "project" });
     }
@@ -35,7 +39,7 @@ export default async function TaskPage({ params }: { params: { id: string } }) {
                 {task.status === "active" ?
                     <TaskFields task={task} /> :
                     <div className="w-full flex-col justify-center rounded-lg p-10 py-24 my-8 border">
-                        <h3 className="text-center">This task has been marked as Completed</h3>
+                        <h3 className="text-center">This task has been marked as <strong>Completed</strong></h3>
                         <p className="text-center text-sm text-muted-foreground">You can no longer contribute to this task</p>
                     </div>
                 }

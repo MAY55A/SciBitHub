@@ -6,10 +6,11 @@ import { TaskCardButton } from "./task-card-button";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { TaskStatus } from "@/src/types/enums";
+import { TaskDropdownMenu } from "./task-options-menu";
 
 export function TaskCard({ task }: { task: Task }) {
     return (
-        <Card className="max-w-[400px] flex flex-col justify-between shadow-md">
+        <Card className="relative max-w-[400px] flex flex-col justify-between shadow-md">
             <CardHeader>
                 <div className="flex justify-between font-semibold uppercase tracking-[.1em] text-xs">
                     <span>{task.type}</span>
@@ -32,6 +33,9 @@ export function TaskCard({ task }: { task: Task }) {
                 <Suspense fallback={<Skeleton className="w-32 h-10 rounded-lg bg-muted mr-4" />}>
                     <TaskCardButton taskId={task.id!} status={task.status!} />
                 </Suspense>
+                <div className="absolute bottom-4 right-4">
+                    <TaskDropdownMenu task={task} />
+                </div>
             </CardFooter>
         </Card>
     );

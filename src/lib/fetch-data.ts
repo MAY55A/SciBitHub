@@ -111,9 +111,11 @@ export const fetchTasks = async (
     const { data, error } = await supabase
         .from("tasks")
         .select(`
-                    *
+                    *,
+                    project:projects(id, creator:users(id))
                     `)
         .eq("project", projectId)
+        .is("deleted_at", null);
 
     if (error) {
         console.error("Error fetching tasks:", error);
@@ -165,6 +167,7 @@ export const fetchFirstTaskContributions = async (
         .from("tasks")
         .select(`id`)
         .eq("project", project)
+        .is("deleted_at", null)
         .order("created_at")
         .limit(1)
         .single();
@@ -194,7 +197,7 @@ export const fetchContribution = async (
     const { data, error } = await supabase
         .from("contributions")
         .select(` *,
-                        task:tasks(id, title, type, project:projects(id, name, creator, moderation_level)),
+                        task:tasks(id, title, type, deleted_at, project:projects(id, name, creator, moderation_level)),
                         user:users(id, username, profile_picture, role, deleted_at)
                     `)
         .eq("id", id)
@@ -363,12 +366,12 @@ export async function fetchFeaturedTopics(
     const supabase = await createClient();
 
     const { data, error } = await supabase
-    .from("topics_with_replies")
-    .select("*")
-    .eq("project_id", project)
-    .eq("is_featured", true)
+        .from("topics_with_replies")
+        .select("*")
+        .eq("project_id", project)
+        .eq("is_featured", true)
         .is("deleted_at", null)
-    .limit(limit);
+        .limit(limit);
 
     if (error) {
         console.error("Error fetching similar discussions:", error);

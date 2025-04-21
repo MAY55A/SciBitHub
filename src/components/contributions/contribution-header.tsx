@@ -23,6 +23,7 @@ export function ContributionHeader({ contribution, showActions }: { contribution
                 <p><strong className="text-muted-foreground mr-2">+ Task :</strong>
                     <Link href="/tasks/[id]" as={`/tasks/${contribution.task.id}`} className="underline">
                         {contribution.task.title}
+                        {contribution.task.deleted_at && " (deleted)"}
                     </Link>
                 </p>
                 <p><strong className="text-muted-foreground mr-2">+ Project :</strong>
