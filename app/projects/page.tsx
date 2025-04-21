@@ -6,7 +6,7 @@ import Search from "@/src/components/custom/search-bar";
 import Pagination from "@/src/components/custom/pagination";
 import { HeroSection } from "@/src/components/custom/hero-section";
 import Projects from "@/src/components/projects/projects";
-import { ProjectProgress } from "@/src/types/enums";
+import { ActivityStatus } from "@/src/types/enums";
 
 export default async function Page(props: {
     searchParams?: Promise<{
@@ -15,7 +15,7 @@ export default async function Page(props: {
         sort?: "asc" | "desc";
         orderBy?: string;
         creator?: string;
-        progress?: ProjectProgress;
+        activityStatus?: ActivityStatus;
     }>;
 }) {
 
@@ -24,7 +24,7 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
     const sort = searchParams?.sort;
     const orderBy = searchParams?.orderBy;
-    const progress = searchParams?.progress;
+    const activityStatus = searchParams?.activityStatus;
     //const status = ProjectStatus.PUBLISHED;
     const status = undefined;
 
@@ -33,7 +33,7 @@ export default async function Page(props: {
         creator,
         query,
         status,
-        progress
+        activityStatus
     );
     const totalPages = pages?.totalPages;
 
@@ -52,7 +52,7 @@ export default async function Page(props: {
                     <Search placeholder="Search projects..." />
                 </div>
                 <Suspense key={query || '' + currentPage} fallback={<ProjectsSkeleton />}>
-                    <Projects creator={creator} query={query} status={status} currentPage={currentPage} orderBy={orderBy} sort={sort} progress={progress} />
+                    <Projects creator={creator} query={query} status={status} currentPage={currentPage} orderBy={orderBy} sort={sort} activityStatus={activityStatus} />
                 </Suspense>
                 <div className="mt-5 flex w-full justify-center">
                     {totalPages ? <Pagination totalPages={totalPages} /> : undefined}

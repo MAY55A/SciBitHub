@@ -18,9 +18,11 @@ export enum ProjectStatus {
     DRAFT = 'draft'
 }
 
-export enum ProjectProgress {
-    ACTIVE = 'active',
+export enum ActivityStatus {
+    ONGOING = 'ongoing',
+    PAUSED = 'paused',
     COMPLETED = 'completed',
+    CLOSED = 'closed'
 }
 
 export enum ProjectDomain {

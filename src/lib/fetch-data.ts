@@ -1,7 +1,6 @@
 import { createClient } from "../utils/supabase/server";
-import { Comment, Contribution, Discussion, ForumTopic, Project, Task } from "../types/models";
-import { ProjectStatus, ProjectProgress } from "../types/enums";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { Contribution, Discussion, ForumTopic, Project, Task } from "../types/models";
+import { ActivityStatus, ProjectStatus } from "../types/enums";
 
 
 
@@ -9,7 +8,7 @@ export const fetchProjects = async (
     creator?: string,
     query?: string,
     status?: ProjectStatus,
-    progress?: ProjectProgress,
+    activityStatus?: ActivityStatus,
     currentPage: number = 1,
     orderBy: string = "created_at",
     sort: "asc" | "desc" = "desc",
@@ -32,8 +31,8 @@ export const fetchProjects = async (
         if (status) {
             queryBuilder = queryBuilder.eq("status", status);
         }
-        if (progress) {
-            queryBuilder = queryBuilder.eq("progress", progress);
+        if (activityStatus) {
+            queryBuilder = queryBuilder.eq("activity_status", activityStatus);
         }
 
         // Apply sorting and pagination
@@ -89,7 +88,7 @@ export const fetchTask = async (
         .from("tasks")
         .select(`
                         *,
-                        project:projects(id, name, moderation_level),
+                        project:projects(id, name, moderation_level, activity_status, creator:users(id)),
                         contributions:contributions(count)
                     `)
         .eq("id", id)

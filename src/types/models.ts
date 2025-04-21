@@ -58,7 +58,7 @@ export interface Project {
     participants?: PublicUser[];
     tasks: Task[];
     status: ProjectStatus;
-    progress?: ProjectProgress;
+    activity_status?: ActivityStatus;
 }
 
 

@@ -1,6 +1,6 @@
 import { ProjectCard } from "@/src/components/projects/project-card";
 import { fetchProjects } from "@/src/lib/fetch-data";
-import { ProjectStatus, ProjectProgress } from "@/src/types/enums";
+import { ProjectStatus, ActivityStatus } from "@/src/types/enums";
 import { Project } from "@/src/types/models";
 import { FolderOpen, X } from "lucide-react";
 
@@ -13,7 +13,7 @@ export default async function Projects({
     sort,
     limit,
     creator,
-    progress
+    activityStatus
 }: {
     editable?: boolean;
     query?: string;
@@ -23,14 +23,14 @@ export default async function Projects({
     sort?: "asc" | "desc";
     limit?: number;
     creator?: string;
-    progress?: ProjectProgress
+    activityStatus?: ActivityStatus
 }) {
 
     const projects = await fetchProjects(
         creator,
         query,
         status,
-        progress,
+        activityStatus,
         currentPage,
         orderBy,
         sort,

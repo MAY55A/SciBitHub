@@ -3,7 +3,7 @@
 import { createClient } from "@/src/utils/supabase/server";
 import { encodedRedirect } from "./utils";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { RequestType } from "../types/enums";
+import { ActivityStatus, RequestType } from "../types/enums";
 
 const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: any, oldParticipants: any, projectId: string, status: string) => {
     if (participants.length > 0) {
@@ -47,17 +47,13 @@ const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, 
     return { success: true, message: "Participants updated successfully!" };
 }
 
-// Change later to soft delete if it has contributions, add task files deletion
-export async function deleteProject(projectId: string) {
+export async function updateActivityStatus(id: string, activity_status: ActivityStatus) {
     const supabase = await createClient();
-    const { error } = await supabase.from("projects").delete().eq("id", projectId);
+    const { error } = await supabase.from("projects").update({ activity_status }).eq("id", id);
     if (error) {
         console.error("Database error:", error.message);
-        return encodedRedirect("error", "/profile/projects", "Failed to delete project");
+        return { success: false, message: "Failed to update project activity status." };
     }
-    await supabase.storage
-        .from("projects")
-        .remove([`cover_images/${projectId}`]);
 
-    return encodedRedirect("success", "/profile/projects", "Project deleted successfully!");
+    return { success: true, message: "Project's activity status updated successfully." };
 }

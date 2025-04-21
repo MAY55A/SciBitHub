@@ -6,6 +6,7 @@ import { ProjectOverview } from "../../../src/components/projects/project-overvi
 import Link from "next/link";
 import { ProjectContribution } from "@/src/components/projects/project-contribution";
 import ProjectForum from "@/src/components/projects/project-forum";
+import { ActivityStatus } from "@/src/types/enums";
 
 export default async function ProjectPage({ ...props }: {
     params: { id: string },
@@ -35,9 +36,11 @@ export default async function ProjectPage({ ...props }: {
                     <Link href={`?tab=overview`} scroll={false} className="w-full">
                         <TabsTrigger value="overview" className="w-full">Overview</TabsTrigger>
                     </Link>
+                    {project.activity_status === ActivityStatus.ONGOING &&
                     <Link href={`?tab=contribution`} scroll={false} className="w-full">
                         <TabsTrigger value="contribution" className="w-full">Contribution</TabsTrigger>
                     </Link>
+                    }
                     <Link href={`?tab=forum`} scroll={false} className="w-full">
                         <TabsTrigger value="forum" className="w-full">Forum</TabsTrigger>
                     </Link>
@@ -48,11 +51,13 @@ export default async function ProjectPage({ ...props }: {
                 <TabsContent value="overview">
                     <ProjectOverview project={project} />
                 </TabsContent>
+                {project.activity_status === ActivityStatus.ONGOING &&
                 <TabsContent value="contribution">
                     <ProjectContribution projectId={project.id!} />
                 </TabsContent>
+                }
                 <TabsContent value="forum">
-                    <ProjectForum projectId={project.id!} {...searchParams}/>
+                    <ProjectForum projectId={project.id!} {...searchParams} />
                 </TabsContent>
                 <TabsContent value="results">
                 </TabsContent>
