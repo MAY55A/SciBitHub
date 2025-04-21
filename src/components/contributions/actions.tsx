@@ -2,7 +2,7 @@
 
 import { Button } from "../ui/button";
 import { Check, Flag, Trash2, X } from "lucide-react";
-import { deleteContributions, updateContributionStatus } from "@/src/utils/contribution-actions";
+import { softDeleteContributions, updateContributionStatus } from "@/src/utils/contribution-actions";
 import { CustomAlertDialog } from "../custom/alert-dialog";
 import { useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
@@ -45,7 +45,7 @@ export function Actions({ status, contributions, onUpdate, onDelete, showText = 
 
     const handleDelete = async () => {
         setPending(true);
-        const res = await deleteContributions(contributions)
+        const res = await softDeleteContributions(contributions)
         setPending(false);
         if (res.success) {
             onDelete();

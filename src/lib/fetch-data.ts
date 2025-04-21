@@ -138,6 +138,7 @@ export const fetchContributions = async (
             `
         )
         .in("task", tasks)
+        .is("deleted_at", null);
 
     if (page) {
         const start = (page - 1) * pageSize;
@@ -175,6 +176,7 @@ export const fetchFirstTaskContributions = async (
             `
         )
         .eq("task", task?.id)
+        .is("deleted_at", null);
 
     if (error) {
         console.error("Error fetching contributions:", error);

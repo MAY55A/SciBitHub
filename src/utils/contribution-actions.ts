@@ -17,7 +17,20 @@ export const updateContributionStatus = async (ids: string[], status: Validation
     return { success: true, message: ids.length === 1 ? "Contribution status updated successfully!" : "Contributions status updated successfully" };
 }
 
-export async function deleteContributions(ids: string[]) {
+export async function softDeleteContributions(ids: string[]) {
+    console.log("Soft Deleting contributions with IDs:", ids);
+    const supabase = await createClient();
+    const currentDate = new Date().toISOString();
+    const { error } = await supabase.from("contributions").update({ deleted_at: currentDate }).in("id", ids);
+    if (error) {
+        console.error("Database error:", error.message);
+        return { success: false, message: "Failed to delete contribution(s)" };
+    }
+
+    return { success: true, message: "Contribution(s) deleted successfully!" };
+}
+
+export async function hardDeleteContributions(ids: string[]) {
     console.log("Deleting contributions with IDs:", ids);
 
     const supabase = await createClient();
@@ -28,14 +41,14 @@ export async function deleteContributions(ids: string[]) {
     }
 
     contributions.forEach(async (contribution) => {
-    for (const field in contribution.data) {
-        if (contribution.data[field].files) {
-            for (const file of contribution.data[field].files) {
-                await deleteFromMinIO(file)
+        for (const field in contribution.data) {
+            if (contribution.data[field].files) {
+                for (const file of contribution.data[field].files) {
+                    await deleteFromMinIO(file)
+                }
             }
         }
-    }
-});
+    });
 
     return { success: true, message: "Contribution(s) deleted successfully!" };
 }

@@ -116,6 +116,7 @@ export interface Contribution {
     data: Map<string, any>;
     status: ValidationStatus;
     created_at?: string;
+    deleted_at?:string;
 }
 
 

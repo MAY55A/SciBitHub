@@ -1,6 +1,7 @@
 import { ContributionBody } from "@/src/components/contributions/contribution-body";
 import { ContributionHeader } from "@/src/components/contributions/contribution-header";
 import { NotAuthorized } from "@/src/components/errors/not-authorized";
+import { NotAvailable } from "@/src/components/errors/not-available";
 import { fetchContribution } from "@/src/lib/fetch-data";
 import { createClient } from "@/src/utils/supabase/server";
 import { notFound } from "next/navigation";
@@ -25,6 +26,10 @@ export default async function Page({
     const contribution = await fetchContribution(id);
     if (!contribution) {
         return notFound();
+    }
+
+    if(contribution.deleted_at) {
+        return NotAvailable({ type: "contribution" });
     }
 
     const isContributor = contribution.user.id === user.id;
