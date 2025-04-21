@@ -175,32 +175,42 @@ export const removeProfilePicture = async (userId: string) => {
     return { success: true, message: 'Profile picture removed successfully.' };
 };
 
-export const softDeleteAccount = async (userId: string) => {
+// soft delete user account
+export const softDeleteAccount = async (userId: string, userName: string) => {
     const supabase = await createClient();
     if (userId !== (await supabase.auth.getUser()).data.user?.id) {
         return { success: false, message: 'You are not authorized to delete this account.' };
     }
     try {
-        // Step 1: Soft delete the user in the database
-        const { error: softDeleteError } = await supabase
+        // update deleted_at in database
+        const { error: dbError } = await supabase
             .from('users')
-            .update({ deleted_at: new Date().toISOString() })
+            .update({
+                deleted_at: new Date().toISOString(),
+                username: `${userName} (deleted)`, // mark the username as deleted to allow reusing it
+                profile_picture: null
+            })
             .eq('id', userId);
 
-        if (softDeleteError) {
-            console.error('Error soft deleting user:', softDeleteError);
-            throw softDeleteError;
+        if (dbError) {
+            console.error('Error deleting user from db:', dbError);
+            throw dbError;
         }
 
-        // Step 2: Delete the Supabase Auth account
-        const { error: deleteAuthError } = await supabase.auth.admin.deleteUser(userId);
+        // delete the Supabase Auth account
+        const { error: AuthError } = await supabase.auth.admin.deleteUser(userId);
 
-        if (deleteAuthError) {
-            console.error('Error deleting Supabase Auth account:', deleteAuthError);
-            throw deleteAuthError;
+        if (AuthError) {
+            console.error('Error deleting Supabase Auth account:', AuthError);
+            throw AuthError;
         }
 
-        return { success: true, message: 'Account deleted successfully.' };
+        // remove profile picture in Supabase Storage to save space since it is not needed for auditing
+        await supabase.storage
+            .from('avatars')
+            .remove([userId]);
+
+        return { success: true, message: 'Account deleted successfully!' };
     } catch (error) {
         console.error('Error deleting user:', error);
         return { success: false, message: 'Failed to delete account.' };

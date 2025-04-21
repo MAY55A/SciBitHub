@@ -30,6 +30,7 @@ export default function UserSearch({ onSelectUser }: UserSearchProps) {
             .from("users")
             .select("id, username, profile_picture, role")
             .eq("role", "contributor")
+            .is("deleted_at", null)
             .ilike("username", `%${searchTerm}%`)
 
         if (error) console.error("Error fetching users:", error);

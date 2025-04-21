@@ -21,7 +21,7 @@ export async function LatestContributions({tasks}: {tasks: string[]}) {
                 <TableBody>
                     {contributions && contributions.length ? contributions.map((contribution) => (
                         <TableRow key={contribution.id!}>
-                            <TableCell className="font-medium">{contribution.user.username}</TableCell>
+                            <TableCell className="font-medium">{contribution.user.deleted_at ? "**Deleted User**" : contribution.user.username}</TableCell>
                             <TableCell>{contribution.task.title}</TableCell>
                             <TableCell><ValidationStatusUI status={contribution.status}/></TableCell>
                             <TableCell className="text-right">{formatDate(contribution.created_at!, true)}</TableCell>

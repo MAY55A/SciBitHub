@@ -3,14 +3,15 @@ import { ValidationStatusUI } from "../custom/validation-status";
 import Link from "../custom/Link";
 import { formatDate } from "@/src/utils/utils";
 import { StatusWithActions } from "./actions";
+import { UserHoverCard } from "../custom/user-hover-card";
 
 export function ContributionHeader({ contribution, showActions }: { contribution: Contribution, showActions: boolean }) {
     return (
         <div className="w-full flex flex-col min-h-[30vh] p-8 rounded-lg bg-muted/50 shadow-md">
             <div className="w-full flex justify-between gap-4">
-                <p className="italic text-muted-foreground text-xs">Submitted on {formatDate(contribution.created_at!, true)},  by
-                    <span className="ml-2 truncate font-semibold text-red-700">{contribution.user.username}</span>
-                </p>
+                <div className="italic text-muted-foreground text-xs">Submitted {formatDate(contribution.created_at!, true)},  by
+                    <UserHoverCard user={contribution.user} />
+                </div>
                 {!showActions && <div className="rounded-2xl shadow-md font-bold uppercase tracking-[.1em] text-xs">
                     <ValidationStatusUI status={contribution.status} withBorder={true} />
                 </div>}

@@ -33,6 +33,7 @@ export interface PublicUser {
     profile_picture?: string;
     role?: UserRole;
     metadata?: Metadata;
+    deleted_at?: string;
 }
 
 export interface Project {

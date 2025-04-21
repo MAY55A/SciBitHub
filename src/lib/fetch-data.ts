@@ -20,8 +20,7 @@ export const fetchProjects = async (
         let queryBuilder = supabase
             .from("projects")
             .select(`*,
-                creator:users(id, username, profile_picture, metadata)`,
-                { count: "exact" });
+                creator:users(id, username, profile_picture, metadata, deleted_at)`,
 
         // Apply filters
         if (creator) {
@@ -69,7 +68,8 @@ export const fetchProject = async (
         .from("projects")
         .select(`
                     *,
-                    creator:users(id, username, profile_picture, metadata)                `)
+                    creator:users(id, username, profile_picture, metadata, deleted_at)
+                `)
         .eq("id", id)
         .maybeSingle();
 
@@ -133,7 +133,7 @@ export const fetchContributions = async (
         .select(
             `
             *,
-            user:users(id, username),
+            user:users(id, username, deleted_at),
             task:tasks(id, title)
             `
         )
@@ -171,7 +171,7 @@ export const fetchFirstTaskContributions = async (
         .select(
             `
             *,
-            user:users(id, username)
+            user:users(id, username, deleted_at)
             `
         )
         .eq("task", task?.id)
@@ -192,7 +192,7 @@ export const fetchContribution = async (
         .from("contributions")
         .select(` *,
                         task:tasks(id, title, type, project:projects(id, name, creator, moderation_level)),
-                        user:users(id, username, profile_picture)
+                        user:users(id, username, profile_picture, role, deleted_at)
                     `)
         .eq("id", id)
         .maybeSingle();

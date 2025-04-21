@@ -10,6 +10,10 @@ import { createClient } from "@/src/utils/supabase/server";
 import { Suspense } from "react";
 
 export function ProjectHeader({ project }: { project: Project }) {
+    const creator = {
+        ...project.creator,
+        username: project.creator.deleted_at ? "**Deleted User**" : project.creator.username
+    };
     return (
         <div className="relative w-full min-h-[50vh] p-4 rounded-lg">
             {project.cover_image !== undefined &&
@@ -24,15 +28,15 @@ export function ProjectHeader({ project }: { project: Project }) {
             <div className="relative w-full flex justify-between gap-4">
                 <div className="flex items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-muted/20 rounded-lg">
                     <Avatar className="flex shrink-0 overflow-hidden h-10 w-10 rounded-lg hover:shadow-lg hover:bg-muted">
-                        <AvatarImage src={project.creator.profile_picture} alt={project.creator.username} />
+                        <AvatarImage src={creator.profile_picture} alt={creator.username} />
                         <AvatarFallback className="rounded-lg">
-                            {project.creator.username?.slice(0, 2).toUpperCase()}
+                            {creator.username.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="flex items-center gap-1 font-semibold text-muted-foreground text-xs"><ResearcherIcon type={project.creator.metadata!.researcherType!} size={16} />{project.creator.metadata!.researcherType} researcher</span>
-                        <span className="ml-2 truncate font-semibold">{project.creator.username}</span>
-                        {project.creator.metadata!.isVerified ? (
+                        <span className="flex items-center gap-1 font-semibold text-muted-foreground text-xs"><ResearcherIcon type={creator.metadata!.researcherType!} size={16} />{creator.metadata!.researcherType} researcher</span>
+                        <span className="ml-2 truncate font-semibold">{creator.username}</span>
+                        {creator.metadata!.isVerified ? (
                             <span className="flex items-center gap-1 text-xs text-green-900"><CheckCircle2 size={13} />verified</span>
                         ) : null
                         }
@@ -47,7 +51,7 @@ export function ProjectHeader({ project }: { project: Project }) {
             </div>
             <div className="relative flex flex-col justify-between w-full h-full text-foreground p-8">
                 <div className="mt-16">
-                    <h1 className="text-xl lg:text-2xl font-bold text-primary">{project.name}gfdfdhf f qdfgfdgqf gdfgqfg qdfgqdfdf</h1>
+                    <h1 className="text-xl lg:text-2xl font-bold text-primary">{project.name}</h1>
                     <p className="text-foreground"><strong>+ Scope:</strong> {project.scope}</p>
                     {project.countries &&
                         <p className="text-foreground"><strong>+ Countries:</strong> {project.countries.join(", ")}</p>

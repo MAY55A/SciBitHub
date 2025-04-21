@@ -29,7 +29,7 @@ export const fetchComments = async (
         let queryBuilder = supabase
             .from("comments")
             .select(`*,
-                creator:users(id, username, profile_picture, metadata)`,
+                creator:users(id, username, profile_picture, metadata, deleted_at)`,
                 { count: "exact" })
 
         if (discussion) {

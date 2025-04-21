@@ -58,19 +58,24 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
         });
     }
 
+    const creator = {
+        ...comment.creator,
+        username: comment.creator.deleted_at ? "**Deleted User**" : comment.creator.username,
+    }
+
     return (
         <div>
             <div className="w-full flex gap-2">
                 <Avatar className="flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg hover:bg-muted">
-                    <AvatarImage src={comment.creator.profile_picture} alt={comment.creator.username} />
+                    <AvatarImage src={creator.profile_picture} alt={creator.username} />
                     <AvatarFallback className="rounded-lg">
-                        {comment.creator.username?.slice(0, 2).toUpperCase()}
+                        {creator.username.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>
                 <Card className="w-full px-2 bg-muted/50">
                     <CardHeader className="flex-row justify-between p-0">
                         <div id={comment.id}>
-                            <UserHoverCard user={comment.creator} />
+                            <UserHoverCard user={creator} />
                             {!!replyingTo &&
                                 <span className="ml-[-7px] text-xs text-muted-foreground">
                                     replied to <a href={`#${replyingTo.comment}`} className="truncate underline">{replyingTo.user}</a>
@@ -110,7 +115,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
                             <Reply size={14} />
                             Reply
                         </Button>
-                        {currentUser?.id === comment.creator.id && (
+                        {currentUser?.id === creator.id && (
                             <>
                                 <Button variant="ghost" size="sm" className="flex gap-1 items-center text-xs h-8 px-1" disabled={isSubmitting} onClick={toggleEdit}>
                                     {isEditing ?
@@ -138,7 +143,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
             </div>
             {showReplies &&
                 <div className="ml-4">
-                    <CommentsList commentedOn={{ parent_comment: comment.id }} replyingTo={{ comment: comment.id, user: comment.creator.username }} />
+                    <CommentsList commentedOn={{ parent_comment: comment.id }} replyingTo={{ comment: comment.id, user: creator.username }} />
                 </div>
             }
         </div>

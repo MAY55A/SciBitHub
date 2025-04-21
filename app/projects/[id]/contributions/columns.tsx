@@ -42,6 +42,10 @@ export const columns: ColumnDef<Contribution>[] = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Contributor" />
         ),
+        cell: ({ row }) => {
+            const username = row.original.deleted_at ? "**Deleted User**" : row.getValue("contributor") as string;
+            return <p>{username}</p>
+        },
     },
     {
         accessorKey: "data",
