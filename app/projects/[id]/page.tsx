@@ -59,7 +59,7 @@ export default async function ProjectPage({ ...props }: {
                 </TabsContent>
                 {project.activity_status === ActivityStatus.ONGOING &&
                     <TabsContent value="contribution">
-                        <ProjectContribution projectId={project.id!} />
+                        <ProjectContribution projectId={project.id!} creator={project.creator.id}/>
                     </TabsContent>
                 }
                 <TabsContent value="forum">
