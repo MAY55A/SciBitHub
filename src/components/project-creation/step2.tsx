@@ -53,7 +53,7 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
         const same = watchedFields.visibility === data.visibility &&
             watchedFields.participationLevel === data.participationLevel &&
             watchedFields.moderationLevel === data.moderationLevel &&
-            watchedFields.scope === data.scope && watchedFields.deadline === data.deadline &&
+            watchedFields.scope === data.scope && watchedFields.deadline?.toISOString() === data.deadline?.toISOString() &&
             areEqualArrays(watchedFields.countries, data.countries) &&
             areEqualArrays(watchedFields.participants, data.participants);
         setIsSaved(same);

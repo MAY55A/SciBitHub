@@ -33,12 +33,13 @@ export default async function Layout({
 
     if (!user || project.creator.id !== user.id) return <NotAuthorized />;
 
-    const { participation_level, moderation_level, cover_image, creator, ...data } = project;
+    const { participation_level, moderation_level, cover_image, creator, deadline, ...data } = project;
     const projectData = {
         ...data,
         shortDescription: project.short_description,
         longDescription: project.long_description,
         coverImage: cover_image,
+        deadline: deadline ? new Date(deadline) : undefined,
         participants: project.participants,
         participationLevel: project.participation_level,
         moderationLevel: project.moderation_level,
