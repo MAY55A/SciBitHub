@@ -50,7 +50,7 @@ export const projectInputDataSchema = z.object({
     links: z.array(z.string().url()).optional(),
     files: z.array(z.string().url()).optional(),
     coverImage: z.string().optional(),
-    participants: z.array(z.object({ id: z.string(), username: z.string(), profile_picture: z.string().optional() })).optional(),
+    participants: z.array(z.object({ id: z.string(), username: z.string(), profile_picture: z.string().nullable() })).optional(),
     tasks: z.array(taskInputDataSchema),
     status: z.string().optional(),
     creator: z.string().optional(),

@@ -34,7 +34,7 @@ export interface User {
 export interface PublicUser {
     id: string;
     username: string;
-    profile_picture?: string;
+    profile_picture: string | null;
     role?: UserRole;
     metadata?: Metadata;
     deleted_at?: string;
