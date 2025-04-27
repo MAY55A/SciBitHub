@@ -138,3 +138,31 @@ export enum DataType {
     IMAGE = 'image',
     AUDIO = 'audio',
 }
+
+export enum VisualizationType {
+    TABLE = 'table',
+    CHART = 'chart',
+    GALLERY = 'gallery',
+    // MAP = 'map',
+}
+
+export enum ChartType {
+    LINE = 'line',
+    BAR = 'bar',
+    PIE = 'pie',
+    // SCATTER = 'scatter',
+    HISTOGRAM = 'histogram',
+    // AREA = 'area',
+    // RADAR = 'radar',
+    // HEATMAP = 'heatmap',
+    // BUBBLE = 'bubble',
+}
+
+export enum AggregationFunction {
+    COUNT = 'count',
+    AVERAGE = 'average',
+    SUM = 'sum',
+    MIN = 'min',
+    MAX = 'max',
+    CUSTOM = 'custom'
+}

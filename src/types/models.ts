@@ -1,4 +1,8 @@
-import { ResearcherType, UserRole, ProjectDomain, ProjectVisibility, ParticipationLevel, ModerationLevel, ProjectStatus, ActivityStatus, TaskType, TaskStatus, RequestType, ValidationStatus, DiscussionCategory, DiscussionStatus } from "./enums";
+import {
+    ResearcherType, UserRole, ProjectDomain, ProjectVisibility, ParticipationLevel,
+    ModerationLevel, ProjectStatus, ActivityStatus, TaskType, TaskStatus, RequestType,
+    ValidationStatus, DiscussionCategory, DiscussionStatus, ChartType, VisualizationType, AggregationFunction
+} from "./enums";
 
 interface Metadata {
     interests: string[];
@@ -54,14 +58,14 @@ export interface Project {
     created_at: string;
     published_at?: string;
     updated_at?: string;
-    deleted_at?:string;
+    deleted_at?: string;
     creator: PublicUser;
     participants?: PublicUser[];
     tasks: Task[];
     status: ProjectStatus;
     activity_status?: ActivityStatus;
+    results_summary?: string;
 }
-
 
 export interface FieldConfig {
     type: string;
@@ -96,7 +100,7 @@ export interface Task {
     status?: TaskStatus;
     created_at?: string;
     updated_at?: string;
-    deleted_at?:string;
+    deleted_at?: string;
     project: Project;
     contributions?: number;
 }
@@ -118,7 +122,7 @@ export interface Contribution {
     data: Map<string, any>;
     status: ValidationStatus;
     created_at?: string;
-    deleted_at?:string;
+    deleted_at?: string;
 }
 
 
@@ -132,7 +136,7 @@ export interface Discussion {
     tags?: string[];
     created_at?: string;
     updated_at?: string;
-    deleted_at?:string;
+    deleted_at?: string;
     creator: PublicUser;
     replies?: number;
 }
@@ -146,7 +150,7 @@ export interface ForumTopic {
     views: number;
     created_at: string;
     updated_at: string;
-    deleted_at?:string;
+    deleted_at?: string;
     project: Project;
     creator: PublicUser;
     replies?: number;
@@ -163,3 +167,19 @@ export interface Comment {
     parent_comment?: Comment;
     replies?: number;
 }
+
+export interface Visualization {
+    id?: string;
+    task: string;
+    title: string;
+    type: VisualizationType;
+    chart_type: ChartType;
+    table_columns?: string[];
+    display_field?: string;
+    group_by?: string;
+    value_field?: string;
+    aggregation?: AggregationFunction;
+    custom_function?: string;
+    created_at?: string;
+    updated_at?: string;
+};
