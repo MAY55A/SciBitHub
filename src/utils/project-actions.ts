@@ -128,3 +128,14 @@ export async function updateActivityStatus(id: string, activity_status: Activity
 
     return { success: true, message: "Project's activity status updated successfully." };
 }
+
+export async function updateSummary(projectId: string, results_summary: string | null) {
+    const supabase = await createClient();
+    const { error } = await supabase.from("projects").update({ results_summary }).eq("id", projectId);
+    if (error) {
+        console.error("Database error:", error.message);
+        return { success: false, message: "Failed to update results summary." };
+    }
+
+    return { success: true, message: "Results summary updated successfully." };
+}
