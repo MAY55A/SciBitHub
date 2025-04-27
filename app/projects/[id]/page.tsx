@@ -1,13 +1,15 @@
 import { fetchProject } from "@/src/lib/fetch-data";
 import { notFound } from "next/navigation";
-import { ProjectHeader } from "../../../src/components/projects/project-header";
+import { ProjectHeader } from "@/src/components/projects/project-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
-import { ProjectOverview } from "../../../src/components/projects/project-overview";
+import { ProjectOverview } from "@/src/components/projects/project-overview";
 import Link from "next/link";
 import { ProjectContribution } from "@/src/components/projects/project-contribution";
 import ProjectForum from "@/src/components/projects/project-forum";
 import { ActivityStatus } from "@/src/types/enums";
 import { NotAvailable } from "@/src/components/errors/not-available";
+import { ProjectResults } from "@/src/components/projects/project-results";
+import { getProjectResultsPermissions } from "@/src/lib/permissions-service";
 
 export default async function ProjectPage({ ...props }: {
     params: { id: string },
@@ -33,6 +35,7 @@ export default async function ProjectPage({ ...props }: {
 
     const searchParams = await props.searchParams;
     const currentTab = (await searchParams).tab || "overview";
+    const { canView, canEdit } = await getProjectResultsPermissions(project.id!, project.creator.id, project.visibility);
 
     return (
         <div className="w-full mx-auto p-6">
@@ -59,13 +62,17 @@ export default async function ProjectPage({ ...props }: {
                 </TabsContent>
                 {project.activity_status === ActivityStatus.ONGOING &&
                     <TabsContent value="contribution">
-                        <ProjectContribution projectId={project.id!} creator={project.creator.id}/>
+                        <ProjectContribution projectId={project.id!} creator={project.creator.id} />
                     </TabsContent>
                 }
                 <TabsContent value="forum">
                     <ProjectForum projectId={project.id!} {...searchParams} />
                 </TabsContent>
                 <TabsContent value="results">
+                    {canView ?
+                        <ProjectResults projectId={project.id!} canEdit={canEdit} />
+                        : <span className="h-80 flex items-center justify-center text-muted-foreground border rounded-lg m-4">Results are not available.</span>
+                    }
                 </TabsContent>
             </Tabs>
         </div>
