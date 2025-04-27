@@ -1,5 +1,5 @@
 import { createClient } from "../utils/supabase/server";
-import { Contribution, Discussion, ForumTopic, Project, Task } from "../types/models";
+import { Contribution, Discussion, ForumTopic, Project, Task, Visualization } from "../types/models";
 import { ActivityStatus, ProjectStatus } from "../types/enums";
 
 
@@ -399,3 +399,76 @@ export const fetchForumTopic = async (
     data.project.creator = { id: data.project.creator };
     return data;
 }
+
+
+export const fetchContributionsData = async (
+    task: string,
+) => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("contributions")
+        .select("id, data")
+        .eq("task", task)
+        .eq("status", "approved")
+        .is("deleted_at", null);
+
+    if (error) {
+        console.error("Error fetching contributions:", error);
+        return null;
+    }
+
+    return data;
+};
+
+export const fetchTasksForResults = async (
+    projectId: string
+) => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("tasks")
+        .select("id, title, type, fields")
+        .eq("project", projectId)
+        .is("deleted_at", null);
+
+    if (error) {
+        console.error("Error fetching tasks:", error);
+        return [];
+    }
+
+    return data;
+};
+
+export const fetchVisualizations = async (
+    projectId: string
+): Promise<Visualization[]> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("visualizations")
+        .select("*")
+        .eq("project", projectId)
+
+    if (error) {
+        console.error("Error fetching visualizations:", error);
+        return [];
+    }
+
+    return data;
+};
+
+export const fetchProjectResultsSummary = async (
+    projectId: string
+): Promise<string | null> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("projects")
+        .select("results_summary")
+        .eq("id", projectId)
+        .single();
+
+    if (error) {
+        console.error("Error fetching results summary:", error);
+        return null;
+    }
+
+    return data.results_summary;
+};
