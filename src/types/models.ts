@@ -112,6 +112,7 @@ export interface ParticipationRequest {
     type: RequestType;
     status: ValidationStatus;
     requested_at?: string;
+    deleted_at?: string;
 }
 
 
