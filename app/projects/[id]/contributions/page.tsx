@@ -1,10 +1,10 @@
 import { fetchContributions, fetchFirstTaskContributions } from "@/src/lib/fetch-data";
 import { TabsContent } from "@/src/components/ui/tabs";
 import { DataTable } from "@/src/components/data-table/data-table";
-import { columns } from "./columns";
+import { columns } from "@/src/components/contributions/columns";
 import { Contribution } from "@/src/types/models";
 import { notFound } from "next/navigation";
-import { contributionsFilters } from "./filters";
+import { contributionsFilters } from "@/src/components/contributions/filters";
 import { softDeleteContributions } from "@/src/utils/contribution-actions";
 
 export default async function Page({
