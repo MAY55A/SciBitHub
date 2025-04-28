@@ -6,6 +6,7 @@ import { DiscussionCard } from "./discussion-card";
 export default async function Discussions({
     editable,
     query,
+    status,
     currentPage,
     orderBy,
     sort,
@@ -14,6 +15,7 @@ export default async function Discussions({
 }: {
     editable?: boolean;
     query?: string;
+    status?: string;
     currentPage?: number;
     orderBy?: string;
     sort?: "asc" | "desc";
@@ -24,6 +26,7 @@ export default async function Discussions({
     const discussions = await fetchDiscussions(
         creator,
         query,
+        status,
         currentPage,
         orderBy,
         sort,
@@ -35,17 +38,17 @@ export default async function Discussions({
                 discussions.data.map((discussion: Discussion) => (
                     <DiscussionCard editable={editable} discussion={discussion} key={discussion.id} />
                 )) :
-                <EmptyState />
+                <EmptyState status={status}/>
             }
         </div>
     );
 }
 
-function EmptyState() {
+function EmptyState({status}: {status?: string}) {
     return (
         <div className="flex flex-col items-center text-center p-10 mt-10">
             <MessagesSquare className="w-20 h-20 text-muted-foreground" />
-            <p className="mt-4 text-lg font-semibold text-muted-foreground">No discussions found</p>
+            <p className="mt-4 text-lg font-semibold text-muted-foreground">No {status} discussions found</p>
         </div>
     );
 }

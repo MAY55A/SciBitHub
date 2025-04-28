@@ -216,6 +216,7 @@ export const fetchContribution = async (
 export const fetchDiscussions = async (
     creator?: string,
     query?: string,
+    status?: string,
     currentPage: number = 1,
     orderBy: string = "created_at",
     sort: "asc" | "desc" = "desc",
@@ -235,6 +236,9 @@ export const fetchDiscussions = async (
         }
         if (query) {
             queryBuilder = queryBuilder.ilike("title", `%${query}%`);
+        }
+        if (status) {
+            queryBuilder = queryBuilder.eq("status", status);
         }
 
         // Apply sorting and pagination

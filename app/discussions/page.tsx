@@ -10,6 +10,7 @@ import DiscussionFormDialog from "@/src/components/discussions/discussion-form-d
 export default async function Page(props: {
     searchParams?: Promise<{
         query?: string;
+        status?: string;
         page?: string;
         sort?: "asc" | "desc";
         orderBy?: string;
@@ -19,6 +20,7 @@ export default async function Page(props: {
 
     const searchParams = await props.searchParams;
     const query = searchParams?.query;
+    const status = searchParams?.status;
     const currentPage = Number(searchParams?.page) || 1;
     const sort = searchParams?.sort;
     const orderBy = searchParams?.orderBy;
@@ -27,6 +29,7 @@ export default async function Page(props: {
     const pages = await fetchDiscussions(
         creator,
         query,
+        status
     );
     const totalPages = pages?.totalPages;
 
@@ -42,7 +45,7 @@ export default async function Page(props: {
                     <Search placeholder="Search discussions..." />
                 </div>
                 <Suspense key={query || '' + currentPage} fallback={<ProjectsSkeleton />}>
-                    <Discussions creator={creator} query={query} currentPage={currentPage} orderBy={orderBy} sort={sort} />
+                    <Discussions creator={creator} query={query} status={status} currentPage={currentPage} orderBy={orderBy} sort={sort} />
                 </Suspense>
                 <div className="mt-5 flex w-full justify-center">
                     {totalPages ? <Pagination totalPages={totalPages} /> : undefined}

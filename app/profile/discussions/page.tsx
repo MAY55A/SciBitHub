@@ -11,6 +11,7 @@ import Discussions from "@/src/components/discussions/discussions";
 export default async function MyProjects(props: {
     searchParams?: Promise<{
         query?: string;
+        status?: string;
         page?: string;
         success?: string;
         error?: string;
@@ -27,10 +28,12 @@ export default async function MyProjects(props: {
     const success = searchParams?.success;
     const error = searchParams?.error;
     const query = searchParams?.query || '';
+    const status = searchParams?.status;
     const currentPage = Number(searchParams?.page) || 1;
     const pages = await fetchDiscussions(
         user.id,
         query,
+        status
     );
     const totalPages = pages?.totalPages;
 
@@ -48,7 +51,7 @@ export default async function MyProjects(props: {
                 <FormMessage message={{ success }} classname="self-start pl-4"></FormMessage>
             }
             <Suspense key={query + currentPage} fallback={<ProjectsSkeleton />}>
-                <Discussions editable={true} creator={user.id} query={query} currentPage={currentPage} />
+                <Discussions editable={true} creator={user.id} query={query} status={status} currentPage={currentPage} />
             </Suspense>
             <div className="mt-5 flex w-full justify-center">
                 {totalPages ? <Pagination totalPages={totalPages} /> : undefined}
