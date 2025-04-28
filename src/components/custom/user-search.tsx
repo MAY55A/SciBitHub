@@ -53,14 +53,14 @@ export default function UserSearch({ onSelectUser }: UserSearchProps) {
                     aria-expanded={open}
                     className="w-[200px] justify-between justify-self-end"
                 >
-                    {"Add contributor..."}
+                    {"Add contributor"}
                     <Plus className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="p-0">
                 <Command>
                     <CommandInput
-                        placeholder="Search contributor..."
+                        placeholder="Start typing to search..."
                         value={value}
                         onValueChange={setValue}
                     />
@@ -82,7 +82,7 @@ export default function UserSearch({ onSelectUser }: UserSearchProps) {
                                         }}
                                     >
                                         <Avatar className="relative flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg">
-                                            <AvatarImage src={user.profile_picture} alt={user.username} />
+                                            <AvatarImage src={user.profile_picture ?? undefined} alt={user.username} />
                                             <AvatarFallback className="rounded-lg">
                                                 {user.username.slice(0, 2).toUpperCase()}
                                             </AvatarFallback>

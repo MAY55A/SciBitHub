@@ -104,17 +104,9 @@ export function ProjectDropdownMenu({ project, showVisit = true }: { project: Pr
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     {project.status === "published" && project.participation_level === "restricted" &&
-                        <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>Manage Participants</DropdownMenuSubTrigger>
-                            <DropdownMenuPortal>
-                                <DropdownMenuSubContent>
-                                    <DropdownMenuItem>Invite</DropdownMenuItem>
-                                    <DropdownMenuItem>Kick out</DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem>View requests</DropdownMenuItem>
-                                </DropdownMenuSubContent>
-                            </DropdownMenuPortal>
-                        </DropdownMenuSub>
+                        <DropdownMenuItem className="px-4" onClick={() => router.push(`/projects/${project.id}/participation-requests`)}>
+                            Manage requests
+                        </DropdownMenuItem>
                     }
                     <DropdownMenuItem
                         className="px-4"

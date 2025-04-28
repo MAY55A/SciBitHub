@@ -1,5 +1,5 @@
 import { createClient } from "../utils/supabase/server";
-import { Contribution, Discussion, ForumTopic, Project, Task, Visualization } from "../types/models";
+import { Contribution, Discussion, ForumTopic, ParticipationRequest, Project, Task, Visualization } from "../types/models";
 import { ActivityStatus, ProjectStatus } from "../types/enums";
 
 
@@ -476,3 +476,29 @@ export const fetchProjectResultsSummary = async (
 
     return data.results_summary;
 };
+
+export async function fetchParticipationRequests(
+    { project, user }: { project?: string, user?: string }
+): Promise<ParticipationRequest[]> {
+    const supabase = await createClient();
+
+    const queryBuilder = supabase
+        .from("participation_requests")
+        .select("*, project:projects(id, name), user:users(id, username, profile_picture)")
+        .not("requested_at", "is", null) // Only fetch requests that have been made (in case of project draft requests have been created but not sent)
+
+    if (user) {
+        queryBuilder.eq("user_id", user);
+    }
+    if (project) {
+        queryBuilder.eq("project_id", project);
+    }
+
+    //queryBuilder.is("deleted_at", null);
+    const { data, error } = await queryBuilder;
+    if (error) {
+        console.error("Error fetching participation requests:", error);
+        return [];
+    }
+    return data;
+}
