@@ -9,7 +9,8 @@ import ProjectForum from "@/src/components/projects/project-forum";
 import { ActivityStatus } from "@/src/types/enums";
 import { NotAvailable } from "@/src/components/errors/not-available";
 import { ProjectResults } from "@/src/components/projects/project-results";
-import { getProjectResultsPermissions } from "@/src/lib/permissions-service";
+import { getProjectPermissions } from "@/src/lib/permissions-service";
+import { RestrictedProjectMessage } from "@/src/components/projects/restricted-project-message";
 
 export default async function ProjectPage({ ...props }: {
     params: { id: string },
@@ -35,7 +36,7 @@ export default async function ProjectPage({ ...props }: {
 
     const searchParams = await props.searchParams;
     const currentTab = (await searchParams).tab || "overview";
-    const { canView, canEdit } = await getProjectResultsPermissions(project.id!, project.creator.id, project.visibility);
+    const { canViewContribution, canSendRequest, canViewResults, canEditResults } = await getProjectPermissions(project.id!, project.creator.id, project.visibility, project.participation_level);
 
     return (
         <div className="w-full mx-auto p-6">
@@ -45,11 +46,9 @@ export default async function ProjectPage({ ...props }: {
                     <Link href={`?tab=overview`} scroll={false} className="w-full">
                         <TabsTrigger value="overview" className="w-full">Overview</TabsTrigger>
                     </Link>
-                    {project.activity_status === ActivityStatus.ONGOING &&
-                        <Link href={`?tab=contribution`} scroll={false} className="w-full">
-                            <TabsTrigger value="contribution" className="w-full">Contribution</TabsTrigger>
-                        </Link>
-                    }
+                    <Link href={`?tab=contribution`} scroll={false} className="w-full">
+                        <TabsTrigger value="contribution" className="w-full">Contribution</TabsTrigger>
+                    </Link>
                     <Link href={`?tab=forum`} scroll={false} className="w-full">
                         <TabsTrigger value="forum" className="w-full">Forum</TabsTrigger>
                     </Link>
@@ -57,21 +56,34 @@ export default async function ProjectPage({ ...props }: {
                         <TabsTrigger value="results" className="w-full">Results</TabsTrigger>
                     </Link>
                 </TabsList>
+
                 <TabsContent value="overview">
                     <ProjectOverview project={project} />
                 </TabsContent>
-                {project.activity_status === ActivityStatus.ONGOING &&
-                    <TabsContent value="contribution">
-                        <ProjectContribution projectId={project.id!} creator={project.creator.id} />
-                    </TabsContent>
-                }
+
+                <TabsContent value="contribution">
+                    {project.activity_status === ActivityStatus.ONGOING ? (
+                        canViewContribution ? (
+                            <ProjectContribution projectId={project.id!} creator={project.creator.id} />
+                        ) : <RestrictedProjectMessage projectId={project.id!} canSendRequest={canSendRequest} />
+                    ) : <div className="w-full flex-col justify-center rounded-lg p-10 py-24 my-8 border">
+                        <h3 className="text-center">This project has been <strong className="capitalize">{project.activity_status}</strong></h3>
+                        <p className="text-center text-sm text-muted-foreground">No more contributions can be made</p>
+                    </div>
+                    }
+                </TabsContent>
+
                 <TabsContent value="forum">
                     <ProjectForum projectId={project.id!} {...searchParams} />
                 </TabsContent>
+
                 <TabsContent value="results">
-                    {canView ?
-                        <ProjectResults projectId={project.id!} canEdit={canEdit} />
-                        : <span className="h-80 flex items-center justify-center text-muted-foreground border rounded-lg m-4">Results are not available.</span>
+                    {canViewResults ?
+                        <ProjectResults projectId={project.id!} canEdit={canEditResults} />
+                        : <div className="w-full flex-col justify-center rounded-lg p-10 py-24 my-8 border">
+                            <h3 className="text-center">This project is <strong className="capitalize">{project.visibility}</strong></h3>
+                            <p className="text-center text-sm text-muted-foreground">Results are not available.</p>
+                        </div>
                     }
                 </TabsContent>
             </Tabs>

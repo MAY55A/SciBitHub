@@ -90,7 +90,7 @@ export const fetchTask = async (
         .from("tasks")
         .select(`
                         *,
-                        project:projects(id, name, moderation_level, activity_status, creator:users(id)),
+                        project:projects(id, name, moderation_level, activity_status, participation_level, creator:users(id)),
                         contributions:contributions(count)
                     `)
         .eq("id", id)

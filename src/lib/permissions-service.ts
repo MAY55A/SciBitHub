@@ -1,4 +1,4 @@
-import { ProjectVisibility, UserRole } from "../types/enums";
+import { ParticipationLevel, ProjectVisibility, UserRole } from "../types/enums";
 import { createClient } from "../utils/supabase/server";
 
 export async function getCurrentUserRole(): Promise<UserRole | null> {
@@ -15,41 +15,53 @@ export async function getCurrentUserRole(): Promise<UserRole | null> {
     return data?.role;
 }
 
-export async function getProjectResultsPermissions(
+export async function getProjectPermissions(
     projectId: string,
     creatorId: string,
     projectVisibility: ProjectVisibility,
-): Promise<{ canView: boolean, canEdit: boolean }> {
+    participationLevel: ParticipationLevel
+): Promise<{ canViewContribution: boolean, canSendRequest: boolean, canViewResults: boolean, canEditResults: boolean }> {
 
     const supabase = await createClient();
     const user = (await supabase.auth.getUser()).data.user;
-    if (!user) {
-        return { canView: true, canEdit: false };
+    const permissions = {
+        canViewResults: true,
+        canEditResults: true,
+        canViewContribution: true,
+        canSendRequest: false,
     }
 
-    if (user.id === creatorId) {
-        return { canView: true, canEdit: true };
+    if (user?.id === creatorId) {
+        return permissions;
+    } else {
+        permissions.canEditResults = false;
     }
 
-    if (projectVisibility === ProjectVisibility.PUBLIC) {
-        return { canView: true, canEdit: false };
-    }
     if (projectVisibility === ProjectVisibility.PRIVATE) {
-        return { canView: false, canEdit: false };
-    }
-    // projectVisibility = ProjectVisibility.RESTRICTED
-    const { data: approvedRequest } = await supabase
-        .from("participation_requests")
-        .select("id")
-        .eq("project_id", projectId)
-        .eq("user_id", user.id)
-        .eq("status", "approved")
-        .limit(1)
-        .maybeSingle();
-
-    if (approvedRequest) {
-        return { canView: true, canEdit: false };
+        permissions.canViewResults = false;
     }
 
-    return { canView: false, canEdit: false };
+    if (participationLevel === ParticipationLevel.RESTRICTED) { // and projectVisibility === ProjectVisibility.RESTRICTED
+        const query = supabase
+            .from("participation_requests")
+            .select("id")
+            .eq("project_id", projectId)
+            .eq("user_id", user!.id)
+            .eq("status", "approved")
+            .is("deleted_at", null)
+            .limit(1)
+            .maybeSingle();
+
+        const isContributor = !!user && await getCurrentUserRole() === UserRole.CONTRIBUTOR;
+        const isAllowedContributor = isContributor && !!(await query).data;
+
+        if (!isAllowedContributor) {
+            permissions.canViewResults = projectVisibility === ProjectVisibility.PUBLIC; // only if project is public allow view
+            permissions.canViewContribution = false;
+            if (isContributor) {
+                permissions.canSendRequest = true;
+            }
+        }
+    }
+    return permissions;
 }
