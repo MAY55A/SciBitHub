@@ -10,8 +10,7 @@ export const ProfileSidebarWrapper = () => {
     const searchParams = useSearchParams().toString();
     const currentUrl = searchParams ? `${pathname}?${searchParams}` : pathname;
 
-    const isActive = (url: string) => currentUrl === url;
     const inUrl = (url: string) => currentUrl.includes(url);
 
-    return <ProfileSidebar isActive={isActive} inUrl={inUrl} user={user} />
+    return <ProfileSidebar inUrl={inUrl} user={user} />
 }

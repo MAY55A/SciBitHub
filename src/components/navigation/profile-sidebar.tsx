@@ -21,7 +21,7 @@ import Link from "next/link"
 import { UserRole } from "@/src/types/enums"
 
 
-export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: string) => boolean, inUrl: (url: string) => boolean, user: User | null }) => {
+export const ProfileSidebar = ({ inUrl, user }: { inUrl: (url: string) => boolean, user: User | null }) => {
     // Menu items.
     const menu = [
         {
@@ -30,7 +30,7 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
             icon: Home,
         },
         {
-            title: user?.role === UserRole.RESEARCHER ? "Projects" : "Contributions",
+            title: user?.role === UserRole.RESEARCHER ? "My Projects" : "My Contributions",
             url: user?.role === UserRole.RESEARCHER ? "/profile/projects" : "/profile/contributions",
             icon: user?.role === UserRole.RESEARCHER ? LibraryBig : ClipboardList,
             items: user?.role === UserRole.RESEARCHER ? [
@@ -47,14 +47,26 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
                     url: "/profile/projects?status=draft",
                 },
             ] : [],
+            open: true
         },
         {
-            title: "Discussions",
+            title: "My Discussions",
             url: "/profile/discussions",
             icon: MessagesSquare,
+            items: [
+                {
+                    title: "Open",
+                    url: "/profile/discussions?status=open",
+                },
+                {
+                    title: "Closed",
+                    url: "/profile/discussions?status=closed",
+                },
+            ],
+            open: true
         },
         {
-            title: "Bookmarks",
+            title: "My Bookmarks",
             url: "/profile/bookmarks",
             icon: Bookmark,
         },
@@ -76,6 +88,7 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
                     url: "/profile/settings/delete-account",
                 },
             ],
+            open: false
         },
     ]
     return (
@@ -90,15 +103,15 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
                                     <Collapsible
                                         key={item.title}
                                         asChild
-                                        defaultOpen={true}
+                                        defaultOpen={item.open}
                                         className="group/collapsible"
                                     >
                                         <SidebarMenuItem key={item.title}>
                                             <CollapsibleTrigger asChild>
                                                 <SidebarMenuButton tooltip={item.title} className={inUrl(item.url) ? "text-green" : ""}>
                                                     <Link href={item.url} className="flex items-center gap-2">
-                                                        {item.icon && <item.icon size={16}/>}
-                                                        <span>{item.title}</span>
+                                                        {item.icon && <item.icon size={16} />}
+                                                        <span className="truncate">{item.title}</span>
                                                     </Link>
                                                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                                                 </SidebarMenuButton>
@@ -109,7 +122,7 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
                                                         <SidebarMenuSubItem key={subItem.title}>
                                                             <SidebarMenuSubButton asChild>
                                                                 <Link href={subItem.url}>
-                                                                    {isActive(subItem.url) ?
+                                                                    {inUrl(subItem.url) ?
                                                                         <><ChevronRight className="text-green" /><span className="text-sm">{subItem.title}</span></>
                                                                         : <span >{subItem.title}</span>
                                                                     }
@@ -124,7 +137,7 @@ export const ProfileSidebar = ({ isActive, inUrl, user }: { isActive: (url: stri
                                 ) : (
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton tooltip={item.title} asChild>
-                                            <Link href={item.url} className={isActive(item.url) ? "text-green" : ""}>
+                                            <Link href={item.url} className={inUrl(item.url) ? "text-green" : ""}>
                                                 <item.icon />
                                                 <span>{item.title}</span>
                                             </Link>
