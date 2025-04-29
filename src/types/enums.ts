@@ -166,3 +166,18 @@ export enum AggregationFunction {
     MAX = 'max',
     CUSTOM = 'custom'
 }
+
+export enum ReportReason {
+    INAPPROPRIATE = 'inappropriate content',
+    IRRELEVANT = 'irrelevant content',
+    OFFENSIVE = 'offensive content',
+    SPAM = 'spam',
+    OTHER = 'other',
+}
+
+export enum ReportStatus {
+    PENDING = 'pending',
+    REVIEWED = 'reviewed',
+    RESOLVED = 'resolved',
+    DISMISSED = 'dismissed'
+}

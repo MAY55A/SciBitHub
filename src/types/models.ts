@@ -1,7 +1,9 @@
 import {
     ResearcherType, UserRole, ProjectDomain, ProjectVisibility, ParticipationLevel,
     ModerationLevel, ProjectStatus, ActivityStatus, TaskType, TaskStatus, RequestType,
-    ValidationStatus, DiscussionCategory, DiscussionStatus, ChartType, VisualizationType, AggregationFunction
+    ValidationStatus, DiscussionCategory, DiscussionStatus, ChartType, VisualizationType,
+    AggregationFunction, ReportReason,
+    ReportStatus
 } from "./enums";
 
 interface Metadata {
@@ -183,4 +185,15 @@ export interface Visualization {
     custom_function?: string;
     created_at?: string;
     updated_at?: string;
+};
+
+export interface Report {
+    id?: string;
+    reporter: PublicUser;
+    reported: string;
+    reported_type: string;
+    reason: ReportReason;
+    description?: string;
+    status: ReportStatus;
+    created_at?: string;
 };
