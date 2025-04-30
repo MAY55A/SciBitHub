@@ -68,7 +68,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
             <div className="w-full flex gap-2">
                 <Avatar className="flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg hover:bg-muted">
                     <AvatarImage src={creator.profile_picture} alt={creator.username} />
-                    <AvatarFallback className="rounded-lg">
+                    <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
                         {creator.username.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>

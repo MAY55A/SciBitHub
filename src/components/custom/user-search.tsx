@@ -83,7 +83,7 @@ export default function UserSearch({ onSelectUser }: UserSearchProps) {
                                     >
                                         <Avatar className="relative flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg">
                                             <AvatarImage src={user.profile_picture ?? undefined} alt={user.username} />
-                                            <AvatarFallback className="rounded-lg">
+                                            <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
                                                 {user.username.slice(0, 2).toUpperCase()}
                                             </AvatarFallback>
                                         </Avatar>

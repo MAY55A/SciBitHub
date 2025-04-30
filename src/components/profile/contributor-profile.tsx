@@ -9,7 +9,7 @@ export function ContributorProfile({ user }: { user: User }) {
                 <div className="flex items-center lg:border-r lg:pr-8 lg:border-b-0 lg:pb-0 border-b border-green pb-8">
                     <Avatar className="flex shrink-0 overflow-hidden h-32 w-32 rounded-fully hover:shadow-lg hover:bg-muted">
                         <AvatarImage src={user.profile_picture} alt={user.username} />
-                        <AvatarFallback className="rounded-lg text-2xl">
+                        <AvatarFallback className="rounded-lg text-3xl text-green font-semibold tracking-[.25em] pl-1">
                             {user.username?.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>

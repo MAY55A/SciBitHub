@@ -44,7 +44,7 @@ export function NewComment({ user, commentedOn, replyingTo }: NewCommentProps) {
             {!!user &&
                 <Avatar className="flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg hover:bg-muted">
                     <AvatarImage src={user.profile_picture} alt={user.username} />
-                    <AvatarFallback className="rounded-lg">
+                    <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
                         {user.username?.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>}

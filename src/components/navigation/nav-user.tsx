@@ -38,7 +38,7 @@ export const NavUser = ({
                 <Button variant="ghost" size={"sm"} className="hover:bg-background">
                     <Avatar className="relative flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg">
                         <AvatarImage src={user.avatar} alt={user.name} />
-                        <AvatarFallback className="rounded-lg text-muted-foreground text-xs border border-primary">{user.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                        <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">{user.name.slice(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
@@ -51,7 +51,7 @@ export const NavUser = ({
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                         <Avatar className="h-8 w-8 rounded-lg">
                             <AvatarImage src={user.avatar} alt={user.name} />
-                            <AvatarFallback className="rounded-lg text-xs text-muted-foreground border border-primary">
+                            <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
                                 {user.name.slice(0, 2).toUpperCase()}
                             </AvatarFallback>
                         </Avatar>

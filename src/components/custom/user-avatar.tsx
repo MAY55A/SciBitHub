@@ -9,7 +9,7 @@ export const UserAvatar = ({ user }: { user: PublicUser }) => {
         <div className="flex items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-muted/20 rounded-lg">
             <Avatar className="flex shrink-0 overflow-hidden h-10 w-10 rounded-lg hover:shadow-lg hover:bg-muted">
                 <AvatarImage src={user.profile_picture} alt={username} />
-                <AvatarFallback className="rounded-lg">
+                <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
                 {username.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
             </Avatar>
