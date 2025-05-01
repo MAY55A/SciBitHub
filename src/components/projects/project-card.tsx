@@ -7,6 +7,7 @@ import { formatDate } from "@/src/utils/utils";
 import ShinyText from "../ui/shiny-text";
 import { ProjectDropdownMenu } from "./project-options-menu";
 import { UserHoverCard } from "../custom/user-hover-card";
+import { LikesDisplay } from "../votes/likes-display";
 
 
 export function ProjectCard({ project, editable = false }: { project: Project, editable?: boolean }) {
@@ -87,6 +88,7 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
                         </span>
                     ))}
                 </div>
+                <LikesDisplay likes={project.likes ?? 0} />
             </CardFooter>
         </Card>
     );

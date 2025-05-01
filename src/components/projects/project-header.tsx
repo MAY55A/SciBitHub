@@ -8,6 +8,7 @@ import { ResearcherIcon } from "../custom/researcher-icon";
 import { ProjectDropdownMenu } from "./project-options-menu";
 import { createClient } from "@/src/utils/supabase/server";
 import { Suspense } from "react";
+import { LikeButton } from "../votes/like-button";
 
 export function ProjectHeader({ project }: { project: Project }) {
     const creator = {
@@ -67,7 +68,8 @@ export function ProjectHeader({ project }: { project: Project }) {
                     )) || "No tags added"}
                 </div>
             </div>
-            <div className="absolute bottom-4 right-4">
+            <div className="absolute bottom-4 right-4 space-x-2">
+                <LikeButton projectId={project.id!} likes={project.likes ?? 0} />
                 <Suspense fallback={null}>
                     <ProjectEditMenu creatorId={project.creator.id} project={project} />
                 </Suspense>
