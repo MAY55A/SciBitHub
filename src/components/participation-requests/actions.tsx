@@ -1,14 +1,15 @@
 "use client"
 
 import { Button } from "../ui/button";
-import { Check, Flag, Trash2, X } from "lucide-react";
+import { Check, Trash2, X } from "lucide-react";
 import { CustomAlertDialog } from "../custom/alert-dialog";
 import { useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
 import { ValidationStatus } from "@/src/types/enums";
 import { hardDeleteRequests, softDeleteRequests, updateRequestsStatus } from "@/src/utils/request-actions";
+import ReportFormDialog from "../reports/report-form-dialog";
 
-export function Actions({ status, requests, onUpdate, onDelete, canAcceptOrReject }: { status: ValidationStatus, requests: string[], onUpdate: (status: ValidationStatus) => void, onDelete: () => void, canAcceptOrReject: boolean }) {
+export function Actions({ status, requests, user, onUpdate, onDelete, canAcceptOrReject }: { status: ValidationStatus, requests: string[], user: string, onUpdate: (status: ValidationStatus) => void, onDelete: () => void, canAcceptOrReject: boolean }) {
     const [pending, setPending] = useState(false);
     const { toast } = useToast()
 
@@ -54,7 +55,7 @@ export function Actions({ status, requests, onUpdate, onDelete, canAcceptOrRejec
                     onClick={() => handleUpdateStatus(ValidationStatus.APPROVED)}
                 >
                     <Check size={15} />
-                    <span className= "w-0 overflow-hidden whitespace-nowrap transition-width duration-300 ease-in-out group-hover:w-full group-hover:pl-1">
+                    <span className="w-0 overflow-hidden whitespace-nowrap transition-width duration-300 ease-in-out group-hover:w-full group-hover:pl-1">
                         Accept
                     </span>
                 </Button>}
@@ -67,7 +68,7 @@ export function Actions({ status, requests, onUpdate, onDelete, canAcceptOrRejec
                     onClick={() => handleUpdateStatus(ValidationStatus.REJECTED)}
                 >
                     <X size={15} />
-                    <span className= "w-0 overflow-hidden whitespace-nowrap transition-width duration-300 ease-in-out group-hover:w-full group-hover:pl-1">
+                    <span className="w-0 overflow-hidden whitespace-nowrap transition-width duration-300 ease-in-out group-hover:w-full group-hover:pl-1">
                         Reject
                     </span>
                 </Button>
@@ -84,14 +85,8 @@ export function Actions({ status, requests, onUpdate, onDelete, canAcceptOrRejec
                 onConfirm={() => handleDelete()}
                 buttonClass="text-destructive hover:border-destructive"
             />
-            {canAcceptOrReject &&
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    title="report"
-                >
-                    <Flag size={15} color="red" opacity={0.5} />
-                </Button>
+            {canAcceptOrReject && requests.length === 1 &&
+                <ReportFormDialog user={user} id={requests[0]} type="participation request" />
             }
         </div>
     );

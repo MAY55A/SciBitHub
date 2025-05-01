@@ -66,10 +66,10 @@ export const columnsWithUser: ColumnDef<ParticipationRequest>[] = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Type" />
         ),
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             const type = row.getValue("type") as RequestType;
             // check if the request is in a table from a project or a user POV
-            const isProjectRequestsTable = !!row._valuesCache?.["user"];
+            const isProjectRequestsTable = table.getAllColumns().some(col => col.id === "user");
             // check if the request is an incoming application for the project (POV project creator)
             const isIncomingApplication = isProjectRequestsTable && type === RequestType.APPLICATION;
             // check if the request is an incoming invitation for the user (POV user)
@@ -139,21 +139,21 @@ export const columnsWithUser: ColumnDef<ParticipationRequest>[] = [
 
             // if the user is present as a column, it means the table is for project requests, and the project creator is viewing them
             // if the user is not present, it means the table is for user requests, and the user is viewing them
-            const isProjectRequestsTable = !!row._valuesCache?.["user"];
-
+            const isProjectRequestsTable = table.getAllColumns().some(col => col.id === "user");
             // check if the request is an incoming application for the project, so the project creator can accept or reject it (POV project creator)
             const isIncomingApplication = isProjectRequestsTable && request.type === RequestType.APPLICATION;
 
             // check if the request is an incoming invitation for the user, so the user can accept or reject it (POV user)
             const isIncomingInvitation = !isProjectRequestsTable && request.type === RequestType.INVITATION;
             return (
-                <div className="w-[300px] flex items-center gap-2 justify-end">
+                <div className="w-[300px] flex items-center gap-2 justify-end justify-self-end">
                     {request.deleted_at ?
                         <div className="text-muted-foreground">deleted {formatDate(request.deleted_at, true)}</div>
                         : <Actions
                             canAcceptOrReject={isIncomingInvitation || isIncomingApplication}
                             requests={[request.id!]}
                             status={request.status}
+                            user={isProjectRequestsTable ? request.project.creator.id : request.user.id }
                             onUpdate={(newStatus) => { tableMeta?.updateData(row.index, "status", newStatus) }}
                             onDelete={() => tableMeta?.removeRow(row.index)} />}
                     <DropdownMenu>

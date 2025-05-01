@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "../ui/button";
-import { Check, Flag, Trash2, X } from "lucide-react";
+import { Check, Trash2, X } from "lucide-react";
 import { softDeleteContributions, updateContributionStatus } from "@/src/utils/contribution-actions";
 import { CustomAlertDialog } from "../custom/alert-dialog";
 import { useState } from "react";
@@ -10,6 +10,8 @@ import { ValidationStatusUI } from "../custom/validation-status";
 import { useRouter } from "next/navigation";
 import { cn } from "@/src/lib/utils";
 import { ValidationStatus } from "@/src/types/enums";
+import ReportFormDialog from "../reports/report-form-dialog";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 
 
@@ -29,7 +31,9 @@ export function StatusWithActions({ contribution, initialStatus }: { contributio
 
 export function Actions({ status, contributions, onUpdate, onDelete, showText = true }: { status: ValidationStatus, contributions: string[], onUpdate: (status: ValidationStatus) => void, onDelete: () => void, showText?: boolean }) {
     const [pending, setPending] = useState(false);
-    const { toast } = useToast()
+    const { toast } = useToast();
+    const {user} = useAuth();
+    
     const handleUpdateStatus = async (newStatus: ValidationStatus) => {
         setPending(true);
         const res = await updateContributionStatus(contributions, newStatus)
@@ -97,7 +101,7 @@ export function Actions({ status, contributions, onUpdate, onDelete, showText = 
             <CustomAlertDialog
                 buttonDisabled={pending}
                 buttonIcon={Trash2}
-                triggerText= {showText ? "Delete" : undefined}
+                triggerText={showText ? "Delete" : undefined}
                 buttonVariant="outline"
                 confirmButtonVariant="destructive"
                 title="Are you Sure ?"
@@ -106,13 +110,9 @@ export function Actions({ status, contributions, onUpdate, onDelete, showText = 
                 onConfirm={() => handleDelete()}
                 buttonClass="text-destructive hover:border-destructive"
             />
-            <Button
-                variant="ghost"
-                size="sm"
-                title="report"
-            >
-                <Flag size={15} color="red" opacity={0.5} />
-            </Button>
+            {!!user && contributions.length === 1 &&
+                <ReportFormDialog user={user.id} id={contributions[0]} type="contribution" />
+            }
         </div>
     );
 }
