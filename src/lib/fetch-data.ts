@@ -17,9 +17,9 @@ export const fetchProjects = async (
     const supabase = await createClient();
     try {
         let queryBuilder = supabase
-            .from("projects")
+            .from("projects_with_likes")
             .select(`*,
-                creator:users(id, username, profile_picture, metadata, deleted_at)`,
+                creator:creator_info`,
                 { count: "exact" })
             .is("deleted_at", null);
 
@@ -66,11 +66,8 @@ export const fetchProject = async (
 ): Promise<Project | null> => {
     const supabase = await createClient();
     const { data, error } = await supabase
-        .from("projects")
-        .select(`
-                    *,
-                    creator:users(id, username, profile_picture, metadata, deleted_at)
-                `)
+        .from("projects_with_likes")
+        .select(`*, creator:creator_info`)
         .eq("id", id)
         .maybeSingle();
 

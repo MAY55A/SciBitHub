@@ -67,6 +67,7 @@ export interface Project {
     status: ProjectStatus;
     activity_status?: ActivityStatus;
     results_summary?: string;
+    likes?: number;
 }
 
 export interface FieldConfig {
