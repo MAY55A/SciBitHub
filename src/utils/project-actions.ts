@@ -100,6 +100,11 @@ export async function hardDeleteProject(projectId: string) {
             throw deleteError;
         }
 
+        const { error: deleteLikesError } = await supabase.from("project_likes").delete().eq("project_id", projectId);
+        if (deleteLikesError) {
+            throw deleteLikesError;
+        }
+
         const { error: storageError } = await supabase.storage
             .from("projects")
             .remove([`cover_images/${projectId}`]);
