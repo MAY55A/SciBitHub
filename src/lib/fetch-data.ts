@@ -225,14 +225,14 @@ export const fetchDiscussions = async (
     const supabase = await createClient();
     try {
         let queryBuilder = supabase
-            .from("discussions_with_replies")
-            .select("*",
+            .from("discussions_with_replies_and_votes")
+            .select("*, creator:creator_info",
                 { count: "exact" })
             .is("deleted_at", null);
 
         // Apply filters
         if (creator) {
-            queryBuilder = queryBuilder.eq("creator_id", creator);
+            queryBuilder = queryBuilder.eq("creator", creator);
         }
         if (query) {
             queryBuilder = queryBuilder.ilike("title", `%${query}%`);
@@ -270,8 +270,8 @@ export const fetchDiscussion = async (
 ): Promise<Discussion | null> => {
     const supabase = await createClient();
     const { data, error } = await supabase
-        .from("discussions_with_replies")
-        .select("*")
+        .from("discussions_with_replies_and_votes")
+        .select("*, creator:creator_info")
         .eq("id", id)
         .maybeSingle();
 
@@ -325,7 +325,7 @@ export const fetchForumTopics = async (
     const supabase = await createClient();
     try {
         let queryBuilder = supabase
-            .from("topics_with_replies")
+            .from("topics_with_replies_and_votes")
             .select("*",
                 { count: "exact" })
             .eq("project_id", project)
@@ -370,7 +370,7 @@ export async function fetchFeaturedTopics(
     const supabase = await createClient();
 
     const { data, error } = await supabase
-        .from("topics_with_replies")
+        .from("topics_with_replies_and_votes")
         .select("*")
         .eq("project_id", project)
         .eq("is_featured", true)
@@ -391,7 +391,7 @@ export const fetchForumTopic = async (
 ): Promise<ForumTopic | null> => {
     const supabase = await createClient();
     const { data, error } = await supabase
-        .from("topics_with_replies")
+        .from("topics_with_replies_and_votes")
         .select("*")
         .eq("id", id)
         .maybeSingle();

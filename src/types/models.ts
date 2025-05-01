@@ -142,6 +142,8 @@ export interface Discussion {
     deleted_at?: string;
     creator: PublicUser;
     replies?: number;
+    upvotes?: number;
+    downvotes?: number;
 }
 
 export interface ForumTopic {
@@ -157,6 +159,8 @@ export interface ForumTopic {
     project: Project;
     creator: PublicUser;
     replies?: number;
+    upvotes?: number;
+    downvotes?: number;
 }
 
 export interface Comment {
@@ -169,6 +173,8 @@ export interface Comment {
     forum_topic?: ForumTopic;
     parent_comment?: Comment;
     replies?: number;
+    upvotes?: number;
+    downvotes?: number;
 }
 
 export interface Visualization {

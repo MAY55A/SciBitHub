@@ -8,6 +8,7 @@ import Link from "next/link";
 import { createClient } from "@/src/utils/supabase/server";
 import { UserAvatar } from "../custom/user-avatar";
 import { Pin } from "lucide-react";
+import { VoteButtons } from "../votes/vote-buttons";
 
 
 export function TopicContent({ topic }: { topic: ForumTopic }) {
@@ -59,8 +60,9 @@ export function TopicContent({ topic }: { topic: ForumTopic }) {
                         </Link>
                     ))}
                 </div>
-                <div>
+                <div className="flex items-center gap-2">
                     <span className="text-xs text-muted-foreground m-4">{topic.views} views</span>
+                    <VoteButtons voted_id={topic.id} voted_type={"forum topic"} upvotes={topic.upvotes ?? 0} downvotes={topic.downvotes ?? 0} />
                     <Suspense fallback={null}>
                         <TopicEditMenu topic={topic} />
                     </Suspense>

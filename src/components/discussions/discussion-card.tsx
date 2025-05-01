@@ -8,6 +8,7 @@ import { DiscussionDropdownMenu } from "./discussion-options-menu";
 import { UserHoverCard } from "../custom/user-hover-card";
 import { cn } from "@/src/lib/utils";
 import { DiscussionStatus } from "@/src/types/enums";
+import { VoteDisplay } from "../votes/vote-display";
 
 
 export function DiscussionCard({ discussion, editable = false, showBody = true }: { discussion: Discussion, editable?: boolean, showBody?: boolean }) {
@@ -53,7 +54,7 @@ export function DiscussionCard({ discussion, editable = false, showBody = true }
                     </h2></Link>
                 {showBody &&
                     <p
-                        className="text-muted-foreground max-h-36 overflow-hidden whitespace-normal pl-2"
+                        className="text-xs text-muted-foreground line-clamp-3 pl-2"
                     >
                         {discussion.body}
                     </p>}
@@ -68,11 +69,9 @@ export function DiscussionCard({ discussion, editable = false, showBody = true }
                     ))}
                 </div>
             </CardContent>
-            <CardFooter className="flex flex-col">
-
-                <div className="w-full">
-                    <span className="text-muted-foreground text-xs font-semibold">{discussion.replies ?? 0} replies</span>
-                </div>
+            <CardFooter className="flex justify-between items-center">
+                <span className="text-muted-foreground text-xs font-semibold">{discussion.replies ?? 0} replies</span>
+                <VoteDisplay upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes ?? 0} />
             </CardFooter>
         </Card>
     );

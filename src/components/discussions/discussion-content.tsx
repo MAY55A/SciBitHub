@@ -14,6 +14,7 @@ import Link from "next/link";
 import { createClient } from "@/src/utils/supabase/server";
 import { cn } from "@/src/lib/utils";
 import { UserAvatar } from "../custom/user-avatar";
+import { VoteButtons } from "../votes/vote-buttons";
 
 
 export function DiscussionContent({ discussion }: { discussion: Discussion }) {
@@ -73,9 +74,12 @@ export function DiscussionContent({ discussion }: { discussion: Discussion }) {
                         </Link>
                     ))}
                 </div>
+                <div className="flex items-center gap-2">
+                    <VoteButtons voted_id={discussion.id!} voted_type="discussion" upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes! ?? 0} />
                 <Suspense fallback={null}>
                     <DiscussionEditMenu creatorId={discussion.creator.id} discussion={discussion} />
                 </Suspense>
+                </div>
             </CardFooter>
         </Card>
     );

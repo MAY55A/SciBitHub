@@ -4,6 +4,7 @@ import Link from "../custom/Link";
 import { formatDate } from "@/src/utils/utils";
 import { UserHoverCard } from "../custom/user-hover-card";
 import { ArrowRight } from "lucide-react";
+import { VoteDisplay } from "../votes/vote-display";
 
 
 export function TopicCard({ topic }: { topic: ForumTopic }) {
@@ -42,7 +43,8 @@ export function TopicCard({ topic }: { topic: ForumTopic }) {
             <CardFooter className="w-full flex justify-between">
                 <div className="flex gap-2 items-center">
                     <span className="text-muted-foreground text-xs font-semibold">{topic.replies ?? 0} replies</span> |
-                    <span className="text-muted-foreground text-xs font-semibold">{topic.views ?? 0} views</span>
+                    <span className="text-muted-foreground text-xs font-semibold">{topic.views ?? 0} views</span> |
+                    <VoteDisplay upvotes={topic.upvotes ?? 0} downvotes={topic.downvotes ?? 0} />
                 </div>
                 <Link href="/forum-topics/[id]" as={`/forum-topics/${topic.id}`}>
                     <ArrowRight />

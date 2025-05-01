@@ -15,6 +15,7 @@ import { deleteComment, editComment } from "@/src/utils/comment-actions";
 import { useToast } from "@/src/hooks/use-toast";
 import { cn } from "@/src/lib/utils";
 import { MarkdownEditor } from "../custom/markdown-editor";
+import { VoteButtons } from "../votes/vote-buttons";
 
 
 export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { comment: Comment, currentUser: User | null, replyingTo?: { user: string, comment: string }, onDelete: (id: string) => void }) {
@@ -110,7 +111,8 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
                             <MarkdownViewer source={content} />
                         }
                     </CardContent>
-                    <CardFooter className="flex items-center gap-2 p-2">
+                    <CardFooter className="flex items-center justify-between gap-2 p-2">
+                        <div className="flex items-center gap-2">
                         <Button variant="ghost" size="sm" className={cn("flex gap-1 items-center text-xs h-8 px-1", showReplies && "text-green")} disabled={isSubmitting || isEditing} onClick={() => setShowReplies(!showReplies)}>
                             <Reply size={14} />
                             Reply
@@ -138,6 +140,10 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
                                     onConfirm={handleDelete} />
                             </>
                         )}
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <VoteButtons voted_id={comment.id!} voted_type="comment" upvotes={comment.upvotes ?? 0} downvotes={comment.downvotes! ?? 0} />
+                        </div>
                     </CardFooter>
                 </Card>
             </div>
