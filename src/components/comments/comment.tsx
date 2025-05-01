@@ -16,6 +16,7 @@ import { useToast } from "@/src/hooks/use-toast";
 import { cn } from "@/src/lib/utils";
 import { MarkdownEditor } from "../custom/markdown-editor";
 import { VoteButtons } from "../votes/vote-buttons";
+import ReportFormDialog from "../reports/report-form-dialog";
 
 
 export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { comment: Comment, currentUser: User | null, replyingTo?: { user: string, comment: string }, onDelete: (id: string) => void }) {
@@ -113,36 +114,39 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
                     </CardContent>
                     <CardFooter className="flex items-center justify-between gap-2 p-2">
                         <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" className={cn("flex gap-1 items-center text-xs h-8 px-1", showReplies && "text-green")} disabled={isSubmitting || isEditing} onClick={() => setShowReplies(!showReplies)}>
-                            <Reply size={14} />
-                            Reply
-                        </Button>
-                        {currentUser?.id === creator.id && (
-                            <>
-                                <Button variant="ghost" size="sm" className="flex gap-1 items-center text-xs h-8 px-1" disabled={isSubmitting} onClick={toggleEdit}>
-                                    {isEditing ?
-                                        <span className="text-green">Cancel</span> :
-                                        <>
-                                            <Edit2 size={14} />
-                                            Edit
-                                        </>}
-                                </Button>
-                                <CustomAlertDialog
-                                    buttonClass="flex gap-1 items-center text-xs h-8 px-1"
-                                    buttonIcon={Trash2}
-                                    buttonVariant="ghost"
-                                    triggerText="Delete"
-                                    buttonSize="sm"
-                                    buttonDisabled={isSubmitting || isEditing}
-                                    title="Delete Reply"
-                                    description="All associated replies will also be deleted."
-                                    confirmText="Confirm"
-                                    onConfirm={handleDelete} />
-                            </>
-                        )}
+                            <Button variant="ghost" size="sm" className={cn("flex gap-1 items-center text-xs h-8 px-1", showReplies && "text-green")} disabled={isSubmitting || isEditing} onClick={() => setShowReplies(!showReplies)}>
+                                <Reply size={14} />
+                                Reply
+                            </Button>
+                            {currentUser?.id === creator.id && (
+                                <>
+                                    <Button variant="ghost" size="sm" className="flex gap-1 items-center text-xs h-8 px-1" disabled={isSubmitting} onClick={toggleEdit}>
+                                        {isEditing ?
+                                            <span className="text-green">Cancel</span> :
+                                            <>
+                                                <Edit2 size={14} />
+                                                Edit
+                                            </>}
+                                    </Button>
+                                    <CustomAlertDialog
+                                        buttonClass="flex gap-1 items-center text-xs h-8 px-1"
+                                        buttonIcon={Trash2}
+                                        buttonVariant="ghost"
+                                        triggerText="Delete"
+                                        buttonSize="sm"
+                                        buttonDisabled={isSubmitting || isEditing}
+                                        title="Delete Reply"
+                                        description="All associated replies will also be deleted."
+                                        confirmText="Confirm"
+                                        onConfirm={handleDelete} />
+                                </>
+                            )}
                         </div>
                         <div className="flex items-center gap-1">
                             <VoteButtons voted_id={comment.id!} voted_type="comment" upvotes={comment.upvotes ?? 0} downvotes={comment.downvotes! ?? 0} />
+                            {!!currentUser &&
+                                <ReportFormDialog user={currentUser.id} id={comment.id} type="comment" />
+                            }
                         </div>
                     </CardFooter>
                 </Card>

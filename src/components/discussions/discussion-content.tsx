@@ -3,9 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import ShinyText from "../ui/shiny-text";
 import { DiscussionDropdownMenu } from "./discussion-options-menu";
 import { formatDate } from "@/src/utils/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { DiscussionStatus, UserRole } from "@/src/types/enums";
-import { FlaskConicalIcon, UserIcon } from "lucide-react";
+import { DiscussionStatus } from "@/src/types/enums";
 import { DiscussionFiles } from "./discussion-files";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
@@ -15,6 +13,7 @@ import { createClient } from "@/src/utils/supabase/server";
 import { cn } from "@/src/lib/utils";
 import { UserAvatar } from "../custom/user-avatar";
 import { VoteButtons } from "../votes/vote-buttons";
+import ReportFormDialog from "../reports/report-form-dialog";
 
 
 export function DiscussionContent({ discussion }: { discussion: Discussion }) {
@@ -76,22 +75,22 @@ export function DiscussionContent({ discussion }: { discussion: Discussion }) {
                 </div>
                 <div className="flex items-center gap-2">
                     <VoteButtons voted_id={discussion.id!} voted_type="discussion" upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes! ?? 0} />
-                <Suspense fallback={null}>
-                    <DiscussionEditMenu creatorId={discussion.creator.id} discussion={discussion} />
-                </Suspense>
+                    <Suspense fallback={null}>
+                        <DiscussionActions discussion={discussion} />
+                    </Suspense>
                 </div>
             </CardFooter>
         </Card>
     );
 }
 
-async function DiscussionEditMenu({ creatorId, discussion }: { creatorId: string, discussion: Discussion }) {
+async function DiscussionActions({ discussion }: { discussion: Discussion }) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    if (user?.id !== creatorId) return null;
-
-    return (
-        <DiscussionDropdownMenu discussion={discussion} showVisit={false} />
-    );
+    if (!user) return null;
+    if (user.id === discussion.creator.id) {
+        return <DiscussionDropdownMenu discussion={discussion} showVisit={false} />;
+    }
+    return <ReportFormDialog user={user.id} id={discussion.id!} type="discussion" />;
 }

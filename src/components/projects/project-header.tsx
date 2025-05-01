@@ -8,6 +8,7 @@ import { ResearcherIcon } from "../custom/researcher-icon";
 import { ProjectDropdownMenu } from "./project-options-menu";
 import { createClient } from "@/src/utils/supabase/server";
 import { Suspense } from "react";
+import ReportFormDialog from "../reports/report-form-dialog";
 import { LikeButton } from "../votes/like-button";
 
 export function ProjectHeader({ project }: { project: Project }) {
@@ -71,7 +72,7 @@ export function ProjectHeader({ project }: { project: Project }) {
             <div className="absolute bottom-4 right-4 space-x-2">
                 <LikeButton projectId={project.id!} likes={project.likes ?? 0} />
                 <Suspense fallback={null}>
-                    <ProjectEditMenu creatorId={project.creator.id} project={project} />
+                    <ProjectActions creatorId={project.creator.id} project={project} />
                 </Suspense>
             </div>
 
@@ -79,13 +80,19 @@ export function ProjectHeader({ project }: { project: Project }) {
     );
 }
 
-async function ProjectEditMenu({ creatorId, project }: { creatorId: string, project: Project }) {
+async function ProjectActions({ creatorId, project }: { creatorId: string, project: Project }) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    if (user?.id !== creatorId) return null;
-
+    if (!user) {
+        return null;
+    }
+    if (user.id === creatorId) {
+        return (
+            <ProjectDropdownMenu project={project} showVisit={false} />
+        );
+    };
     return (
-        <ProjectDropdownMenu project={project} showVisit={false} />
+        <ReportFormDialog user={user.id} id={project.id!} type="project" />
     );
 }

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { createClient } from "@/src/utils/supabase/server";
 import { UserAvatar } from "../custom/user-avatar";
 import { Pin } from "lucide-react";
+import ReportFormDialog from "../reports/report-form-dialog";
 import { VoteButtons } from "../votes/vote-buttons";
 
 
@@ -64,7 +65,7 @@ export function TopicContent({ topic }: { topic: ForumTopic }) {
                     <span className="text-xs text-muted-foreground m-4">{topic.views} views</span>
                     <VoteButtons voted_id={topic.id} voted_type={"forum topic"} upvotes={topic.upvotes ?? 0} downvotes={topic.downvotes ?? 0} />
                     <Suspense fallback={null}>
-                        <TopicEditMenu topic={topic} />
+                        <TopicActions topic={topic} />
                     </Suspense>
                 </div>
             </CardFooter>
@@ -72,16 +73,20 @@ export function TopicContent({ topic }: { topic: ForumTopic }) {
     );
 }
 
-async function TopicEditMenu({ topic }: { topic: ForumTopic }) {
+async function TopicActions({ topic }: { topic: ForumTopic }) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return null;
+    }
+
     const isCreator = user?.id === topic.creator.id;
     const isProjectCreator = user?.id === topic.project.creator.id;
 
     if (!isCreator && !isProjectCreator) {
-        return null;
+        return <ReportFormDialog user={user.id} id={topic.id!} type="topic" />
     }
-    return (
-        <TopicDropdownMenu topic={topic} canSetAsFeatured={isProjectCreator} canEdit={isCreator} />
-    );
+
+    return <TopicDropdownMenu topic={topic} canSetAsFeatured={isProjectCreator} canEdit={isCreator} />
 }

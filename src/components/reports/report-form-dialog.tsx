@@ -14,15 +14,13 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { Flag } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
-import { useAuth } from "@/src/contexts/AuthContext";
 import { createClient } from "@/src/utils/supabase/client";
 
 
-export default function ReportFormDialog({ id, type }: { id: string, type: string }) {
+export default function ReportFormDialog({ user, id, type }: { user: string, id: string, type: string }) {
     const [open, setOpen] = useState(false);
     const [hasConfirmed, setHasConfirmed] = useState(false);
     const [hasReported, setHasReported] = useState(false);
-    const { user } = useAuth();
     const { toast } = useToast();
 
     const form = useForm({
@@ -36,7 +34,7 @@ export default function ReportFormDialog({ id, type }: { id: string, type: strin
             .from("reports")
             .select("id")
             .eq("reported", id)
-            .eq("reporter", user?.id)
+            .eq("reporter", user)
             .maybeSingle();
 
         setHasReported(data !== null);
@@ -76,15 +74,15 @@ export default function ReportFormDialog({ id, type }: { id: string, type: strin
             </DialogTrigger>
             {hasReported ?
                 <DialogContent>
-                    <DialogTitle className="m-8 text-md font-normal">You’ve already reported this item.<br/> Thank you for your feedback.</DialogTitle>
+                    <DialogTitle className="m-8 text-md font-normal">You’ve already reported this item.<br /> Thank you for your feedback.</DialogTitle>
                 </DialogContent>
                 : <DialogContent className="lg:min-w-[700px] md:min-w-[700px] sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>
-                            Report {type}
+                            Report this {type}
                         </DialogTitle>
                         <DialogDescription>
-                            Enter details about the cause of this report.
+                            Provide details about the reason for this report.
                         </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
