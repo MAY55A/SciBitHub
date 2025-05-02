@@ -1,5 +1,4 @@
 import { DataTable } from "@/src/components/data-table/data-table";
-import { NotAuthorized } from "@/src/components/errors/not-authorized";
 import { columnsWithProject } from "@/src/components/participation-requests/columns";
 import { requestsFilters } from "@/src/components/participation-requests/filters";
 import { fetchParticipationRequests } from "@/src/lib/fetch-data";
@@ -9,9 +8,7 @@ import { createClient } from "@/src/utils/supabase/server";
 export default async function Page() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        return NotAuthorized({ message: "You need to be logged in to view this page." });
-    }
+
     const requests = await fetchParticipationRequests({ user: user?.id });
 
     return (

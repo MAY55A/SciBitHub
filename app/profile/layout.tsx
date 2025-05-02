@@ -1,14 +1,24 @@
 import DynamicBreadcrumb from "@/src/components/navigation/bread-crumb"
 import { ProfileSidebarWrapper } from "@/src/components/navigation/profile-sidebar-wrapper"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/src/components/ui/sidebar"
-import { cookies } from "next/headers"
+import { createClient } from "@/src/utils/supabase/server";
+import { Forbidden } from "@/src/components/errors/forbidden";
+import { redirect } from "next/navigation";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-    const cookieStore = await cookies()
-    const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
+    const supabase = await createClient();
+    const {data: {user}} = await supabase.auth.getUser();
+
+    if(!user) {
+        redirect("/login")
+    }
+
+    if(user.app_metadata.role === "admin") {
+        return Forbidden({message: "You are not allowed to access this page with an admin account."})
+    }
 
     return (
-        <SidebarProvider defaultOpen={defaultOpen}>
+        <SidebarProvider>
             <ProfileSidebarWrapper />
             <SidebarInset>
                 <div className="fixed w-full flex h-16 z-20 shrink-0 items-center gap-2 px-4 bg-background/70 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">

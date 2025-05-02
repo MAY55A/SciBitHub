@@ -1,5 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const updateSession = async (request: NextRequest) => {
@@ -41,7 +41,7 @@ export const updateSession = async (request: NextRequest) => {
     const user = await supabase.auth.getUser();
 
     // protected routes
-    if (request.nextUrl.pathname.startsWith("/profile") && user.error) {
+    if ((request.nextUrl.pathname.startsWith("/profile") || request.nextUrl.pathname.startsWith("/admin")) && user.error) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
     if (request.nextUrl.pathname.startsWith("/projects/create") && user.error) {

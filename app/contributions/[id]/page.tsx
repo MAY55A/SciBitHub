@@ -1,10 +1,10 @@
 import { ContributionBody } from "@/src/components/contributions/contribution-body";
 import { ContributionHeader } from "@/src/components/contributions/contribution-header";
-import { NotAuthorized } from "@/src/components/errors/not-authorized";
+import { Forbidden } from "@/src/components/errors/forbidden";
 import { NotAvailable } from "@/src/components/errors/not-available";
 import { fetchContribution } from "@/src/lib/fetch-data";
 import { createClient } from "@/src/utils/supabase/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function Page({
     params,
@@ -20,7 +20,7 @@ export default async function Page({
     const supabase = await createClient();
     const user = (await supabase.auth.getUser()).data.user;
     if (!user) {
-        return <NotAuthorized />;
+        redirect(`/login?redirect_to=contributions/${id}`);
     }
 
     const contribution = await fetchContribution(id);
@@ -35,7 +35,7 @@ export default async function Page({
     const isContributor = contribution.user.id === user.id;
     const isCreator = contribution.task.project.creator.id === user.id;
     if (!isContributor && !isCreator) {
-        return <NotAuthorized />;
+        return <Forbidden message="You do not have the permission to view this contribution" />;
     }
 
     return (

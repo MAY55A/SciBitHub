@@ -1,10 +1,10 @@
-import { NotAuthorized } from "@/src/components/errors/not-authorized";
+import { Forbidden } from "@/src/components/errors/forbidden";
 import { Tabs, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
 import { ProjectStatus } from "@/src/types/enums";
 import { createClient } from "@/src/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 
 async function fetchTasks(supabase: SupabaseClient<any, "public", any>, projectId: string) {
@@ -40,8 +40,16 @@ export default async function Layout({
 }) {
     const { id } = await params;
     const { user, tasks } = await getProjectTasks(id);
+
     if (!tasks || tasks.length === 0 || tasks[0].project.status !== ProjectStatus.PUBLISHED) return notFound();
-    if (!user || tasks[0].project.creator !== user.id) return <NotAuthorized />;
+
+    if (!user) {
+        redirect(`/login?redirect_to=projects/${id}/contributions`);
+    }
+
+    if (tasks[0].project.creator !== user.id) {
+        return <Forbidden message="You do not have the permission to view contributions for this project." />;
+    }
 
     return (
         <div className="w-full">
