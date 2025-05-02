@@ -9,7 +9,7 @@ import { ProfilePictureUpload } from "../../../src/components/account-settings/p
 import { AccountSettingsSkeleton } from "@/src/components/skeletons/account-settings-skeleton";
 import { Suspense } from "react";
 import { OraganizationDetailsForm } from "@/src/components/account-settings/organization-details-form";
-import { EducationDetailsForm } from "@/src/components/account-settings/Education-details-form copy";
+import { EducationDetailsForm } from "@/src/components/account-settings/Education-details-form";
 import { ResearcherType } from "@/src/types/enums";
 
 export default function Settings() {

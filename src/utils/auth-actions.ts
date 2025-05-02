@@ -4,9 +4,9 @@ import { encodedRedirect } from "@/src/utils/utils";
 import { createClient } from "@/src/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { InputData } from "@/src/types/user-form-data";
+import { UserInputData } from "@/src/types/user-form-data";
 
-export const signUpAction = async (inputData: InputData) => {
+export const signUpAction = async (inputData: UserInputData) => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
   if (!inputData) {

@@ -5,7 +5,7 @@ import { FormMessage, Message } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
-import { InputData, inputDataSchema } from "@/src/types/user-form-data";
+import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { updateInfo } from "@/src/utils/account-actions";
 import { Textarea } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,12 +15,12 @@ import { useForm } from "react-hook-form";
 export function PersonalInformationForm({ ...info }: { username: string, country: string, bio: string }) {
     const [initialInfo, setInitialInfo] = useState(info);
     const form = useForm({
-        resolver: zodResolver(inputDataSchema.pick({ username: true, country: true, bio: true })),
+        resolver: zodResolver(userInputDataSchema.pick({ username: true, country: true, bio: true })),
         defaultValues: info
     });
     const [message, setMessage] = useState<Message | null>(null);
 
-    const onSubmit = async (data: Partial<InputData>) => {
+    const onSubmit = async (data: Partial<UserInputData>) => {
         setMessage(null);
         if (JSON.stringify(data) === JSON.stringify(initialInfo)) {
             setMessage({ error: "No changes were made." });

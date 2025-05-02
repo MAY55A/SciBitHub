@@ -4,7 +4,7 @@ import { FormMessage, Message } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
-import { InputData, inputDataSchema } from "@/src/types/user-form-data";
+import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { updateMetadata } from "@/src/utils/account-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -14,12 +14,12 @@ export function EducationDetailsForm({ ...details }: { degree: string, instituti
         const [initialDetails, setInitialDetails] = useState({ academicDegree: details.degree, institutionName: details.institution });
 
     const form = useForm({
-        resolver: zodResolver(inputDataSchema.pick({ academicDegree: true, institutionName: true })),
+        resolver: zodResolver(userInputDataSchema.pick({ academicDegree: true, institutionName: true })),
         defaultValues: initialDetails
     });
     const [message, setMessage] = useState<Message | null>(null);
 
-    const onSubmit = async (data: Partial<InputData>) => {
+    const onSubmit = async (data: Partial<UserInputData>) => {
         setMessage(null);
         if (data.academicDegree === initialDetails.academicDegree && data.institutionName === initialDetails.academicDegree) {
             setMessage({ error: "No changes were made." });

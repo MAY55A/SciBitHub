@@ -1,12 +1,12 @@
 "use client";
 
-import { InputData } from "@/src/types/user-form-data";
+import { UserInputData } from "@/src/types/user-form-data";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 
 interface MultistepSignupFormContextType {
-    formData: InputData;
-    updateFormData: (data: Partial<InputData>) => void;
+    formData: UserInputData;
+    updateFormData: (data: Partial<UserInputData>) => void;
     clearFormData: () => void;
     formDataIsFilled: () => boolean;
 }
@@ -22,7 +22,7 @@ export default function MultistepSignupFormContextProvider({
 }: {
     children: ReactNode;
 }) {
-    const initialFormData: InputData = {
+    const initialFormData: UserInputData = {
         username: "",
         email: "",
         password: "",
@@ -32,12 +32,12 @@ export default function MultistepSignupFormContextProvider({
         country: ""
     };
 
-    const [formData, setFormData] = useState<InputData>(() => {
+    const [formData, setFormData] = useState<UserInputData>(() => {
         const saved = localStorage.getItem(STORAGE_KEY);
         return saved ? JSON.parse(saved) : initialFormData;
     });
 
-    const updateFormData = (data: Partial<InputData>) => {
+    const updateFormData = (data: Partial<UserInputData>) => {
         const updatedData = { ...formData, ...data };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
         setFormData(updatedData);

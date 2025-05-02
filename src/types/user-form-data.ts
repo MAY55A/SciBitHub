@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const inputDataSchema = z.object({
+export const userInputDataSchema = z.object({
     id: z.string().optional(), // to store google account id
     username: z.string().max(50, "Name must contain at most 50 characters").min(5, "Name must contain at least 5 characters"),
     email: z.string().email(),
@@ -26,4 +26,4 @@ export const inputDataSchema = z.object({
     institutionName: z.string().optional(),
 });
 
-export type InputData = z.infer<typeof inputDataSchema>;
+export type UserInputData = z.infer<typeof userInputDataSchema>;

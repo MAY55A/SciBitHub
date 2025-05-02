@@ -12,7 +12,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMultistepSignupFormContext } from "../../../../src/contexts/multistep-signup-form-context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputData, inputDataSchema } from "@/src/types/user-form-data";
+import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
 import CountrySelector from "@/src/components/custom/countries-selector";
@@ -33,13 +33,13 @@ export default function NameAndCountryForm() {
         }
     }, []);
     const form = useForm({
-        resolver: zodResolver(inputDataSchema.pick({ username: true, country: true })),
+        resolver: zodResolver(userInputDataSchema.pick({ username: true, country: true })),
         defaultValues: { username: formData.username, country: formData.country },
     });
     const [isVerifying, setisVerifying] = useState(false);
 
 
-    const onSubmit = async (data: Partial<InputData>) => {
+    const onSubmit = async (data: Partial<UserInputData>) => {
         try {
             setisVerifying(true);
             const response = await fetch("/api/check-exists", {

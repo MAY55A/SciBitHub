@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { InputData } from "../types/user-form-data";
+import { UserInputData } from "../types/user-form-data";
 
 export const updateEmail = async (newEmail: string) => {
     const supabase = await createClient();
@@ -34,7 +34,7 @@ export const updateEmail = async (newEmail: string) => {
     }
 };
 
-export const updateInfo = async (data: Partial<InputData>) => {
+export const updateInfo = async (data: Partial<UserInputData>) => {
     const supabase = await createClient();
     const currentUser = (await supabase.auth.getUser()).data.user;
     if (!currentUser) {

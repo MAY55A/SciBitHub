@@ -4,7 +4,7 @@ import { Message, FormMessage } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FieldMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
-import { InputData, inputDataSchema } from "@/src/types/user-form-data";
+import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { updateMetadata } from "@/src/utils/account-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash2 } from "lucide-react";
@@ -15,7 +15,7 @@ import { z } from "zod";
 export function ContactsForm({ ...contacts }: { contactEmail: string, phone: string, contacts: string[] }) {
     const [initialContacts, setInitialContacts] = useState(contacts);
     const form = useForm({
-        resolver: zodResolver(inputDataSchema.pick({ contactEmail: true, phone: true, contacts: true })),
+        resolver: zodResolver(userInputDataSchema.pick({ contactEmail: true, phone: true, contacts: true })),
         defaultValues: contacts,
     });
     const [message, setMessage] = useState<Message | null>(null);
@@ -37,7 +37,7 @@ export function ContactsForm({ ...contacts }: { contactEmail: string, phone: str
         contacts.splice(index, 1);
         form.setValue('contacts', contacts);
     }
-    const onSubmit = async (data: Partial<InputData>) => {
+    const onSubmit = async (data: Partial<UserInputData>) => {
         setMessage(null);
         if (JSON.stringify(data) === JSON.stringify(initialContacts)) {
             setMessage({ error: "No changes were made." });

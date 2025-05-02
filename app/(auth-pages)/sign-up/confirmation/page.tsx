@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { inputDataSchema } from "@/src/types/user-form-data";
+import { userInputDataSchema } from "@/src/types/user-form-data";
 import { signUpAction } from "@/src/utils/auth-actions";
 import { FormMessage } from "@/src/components/custom/form-message";
 import { SubmitButton } from "@/src/components/custom/submit-button";
@@ -24,7 +24,7 @@ export default function Signup() {
   const { formData, clearFormData } = useMultistepSignupFormContext();
 
   const form = useForm({
-    resolver: zodResolver(inputDataSchema),
+    resolver: zodResolver(userInputDataSchema),
     defaultValues: { ...formData, password: formData.id ? undefined : formData.password },
   });
 

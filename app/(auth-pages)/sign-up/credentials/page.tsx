@@ -1,12 +1,12 @@
 'use client'
 
 import { Input } from "@/src/components/ui/input";
-import { GoogleButton } from "../../../../src/components/custom/google-button";
+import { GoogleButton } from "@/src/components/custom/google-button";
 import { Button } from "@/src/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useMultistepSignupFormContext } from "../../../../src/contexts/multistep-signup-form-context";
+import { useMultistepSignupFormContext } from "@/src/contexts/multistep-signup-form-context";
 import { useForm } from "react-hook-form";
-import { inputDataSchema, InputData } from "@/src/types/user-form-data";
+import { userInputDataSchema, UserInputData } from "@/src/types/user-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -27,13 +27,13 @@ export default function Signup() {
   const router = useRouter();
   const { formData, updateFormData } = useMultistepSignupFormContext();
   const form = useForm({
-    resolver: zodResolver(inputDataSchema.pick({ email: true, password: true })),
+    resolver: zodResolver(userInputDataSchema.pick({ email: true, password: true })),
     defaultValues: { email: formData.email, password: formData.password },
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
 
-  const onSubmit = async (data: Partial<InputData>) => {
+  const onSubmit = async (data: Partial<UserInputData>) => {
       setIsVerifying(true);
       const supabase = await createClient();
       const result = await checkEmailExists(supabase, data.email!);

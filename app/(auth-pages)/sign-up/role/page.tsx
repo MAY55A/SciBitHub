@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useMultistepSignupFormContext } from "../../../../src/contexts/multistep-signup-form-context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputData, inputDataSchema } from "@/src/types/user-form-data";
+import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { motion } from "framer-motion";
 import { Button } from "@/src/components/ui/button";
 import Card from "@/src/components/ui/motion-card";
@@ -15,7 +15,7 @@ export default function RoleSelection() {
     const router = useRouter();
     const { formData, updateFormData } = useMultistepSignupFormContext();
     const form = useForm({
-        resolver: zodResolver(inputDataSchema.pick({ role: true })),
+        resolver: zodResolver(userInputDataSchema.pick({ role: true })),
         defaultValues: { role: formData.role },
     });
     const { setValue, watch, handleSubmit } = form;
@@ -25,7 +25,7 @@ export default function RoleSelection() {
         setValue("role", role);
     };
 
-    const onSubmit = (data: Partial<InputData>) => {
+    const onSubmit = (data: Partial<UserInputData>) => {
         updateFormData(data);
 
         if (selectedRole === "researcher") {

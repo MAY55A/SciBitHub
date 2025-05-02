@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMultistepSignupFormContext } from "../../../../src/contexts/multistep-signup-form-context";
+import { useMultistepSignupFormContext } from "@/src/contexts/multistep-signup-form-context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputData, inputDataSchema } from "@/src/types/user-form-data";
+import { userInputDataSchema } from "@/src/types/user-form-data";
 import { Button } from "@/src/components/ui/button";
 import CardGridSelect from "@/src/components/ui/card-grid-select";
 import { researchDomains } from "@/src/data/fields";
@@ -15,7 +15,7 @@ export default function FieldsOfInterestSelection() {
     const router = useRouter();
     const { formData, updateFormData } = useMultistepSignupFormContext();
     const form = useForm({
-        resolver: zodResolver(inputDataSchema.pick({ fieldsOfInterest: true, role: true })),
+        resolver: zodResolver(userInputDataSchema.pick({ fieldsOfInterest: true, role: true })),
         defaultValues: { fieldsOfInterest: formData.fieldsOfInterest },
     });
     const { setValue, watch, handleSubmit } = form;

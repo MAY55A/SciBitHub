@@ -4,7 +4,7 @@ import { FormMessage, Message } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
-import { InputData, inputDataSchema } from "@/src/types/user-form-data";
+import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { updateMetadata } from "@/src/utils/account-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -13,12 +13,12 @@ import { useForm } from "react-hook-form";
 export function OraganizationDetailsForm({ ...details }: { name: string, location: string }) {
     const [initialDetails, setInitialDetails] = useState({ organizationName: details.name, organizationLocation: details.location });
     const form = useForm({
-        resolver: zodResolver(inputDataSchema.pick({ organizationName: true, organizationLocation: true })),
+        resolver: zodResolver(userInputDataSchema.pick({ organizationName: true, organizationLocation: true })),
         defaultValues: initialDetails
     });
     const [message, setMessage] = useState<Message | null>(null);
 
-    const onSubmit = async (data: Partial<InputData>) => {
+    const onSubmit = async (data: Partial<UserInputData>) => {
         setMessage(null);
         if (data.organizationName === initialDetails.organizationName && data.organizationLocation === initialDetails.organizationLocation) {
             setMessage({ error: "No changes were made." });
