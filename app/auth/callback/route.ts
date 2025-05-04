@@ -6,9 +6,9 @@ export async function GET(request: Request) {
 
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
+  const errorCode = requestUrl.searchParams.get("error_code");
   const origin = requestUrl.origin;
   const redirectTo = requestUrl.searchParams.get("redirect_to")?.toString();
-
   if (code) {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
@@ -32,6 +32,11 @@ export async function GET(request: Request) {
       }
     }
   }
+
+  if (errorCode === "user_banned") {
+    return encodedRedirect("error", `${origin}/sign-in`, "User is banned");
+  }
+
   if (redirectTo) {
     return NextResponse.redirect(`${origin}${redirectTo}`);
   }
