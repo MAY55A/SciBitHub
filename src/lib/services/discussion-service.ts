@@ -1,6 +1,6 @@
-import { DiscussionInputData } from "../types/discussion-form-data";
-import { deleteFromMinIO, uploadFileToMinIO } from "../utils/minio/client";
-import { createClient } from "../utils/supabase/client";
+import { DiscussionInputData } from "@/src/types/discussion-form-data";
+import { deleteFromMinIO, uploadFileToMinIO } from "@/src/utils/minio/client";
+import { createClient } from "@/src/utils/supabase/client";
 
 export const createDiscussion = async (data: DiscussionInputData, files: File[]) => {
     const supabase = createClient();

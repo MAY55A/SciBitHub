@@ -1,5 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { Comment } from "../types/models";
+import { Comment } from "@/src/types/models";
 
 export const fetchComments = async (
     supabase: SupabaseClient,

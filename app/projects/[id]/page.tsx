@@ -9,7 +9,7 @@ import ProjectForum from "@/src/components/projects/project-forum";
 import { ActivityStatus } from "@/src/types/enums";
 import { NotAvailable } from "@/src/components/errors/not-available";
 import { ProjectResults } from "@/src/components/projects/project-results";
-import { getProjectPermissions } from "@/src/lib/permissions-service";
+import { getProjectPermissions } from "@/src/lib/services/permissions-service";
 import { RestrictedProjectMessage } from "@/src/components/projects/restricted-project-message";
 
 export default async function ProjectPage({ ...props }: {

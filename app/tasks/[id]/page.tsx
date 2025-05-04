@@ -5,7 +5,7 @@ import { TaskTutorial } from "@/src/components/tasks/task-tutorial";
 import { TaskFields } from "@/src/components/tasks/task-fields";
 import { ActivityStatus, ParticipationLevel } from "@/src/types/enums";
 import { NotAvailable } from "@/src/components/errors/not-available";
-import { getProjectPermissions } from "@/src/lib/permissions-service";
+import { getProjectPermissions } from "@/src/lib/services/permissions-service";
 import { RestrictedProjectMessage } from "@/src/components/projects/restricted-project-message";
 
 export default async function TaskPage({ params }: { params: { id: string } }) {

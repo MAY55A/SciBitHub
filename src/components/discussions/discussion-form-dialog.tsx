@@ -11,7 +11,7 @@ import { Input } from "@/src/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select";
 import FileDropzone from "../custom/file-dropzone";
 import TagsInput from "@/src/components/custom/tags-input";
-import { createDiscussion, updateDiscussion } from "@/src/lib/discussion-service";
+import { createDiscussion, updateDiscussion } from "@/src/lib/services/discussion-service";
 import { useToast } from "@/src/hooks/use-toast";
 import { getFileWithMetadata } from "@/src/utils/minio/client";
 import { DiscussionCategory } from "@/src/types/enums";

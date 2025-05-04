@@ -1,6 +1,6 @@
 import { Forbidden } from "@/src/components/errors/forbidden";
 import { MultistepProjectFormProvider } from "@/src/contexts/multistep-project-form-context";
-import { getCurrentUserRole } from "@/src/lib/permissions-service";
+import { getCurrentUserRole } from "@/src/lib/services/permissions-service";
 import { UserRole } from "@/src/types/enums";
 import { redirect } from "next/navigation";
 

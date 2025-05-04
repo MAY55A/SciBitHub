@@ -8,7 +8,7 @@ import { Step3 } from "@/src/components/project-creation/step3";
 import { Step4 } from "@/src/components/project-creation/step4";
 import { Step5 } from "@/src/components/project-creation/step5";
 import { useMultistepProjectForm } from "@/src/contexts/multistep-project-form-context";
-import { createProject } from "@/src/lib/project-service";
+import { createProject } from "@/src/lib/services/project-service";
 import { ProjectStatus } from "@/src/types/enums";
 import { ProjectInputData } from "@/src/types/project-form-data";
 import { useRouter } from "next/navigation";

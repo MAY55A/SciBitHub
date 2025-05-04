@@ -6,7 +6,7 @@ import { CommentCard } from "./comment";
 import { Button } from "../ui/button";
 import { Comment } from "@/src/types/models";
 import { createClient } from "@/src/utils/supabase/client";
-import { fetchComments } from "@/src/lib/comment-service";
+import { fetchComments } from "@/src/lib/services/comment-service";
 import { useRealtimeComments } from "@/src/hooks/use-realtime-comments";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/src/lib/utils";

@@ -1,5 +1,5 @@
-import { ParticipationLevel, ProjectVisibility, UserRole } from "../types/enums";
-import { createClient } from "../utils/supabase/server";
+import { ParticipationLevel, ProjectVisibility, UserRole } from "@/src/types/enums";
+import { createClient } from "@/src/utils/supabase/server";
 
 export async function getCurrentUserRole(): Promise<UserRole | null> {
     const supabase = await createClient();

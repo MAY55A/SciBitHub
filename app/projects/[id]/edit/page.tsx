@@ -8,7 +8,7 @@ import { Step4 } from "@/src/components/project-creation/step4";
 import { Step5 } from "@/src/components/project-creation/step5";
 import { useProjectEdit } from "@/src/contexts/project-edit-context";
 import useNavigationGuard from "@/src/hooks/use-navigation-guard";
-import { updateProject } from "@/src/lib/project-service";
+import { updateProject } from "@/src/lib/services/project-service";
 import { ProjectStatus } from "@/src/types/enums";
 import { ProjectInputData } from "@/src/types/project-form-data";
 import { useRouter } from "next/navigation";

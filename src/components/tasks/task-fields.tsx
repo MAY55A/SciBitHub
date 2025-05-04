@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FormGenerator } from "./form-generator";
 import { Button } from "../ui/button";
-import { createContribution, hasUserContributed } from "@/src/lib/contribution-service";
+import { createContribution, hasUserContributed } from "@/src/lib/services/contribution-service";
 import { FormMessage, Message } from "../custom/form-message";
 import { Flag, Info } from "lucide-react";
 import ImageViewer from "../custom/image-viewer";

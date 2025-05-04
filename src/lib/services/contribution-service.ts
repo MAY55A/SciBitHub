@@ -1,6 +1,6 @@
-import { ModerationLevel, ValidationStatus } from "../types/enums";
-import { uploadFileToMinIO } from "../utils/minio/client";
-import { createClient } from "../utils/supabase/client";
+import { ModerationLevel, ValidationStatus } from "@/src/types/enums";
+import { uploadFileToMinIO } from "@/src/utils/minio/client";
+import { createClient } from "@/src/utils/supabase/client";
 
 export const createContribution = async (data: any, taskId: string, moderation: ModerationLevel) => {
     const supabase = createClient();

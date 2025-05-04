@@ -1,10 +1,10 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { TaskFilesMap } from "../contexts/multistep-project-form-context";
-import { ProjectInputData, TaskInputData } from "../types/project-form-data";
-import { deleteFromMinIO, uploadFileToMinIO } from "../utils/minio/client";
-import { createClient } from "../utils/supabase/client";
-import { base64ToFile } from "../utils/utils";
-import { ParticipationLevel, ProjectStatus, RequestType } from "../types/enums";
+import { TaskFilesMap } from "@/src/contexts/multistep-project-form-context";
+import { ProjectInputData, TaskInputData } from "@/src/types/project-form-data";
+import { deleteFromMinIO, uploadFileToMinIO } from "@/src/utils/minio/client";
+import { createClient } from "@/src/utils/supabase/client";
+import { base64ToFile } from "@/src/utils/utils";
+import { ParticipationLevel, ProjectStatus, RequestType } from "@/src/types/enums";
 
 
 export const createProject = async (inputData: Partial<ProjectInputData>, status: ProjectStatus, files: TaskFilesMap) => {
