@@ -32,11 +32,10 @@ interface DataTableProps<TData, TValue> {
     filters?: {
         column: string, values: {
             label: string
-            value: string
-            icon?: React.ComponentType<{ className?: string }>
+            value: any
         }[]
     }[],
-    onRemoveSelected:  (ids: string[]) => Promise<{ success: boolean; message: string; }>
+    onRemoveSelected: (ids: string[]) => Promise<{ success: boolean; message: string; }>
 }
 
 export function DataTable<TData, TValue>({
@@ -50,7 +49,7 @@ export function DataTable<TData, TValue>({
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
-    const {toast} = useToast();
+    const { toast } = useToast();
 
     const table = useReactTable({
         data,
@@ -68,13 +67,31 @@ export function DataTable<TData, TValue>({
             rowSelection,
         },
         meta: {
-            updateData: (rowIndex: number, columnId: string, value: string) => {
+            updateData: (rowIndex: number, column: string, values: any) => {
+                console.log("updateData", rowIndex, column, values);
                 setData((old) =>
                     old.map((row, index) => {
                         if (index === rowIndex) {
+                            if (column === "") { // if columnId is empty, it means more than one column is being updated
+                                return {
+                                    ...row,
+                                    ...values
+                                };
+                            }
+                            if (column.includes(".")) { // if columnId is a nested object, we need to update the nested object (only 2 levels deep)
+                                // e.g. columnId = "metadata.isVerified" => metadata: { isVerified: values }
+                                const columns = column.split(".");
+                                const outerColumn = columns[0];
+                                const outerColumnValue = row[outerColumn as keyof TData];
+                                const innerColumn = columns[1];
+                                return {
+                                    ...row,
+                                    [outerColumn]: { ...outerColumnValue, [innerColumn]: values },
+                                };
+                            }
                             return {
-                                ...old[rowIndex],
-                                [columnId]: value,
+                                ...row,
+                                [column]: values,
                             };
                         }
                         return row;

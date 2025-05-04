@@ -30,7 +30,7 @@ export function DataTableToolbar<TData>({
         <div className="flex items-center justify-between">
             <div className="flex flex-1 items-center space-x-2">
                 <Input
-                    placeholder={`Filter ${searchColumn}s...`}
+                    placeholder={`Search by ${searchColumn}...`}
                     value={(table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""}
                     onChange={(event: any) =>
                         table.getColumn(searchColumn)?.setFilterValue(event.target.value)

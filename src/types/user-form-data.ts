@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { UserRole } from "./enums";
 
 export const userInputDataSchema = z.object({
     id: z.string().optional(), // to store google account id
@@ -26,4 +27,24 @@ export const userInputDataSchema = z.object({
     institutionName: z.string().optional(),
 });
 
+export const basicUserInputDataSchema = z.object({
+    id: z.string().optional(),
+    username: userInputDataSchema.shape.username,
+    password: userInputDataSchema.shape.password,
+    email: userInputDataSchema.shape.email,
+    role: z.enum(Object.values(UserRole) as [string, ...string[]], {
+        errorMap: () => ({ message: "Role is required" }),
+    }),
+    researcherType: z.enum(["academic", "organization", "casual"]).optional(),
+}).superRefine((data, ctx) => {
+    if (data.role === "researcher" && !data.researcherType) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Researcher type is required for researchers",
+            path: ["researcherType"],
+        })
+    }
+});
+
 export type UserInputData = z.infer<typeof userInputDataSchema>;
+export type BasicUserInputData = z.infer<typeof basicUserInputDataSchema>;

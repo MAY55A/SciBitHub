@@ -1,0 +1,168 @@
+"use client"
+
+import { Ellipsis } from "lucide-react";
+import { Button } from "@/src/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
+import { User } from "@/src/types/models";
+import { useRouter } from "next/navigation";
+import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
+import { useToast } from "@/src/hooks/use-toast";
+import { UserRole } from "@/src/types/enums";
+import { deleteUser, updateBanStatus, updateVerified } from "@/src/lib/actions/admin/users-actions";
+import { BanUserDialog } from "./ban-user-dialog";
+import UserFormDialog from "./user-form-dialog";
+import UserDetailsDialog from "./user-details-dialog";
+import { useState } from "react";
+
+export function UserOptionsMenu({
+    user, rowIndex, updateRow
+}: {
+    user: User, rowIndex: number, updateRow: (rowIndex: number, field: string, data: any) => void
+}) {
+    const [showDialog, setShowDialog] = useState("");
+    const router = useRouter();
+    const { toast } = useToast();
+    const isBanned = user.banned_until && new Date(user.banned_until) > new Date();
+
+    const handleDelete = async () => {
+        const res = await deleteUser(user.id);
+        toast({
+            title: res.success ? "Success !" : "Error !",
+            description: res.message,
+            variant: res.success ? "default" : "destructive",
+        });
+
+        if (res.success) {
+            updateRow(rowIndex, "deleted_at", new Date().toISOString());
+        }
+    }
+
+    const toggleBanStatus = async (duration: string) => {
+        const res = await updateBanStatus(user.id, duration);
+        toast({
+            title: res.success ? "Success !" : "Error !",
+            description: res.message,
+            variant: res.success ? "default" : "destructive",
+        });
+
+        if (res.success) {
+            updateRow(rowIndex, "banned_until", res.banned_until)
+        }
+    }
+
+    const toggleVerifiedStatus = async (isVerified: boolean) => {
+        const res = await updateVerified(user.id, isVerified, user.metadata);
+        toast({
+            title: res.success ? "Success !" : "Error !",
+            description: res.message,
+            variant: res.success ? "default" : "destructive",
+        });
+
+        if (res.success) {
+            updateRow(rowIndex, "metadata.isVerified", isVerified);
+        }
+    }
+
+    return (
+        <div>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-6 w-6 p-0"><Ellipsis size={15} /></Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-60">
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem
+                            className="px-4"
+                            disabled={!!user.deleted_at}
+                            onClick={() => router.push(`/users/${user.id}`)}>
+                            Visit Profile
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            className="px-4"
+                            onClick={() => setShowDialog("user-details")}>
+                            View Account Details
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            className="px-4"
+                            onClick={() => setShowDialog("edit-account")}>
+                            Edit Account
+                        </DropdownMenuItem>
+                        {user.role === UserRole.RESEARCHER && user.metadata?.isVerified &&
+                            <DropdownMenuItem
+                                className="px-4"
+                                onClick={() => toggleVerifiedStatus(false)}>
+                                Unmark as Verified
+                            </DropdownMenuItem>
+                        }
+                        {user.role === UserRole.RESEARCHER && !user.metadata?.isVerified &&
+                            <DropdownMenuItem
+                                className="px-4"
+                                onClick={() => toggleVerifiedStatus(true)}>
+                                Mark as Verified
+                            </DropdownMenuItem>
+                        }
+
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+
+                    {!user.deleted_at && (
+                        isBanned
+                            ? <DropdownMenuItem
+                                onSelect={(event) => {
+                                    event.preventDefault(); // Prevent dialog from closing immediately when opened
+                                }}
+                                className="hover:text-destructive">
+                                <CustomAlertDialog
+                                    triggerText="Unban User"
+                                    buttonVariant="ghost"
+                                    title="Confirm Unban"
+                                    description="Are you sure you want to unban this user ?"
+                                    confirmText="Confirm Unban"
+                                    onConfirm={() => toggleBanStatus("none")}
+                                    buttonClass="h-full hover:text-destructive pl-0"
+                                />
+                            </DropdownMenuItem>
+                            : <DropdownMenuItem
+                                onSelect={(event) => {
+                                    event.preventDefault(); // Prevent dialog from closing immediately when opened
+                                }}
+                                className="hover:text-destructive">
+                                <BanUserDialog onConfirm={toggleBanStatus} />
+                            </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
+                    {!user.deleted_at &&
+                        <DropdownMenuItem
+                            onSelect={(event) => {
+                                event.preventDefault(); // Prevent dialog from closing immediately when opened
+                            }}
+                            className="hover:text-destructive">
+                            <CustomAlertDialog
+                                triggerText="Delete User"
+                                buttonVariant="ghost"
+                                confirmButtonVariant="destructive"
+                                title="Are you Sure ?"
+                                description="This action cannot be undone."
+                                confirmText="Delete Project"
+                                onConfirm={handleDelete}
+                                buttonClass="h-full hover:text-destructive pl-0"
+                            />
+                        </DropdownMenuItem>}
+                </DropdownMenuContent>
+            </DropdownMenu >
+            {
+                showDialog === "edit-account" &&
+                <UserFormDialog
+                    data={{ ...user, researcherType: user.metadata?.researcherType }}
+                    onUpdate={(data: any) => updateRow(rowIndex, "", data)} // Update the entire row with the new data
+                    onClose={() => setShowDialog("")} />
+            }
+            {
+                showDialog === "user-details" &&
+                <UserDetailsDialog
+                    user={user}
+                    onClose={() => setShowDialog("")} />
+            }
+        </div >
+    )
+}

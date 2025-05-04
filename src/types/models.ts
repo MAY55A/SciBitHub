@@ -27,9 +27,9 @@ export interface User {
     profile_picture?: string;
     role: UserRole;
     country: string;
-    is_suspended: boolean;
     metadata?: Metadata;
     created_at: string;
+    banned_until: Date;
     deleted_at?: string;
 }
 
