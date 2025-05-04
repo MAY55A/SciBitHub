@@ -6,7 +6,7 @@ import { CustomAlertDialog } from "../custom/alert-dialog";
 import { useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
 import { ValidationStatus } from "@/src/types/enums";
-import { hardDeleteRequests, softDeleteRequests, updateRequestsStatus } from "@/src/utils/request-actions";
+import { hardDeleteRequests, softDeleteRequests, updateRequestsStatus } from "@/src/lib/actions/request-actions";
 import ReportFormDialog from "../reports/report-form-dialog";
 
 export function Actions({ status, requests, user, onUpdate, onDelete, canAcceptOrReject }: { status: ValidationStatus, requests: string[], user: string, onUpdate: (status: ValidationStatus) => void, onDelete: () => void, canAcceptOrReject: boolean }) {

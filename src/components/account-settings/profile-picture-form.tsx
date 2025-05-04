@@ -3,7 +3,7 @@
 import { FormMessage, Message } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
-import { removeProfilePicture, updateProfilePicture } from "@/src/utils/account-actions";
+import { removeProfilePicture, updateProfilePicture } from "@/src/lib/actions/account-actions";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";

@@ -1,8 +1,8 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { deleteFromMinIO } from "./minio/client";
-import { DiscussionStatus } from "../types/enums";
+import { deleteFromMinIO } from "@/src/utils/minio/client";
+import { DiscussionStatus } from "@/src/types/enums";
 
 export async function updateDiscussionStatus(id: string, status: DiscussionStatus) {
     const supabase = await createClient();

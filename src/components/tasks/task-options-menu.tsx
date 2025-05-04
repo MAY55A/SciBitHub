@@ -7,7 +7,7 @@ import { Task } from "@/src/types/models";
 import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "../custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
-import { deleteTask, updateStatus } from "@/src/utils/task-actions";
+import { deleteTask, updateStatus } from "@/src/lib/actions/task-actions";
 import { TaskStatus } from "@/src/types/enums";
 import { useAuth } from "@/src/contexts/AuthContext";
 import ReportFormDialog from "../reports/report-form-dialog";

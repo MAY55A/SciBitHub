@@ -2,7 +2,7 @@ import { DataTable } from "@/src/components/data-table/data-table";
 import { columnsWithProject } from "@/src/components/participation-requests/columns";
 import { requestsFilters } from "@/src/components/participation-requests/filters";
 import { fetchParticipationRequests } from "@/src/lib/fetch-data";
-import { deleteRequests } from "@/src/utils/request-actions";
+import { deleteRequests } from "@/src/lib/actions/request-actions";
 import { createClient } from "@/src/utils/supabase/server";
 
 export default async function Page() {

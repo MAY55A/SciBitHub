@@ -11,7 +11,7 @@ import { Edit2, Reply, Trash2 } from "lucide-react";
 import { useState } from "react";
 import CommentsList from "./comments-list";
 import { CustomAlertDialog } from "../custom/alert-dialog";
-import { deleteComment, editComment } from "@/src/utils/comment-actions";
+import { deleteComment, editComment } from "@/src/lib/actions/comment-actions";
 import { useToast } from "@/src/hooks/use-toast";
 import { cn } from "@/src/lib/utils";
 import { MarkdownEditor } from "../custom/markdown-editor";

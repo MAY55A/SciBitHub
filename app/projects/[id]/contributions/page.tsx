@@ -5,7 +5,7 @@ import { columns } from "@/src/components/contributions/columns";
 import { Contribution } from "@/src/types/models";
 import { notFound } from "next/navigation";
 import { contributionsFilters } from "@/src/components/contributions/filters";
-import { softDeleteContributions } from "@/src/utils/contribution-actions";
+import { softDeleteContributions } from "@/src/lib/actions/contribution-actions";
 
 export default async function Page({
     searchParams,
@@ -29,7 +29,7 @@ export default async function Page({
         }
     } else {
         // If task_id is provided, fetch the specific task's contributions
-        contributions = await fetchContributions([task]) ?? [];
+        contributions = (await fetchContributions([task])).contributions ?? [];
     }
 
     return (

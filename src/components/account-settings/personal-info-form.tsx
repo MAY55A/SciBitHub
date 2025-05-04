@@ -6,7 +6,7 @@ import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
-import { updateInfo } from "@/src/utils/account-actions";
+import { updateInfo } from "@/src/lib/actions/account-actions";
 import { Textarea } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";

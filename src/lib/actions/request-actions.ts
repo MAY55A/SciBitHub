@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { RequestType, ValidationStatus } from "../types/enums";
+import { RequestType, ValidationStatus } from "@/src/types/enums";
 
 export const createRequests = async (projectId: string, users: string[], type: RequestType) => {
     const supabase = await createClient();

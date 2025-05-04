@@ -5,7 +5,7 @@ import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FieldMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
-import { updateMetadata } from "@/src/utils/account-actions";
+import { updateMetadata } from "@/src/lib/actions/account-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";

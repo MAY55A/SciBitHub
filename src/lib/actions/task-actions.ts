@@ -1,8 +1,8 @@
 'use server';
 
-import { TaskStatus } from "../types/enums";
-import { deleteFromMinIO } from "./minio/client";
-import { createClient } from "./supabase/server";
+import { TaskStatus } from "@/src/types/enums";
+import { deleteFromMinIO } from "@/src/utils/minio/client";
+import { createClient } from "@/src/utils/supabase/server";
 
 
 export async function updateStatus(id: string, status: TaskStatus) {

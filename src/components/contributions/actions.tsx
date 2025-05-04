@@ -2,7 +2,7 @@
 
 import { Button } from "../ui/button";
 import { Check, Trash2, X } from "lucide-react";
-import { softDeleteContributions, updateContributionStatus } from "@/src/utils/contribution-actions";
+import { softDeleteContributions, updateContributionStatus } from "@/src/lib/actions/contribution-actions";
 import { CustomAlertDialog } from "../custom/alert-dialog";
 import { useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";

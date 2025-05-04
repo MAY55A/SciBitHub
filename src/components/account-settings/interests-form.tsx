@@ -2,7 +2,7 @@ import { FormMessage, Message } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
 import CardGridSelect from "@/src/components/ui/card-grid-select";
 import { researchDomains } from "@/src/data/fields";
-import { updateMetadata } from "@/src/utils/account-actions";
+import { updateMetadata } from "@/src/lib/actions/account-actions";
 import { useState } from "react";
 
 export function InterestsForm({ interests }: { interests: string[] }) {

@@ -8,7 +8,7 @@ import { VisualizationInputData } from "@/src/types/data-visualization-form-data
 import { Edit, X, PlusCircle } from "lucide-react";
 import { VisualizationForm } from "./visualization-form";
 import { useToast } from "@/src/hooks/use-toast";
-import { createVisualization, deleteVisualization, updateVisualization } from "@/src/utils/visualization-actions";
+import { createVisualization, deleteVisualization, updateVisualization } from "@/src/lib/actions/visualization-actions";
 import { FormMessage } from "../custom/form-message";
 import { CustomAlertDialog } from "../custom/alert-dialog";
 

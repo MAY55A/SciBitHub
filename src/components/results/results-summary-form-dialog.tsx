@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
 import { useToast } from "@/src/hooks/use-toast";
-import { updateSummary } from "@/src/utils/project-actions";
+import { updateSummary } from "@/src/lib/actions/project-actions";
 import { MarkdownEditor } from "../custom/markdown-editor";
 import { useRouter } from "next/navigation";
 

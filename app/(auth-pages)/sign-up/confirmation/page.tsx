@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { userInputDataSchema } from "@/src/types/user-form-data";
-import { signUpAction } from "@/src/utils/auth-actions";
+import { signUpAction } from "@/src/lib/actions/auth-actions";
 import { FormMessage } from "@/src/components/custom/form-message";
 import { SubmitButton } from "@/src/components/custom/submit-button";
 import { useMultistepSignupFormContext } from "@/src/contexts/multistep-signup-form-context";

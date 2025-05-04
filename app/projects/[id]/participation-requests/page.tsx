@@ -3,7 +3,7 @@ import { columnsWithUser } from "@/src/components/participation-requests/columns
 import { requestsFilters } from "@/src/components/participation-requests/filters";
 import RequestFormDialog from "@/src/components/participation-requests/request-form-dialog";
 import { fetchParticipationRequests } from "@/src/lib/fetch-data";
-import { deleteProjectRequests } from "@/src/utils/request-actions";
+import { deleteProjectRequests } from "@/src/lib/actions/request-actions";
 
 export default async function Page({
     params,

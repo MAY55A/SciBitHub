@@ -7,7 +7,7 @@ import { useToast } from "@/src/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { ReportInputData, reportInputDataSchema } from "@/src/types/report-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createReport } from "@/src/utils/report-actions";
+import { createReport } from "@/src/lib/actions/report-actions";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { ReportReason } from "@/src/types/enums";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";

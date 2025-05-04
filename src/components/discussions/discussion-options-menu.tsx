@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Discussion } from "@/src/types/models";
 import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "../custom/alert-dialog";
-import { deleteDiscussion, updateDiscussionStatus } from "@/src/utils/discussion-actions";
+import { deleteDiscussion, updateDiscussionStatus } from "@/src/lib/actions/discussion-actions";
 import DiscussionFormDialog from "./discussion-form-dialog";
 import { DiscussionStatus } from "@/src/types/enums";
 import { useToast } from "@/src/hooks/use-toast";

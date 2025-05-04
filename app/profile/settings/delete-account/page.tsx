@@ -1,7 +1,7 @@
 "use client"
 
 import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
-import { softDeleteAccount } from "@/src/utils/account-actions";
+import { softDeleteAccount } from "@/src/lib/actions/account-actions";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";

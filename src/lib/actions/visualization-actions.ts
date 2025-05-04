@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { VisualizationInputData } from "../types/data-visualization-form-data";
+import { VisualizationInputData } from "@/src/types/data-visualization-form-data";
 
 export const createVisualization = async (data: VisualizationInputData, project: string) => {
     const supabase = await createClient();

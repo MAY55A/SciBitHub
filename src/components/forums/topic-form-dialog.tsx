@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import TagsInput from "@/src/components/custom/tags-input";
-import { createTopic, editTopic } from "@/src/utils/topic-actions";
+import { createTopic, editTopic } from "@/src/lib/actions/topic-actions";
 import { useToast } from "@/src/hooks/use-toast";
 import { MarkdownEditor } from "../custom/markdown-editor";
 import { areEqualArrays } from "@/src/utils/utils";

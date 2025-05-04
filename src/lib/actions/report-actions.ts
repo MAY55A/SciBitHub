@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { ReportInputData } from "../types/report-form-data";
+import { ReportInputData } from "@/src/types/report-form-data";
 
 export const createReport = async (data: ReportInputData) => {
     const supabase = await createClient();

@@ -63,19 +63,22 @@ export const signInAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error, data: { user } } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
-
   if (error) {
     return encodedRedirect("error", "/sign-in", error.message);
+  }
+  
+  if (user?.app_metadata?.role === "admin") {
+    return redirect("/admin");
   }
 
   const referer = (await headers()).get("referer");
   const url = new URL(referer || "");
   const redirectTo = url.searchParams.get("redirect_to") || "/profile";
-
+  
   return redirect(redirectTo);
 };
 

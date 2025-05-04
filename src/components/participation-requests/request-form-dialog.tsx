@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useToast } from "@/src/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { RequestType } from "@/src/types/enums";
-import { createRequests } from "@/src/utils/request-actions";
+import { createRequests } from "@/src/lib/actions/request-actions";
 import ContributorsInput from "../custom/contributors-input";
 import { PublicUser } from "@/src/types/models";
 

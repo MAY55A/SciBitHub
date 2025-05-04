@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Project } from "@/src/types/models";
 import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "../custom/alert-dialog";
-import { hardDeleteProject, softDeleteProject, updateActivityStatus } from "@/src/utils/project-actions";
+import { hardDeleteProject, softDeleteProject, updateActivityStatus } from "@/src/lib/actions/project-actions";
 import { useToast } from "@/src/hooks/use-toast";
 import { ActivityStatus, ProjectStatus } from "@/src/types/enums";
 

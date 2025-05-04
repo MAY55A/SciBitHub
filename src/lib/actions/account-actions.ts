@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { UserInputData } from "../types/user-form-data";
+import { UserInputData } from "@/src/types/user-form-data";
 
 export const updateEmail = async (newEmail: string) => {
     const supabase = await createClient();
@@ -22,7 +22,11 @@ export const updateEmail = async (newEmail: string) => {
         }
         */
         // Else update the email
-        const { error } = await supabase.auth.updateUser({ email: newEmail });
+        const { error } = await supabase.auth.updateUser({
+            email: newEmail
+        }, {
+            emailRedirectTo: "http://localhost:3000/auth/callback"
+        });
 
         if (error) {
             return { success: false, message: error.message };

@@ -3,7 +3,7 @@
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useToast } from "@/src/hooks/use-toast";
 import { useEffect, useState } from "react";
-import { createRequests } from "@/src/utils/request-actions";
+import { createRequests } from "@/src/lib/actions/request-actions";
 import { RequestType } from "@/src/types/enums";
 import { createClient } from "@/src/utils/supabase/client";
 import { CustomAlertDialog } from "../custom/alert-dialog";

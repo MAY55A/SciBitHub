@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { useToast } from "@/src/hooks/use-toast";
 import { usePathname, useRouter } from "next/navigation";
-import { postComment } from "@/src/utils/comment-actions";
+import { postComment } from "@/src/lib/actions/comment-actions";
 import { MarkdownEditor } from "../custom/markdown-editor";
 
 

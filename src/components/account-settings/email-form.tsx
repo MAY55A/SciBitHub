@@ -4,7 +4,7 @@ import { Message, FormMessage } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage as FieldMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
-import { updateEmail } from "@/src/utils/account-actions";
+import { updateEmail } from "@/src/lib/actions/account-actions";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 

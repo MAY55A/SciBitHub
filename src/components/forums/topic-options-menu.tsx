@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { ForumTopic } from "@/src/types/models";
 import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "../custom/alert-dialog";
-import { deleteTopic, toggleIsFeatured } from "@/src/utils/topic-actions";
+import { deleteTopic, toggleIsFeatured } from "@/src/lib/actions/topic-actions";
 import { useToast } from "@/src/hooks/use-toast";
 import TopicFormDialog from "./topic-form-dialog";
 

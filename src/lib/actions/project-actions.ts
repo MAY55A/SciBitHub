@@ -2,8 +2,8 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { ActivityStatus, RequestType } from "../types/enums";
-import { deleteFromMinIO } from "./minio/client";
+import { ActivityStatus, RequestType } from "@/src/types/enums";
+import { deleteFromMinIO } from "@/src/utils/minio/client";
 
 const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: any, oldParticipants: any, projectId: string, status: string) => {
     if (participants.length > 0) {

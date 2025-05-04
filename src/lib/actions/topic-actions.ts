@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/src/utils/supabase/server";
-import { TopicInputData } from "../types/topic-form-data";
+import { TopicInputData } from "@/src/types/topic-form-data";
 
 export const createTopic = async (data: TopicInputData) => {
     const supabase = await createClient();
