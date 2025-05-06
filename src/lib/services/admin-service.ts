@@ -1,4 +1,4 @@
-import { Discussion, Project, User } from "@/src/types/models";
+import { Discussion, Project, Report, User } from "@/src/types/models";
 import { createAdminClient } from "@/src/utils/supabase/admin";
 
 export async function fetchAllUsers(): Promise<User[]> {
@@ -30,7 +30,6 @@ export async function fetchAllProjects(): Promise<Project[]> {
     return data;
 }
 
-
 export async function fetchAllDiscussions(): Promise<Discussion[]> {
     const supabase = createAdminClient();
 
@@ -40,6 +39,20 @@ export async function fetchAllDiscussions(): Promise<Discussion[]> {
 
     if (error) {
         console.error("Error fetching all discussions:", error);
+        return [];
+    }
+    return data;
+}
+
+export async function fetchAllReports(): Promise<Report[]> {
+    const supabase = createAdminClient();
+
+    const { data, error } = await supabase
+        .from("reports")
+        .select("*, reporter:users(id, username, profile_picture, role, metadata)")
+
+    if (error) {
+        console.error("Error fetching all reports:", error);
         return [];
     }
     return data;
