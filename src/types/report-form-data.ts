@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ReportReason } from "./enums";
 
 export const reportInputDataSchema = z.object({
-    reported: z.string(),
+    reported_link: z.string(),
     reported_type: z.string(),
     reason: z.enum(Object.values(ReportReason) as [string, ...string[]], {
         errorMap: () => ({ message: "Please select the reason for this report" }),

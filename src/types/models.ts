@@ -197,7 +197,7 @@ export interface Visualization {
 export interface Report {
     id?: string;
     reporter: PublicUser;
-    reported: string;
+    reported_link: string;
     reported_type: string;
     reason: ReportReason;
     description?: string;

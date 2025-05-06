@@ -22,10 +22,11 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
     const [hasConfirmed, setHasConfirmed] = useState(false);
     const [hasReported, setHasReported] = useState(false);
     const { toast } = useToast();
+    const reportedLink = type === "comment" ? `${window.location.pathname}#${id}` : window.location.pathname;
 
     const form = useForm({
         resolver: zodResolver(reportInputDataSchema),
-        defaultValues: { reported: id, reported_type: type },
+        defaultValues: { reported_link: reportedLink, reported_type: type },
     });
 
     async function checkReported() {
@@ -33,7 +34,7 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
         const { data } = await supabase
             .from("reports")
             .select("id")
-            .eq("reported", id)
+            .eq("reported_link", reportedLink)
             .eq("reporter", user)
             .maybeSingle();
 
@@ -66,10 +67,10 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
                 <Button
                     variant="ghost"
                     size="sm"
-                    title="report"
+                    title={hasReported ? "reported" : "report"}
                     onClick={() => setOpen(true)}
                 >
-                    <Flag size={15} color="red" opacity={0.5} />
+                    <Flag size={15} color="red" opacity={hasReported ? 0.8 : 0.3} />
                 </Button>
             </DialogTrigger>
             {hasReported ?
