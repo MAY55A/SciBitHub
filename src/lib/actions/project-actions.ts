@@ -2,7 +2,7 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { ActivityStatus, RequestType } from "@/src/types/enums";
+import { ActivityStatus, ProjectStatus, RequestType } from "@/src/types/enums";
 import { deleteFromMinIO } from "@/src/utils/minio/client";
 
 const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: any, oldParticipants: any, projectId: string, status: string) => {
@@ -55,6 +55,7 @@ export async function softDeleteProject(projectId: string, projectName: string) 
             .update({
                 name: `${projectName} (deleted)`,
                 deleted_at: currentDate,
+                status: ProjectStatus.DELETED,
             })
             .eq("id", projectId);
         if (projectError) {

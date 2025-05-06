@@ -15,7 +15,9 @@ export enum ResearcherType {
 export enum ProjectStatus {
     PENDING = 'pending',
     PUBLISHED = 'published',
-    DRAFT = 'draft'
+    DECLINED = 'declined',
+    DRAFT = 'draft',
+    DELETED = 'deleted',
 }
 
 export enum ActivityStatus {
