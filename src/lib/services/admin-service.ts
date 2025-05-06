@@ -1,4 +1,4 @@
-import { Project, User } from "@/src/types/models";
+import { Discussion, Project, User } from "@/src/types/models";
 import { createAdminClient } from "@/src/utils/supabase/admin";
 
 export async function fetchAllUsers(): Promise<User[]> {
@@ -24,7 +24,22 @@ export async function fetchAllProjects(): Promise<Project[]> {
         .neq("status", "draft") // Exclude draft projects
 
     if (error) {
-        console.error("Error fetching all users:", error);
+        console.error("Error fetching all projects:", error);
+        return [];
+    }
+    return data;
+}
+
+
+export async function fetchAllDiscussions(): Promise<Discussion[]> {
+    const supabase = createAdminClient();
+
+    const { data, error } = await supabase
+        .from("discussions_with_replies_and_votes")
+        .select("*, creator:creator_info")
+
+    if (error) {
+        console.error("Error fetching all discussions:", error);
         return [];
     }
     return data;

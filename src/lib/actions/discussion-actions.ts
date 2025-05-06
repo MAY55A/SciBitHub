@@ -3,9 +3,10 @@
 import { createClient } from "@/src/utils/supabase/server";
 import { deleteFromMinIO } from "@/src/utils/minio/client";
 import { DiscussionStatus } from "@/src/types/enums";
+import { SupabaseClient } from "@supabase/supabase-js";
 
-export async function updateDiscussionStatus(id: string, status: DiscussionStatus) {
-    const supabase = await createClient();
+export async function updateDiscussionStatus(id: string, status: DiscussionStatus, client?: SupabaseClient<any, "public", any>) {
+    const supabase = client ?? await createClient();
     const { error } = await supabase.from("discussions").update({ status }).eq("id", id);
     if (error) {
         console.error("Database error:", error.message);
@@ -15,8 +16,8 @@ export async function updateDiscussionStatus(id: string, status: DiscussionStatu
     return { success: true, message: "Discussion status updated successfully." };
 }
 
-export async function deleteDiscussion(id: string) {
-    const supabase = await createClient();
+export async function deleteDiscussion(id: string, client?: SupabaseClient<any, "public", any>) {
+    const supabase = client ?? await createClient();
     const { count } = await supabase.from("comments").select("*", { count: "exact", head: true }).eq("discussion", id);
     // hard delete if no comments exist
     if (!count) {
@@ -31,6 +32,7 @@ export async function deleteDiscussion(id: string) {
         const { error } = await supabase.from("discussions")
             .update({
                 files: null,
+                status: DiscussionStatus.DELETED,
                 deleted_at: new Date().toISOString(),
             })
             .eq("id", id);

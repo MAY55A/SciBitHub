@@ -121,6 +121,7 @@ export enum ValidationStatus {
 export enum DiscussionStatus {
     OPEN = 'open',
     CLOSED = 'closed',
+    DELETED = 'deleted',
 }
 
 export enum DiscussionCategory {
