@@ -5,6 +5,7 @@ import { SimilarDiscussions } from "@/src/components/discussions/similar-discuss
 import { DiscussionStatus } from "@/src/types/enums";
 import CommentsList from "@/src/components/comments/comments-list";
 import { NotAvailable } from "@/src/components/errors/not-available";
+import { ScrollToHashElement } from "@/src/components/custom/scroll-to-hash";
 
 export default async function DiscussionPage({ params }: { params: { id: string } }) {
     const { id } = await params;
@@ -25,6 +26,7 @@ export default async function DiscussionPage({ params }: { params: { id: string 
                 <div className="flex flex-col gap-4 border-t-2 border-muted p-2 mt-8">
                     <CommentsList commentedOn={{ discussion: id }} allowNewComments={discussion.status === DiscussionStatus.OPEN} />
                 </div>
+                <ScrollToHashElement/>
             </div>
             <div className="relative">
                 <SimilarDiscussions title={discussion.title} tags={discussion.tags} category={discussion.category} id={discussion.id!} />

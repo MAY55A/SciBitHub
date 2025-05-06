@@ -67,7 +67,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
 
     return (
         <div>
-            <div className="w-full flex gap-2">
+            <div className="w-full flex gap-2" id={comment.id} tabIndex={-1}>
                 <Avatar className="flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg hover:bg-muted">
                     <AvatarImage src={creator.profile_picture} alt={creator.username} />
                     <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
@@ -76,7 +76,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
                 </Avatar>
                 <Card className="w-full px-2 bg-muted/50">
                     <CardHeader className="flex-row justify-between p-0">
-                        <div id={comment.id}>
+                        <div>
                             <UserHoverCard user={creator} />
                             {!!replyingTo &&
                                 <span className="ml-[-7px] text-xs text-muted-foreground">

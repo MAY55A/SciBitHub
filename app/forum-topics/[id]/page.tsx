@@ -1,4 +1,5 @@
 import CommentsList from "@/src/components/comments/comments-list";
+import { ScrollToHashElement } from "@/src/components/custom/scroll-to-hash";
 import { NotAvailable } from "@/src/components/errors/not-available";
 import { TopicContent } from "@/src/components/forums/topic-content";
 import ViewTracker from "@/src/components/forums/view-tracker";
@@ -15,11 +16,11 @@ export default async function TopicPage({ params }: { params: { id: string } }) 
         return notFound();
     }
 
-    if(topic.deleted_at) {
+    if (topic.deleted_at) {
         return NotAvailable({ type: "forum topic" });
     }
 
-    if(topic.project.deleted_at) {
+    if (topic.project.deleted_at) {
         return NotAvailable({ type: "project" });
     }
 
@@ -37,6 +38,7 @@ export default async function TopicPage({ params }: { params: { id: string } }) 
                 <div className="flex flex-col gap-4 border-t-2 border-muted p-2 mt-8">
                     <CommentsList commentedOn={{ forum_topic: id }} />
                 </div>
+                <ScrollToHashElement />
             </div>
         </div>
     );
