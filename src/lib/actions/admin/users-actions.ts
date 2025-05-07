@@ -3,14 +3,17 @@
 import { createAdminClient } from "@/src/utils/supabase/admin";
 import { BasicUserInputData } from "@/src/types/user-form-data";
 
-export const addAdmin = async () => {
-    console.log("Adding admin...");
+export const adminResetPassword = async (userId: string, newPassword: string) => {
     const supabase = createAdminClient();
-    const user = await supabase.auth.getUser();
-    const res = await supabase.auth.admin.updateUserById(user!.data!.user!.id, {
-        app_metadata: { role: 'admin' }
-    });
-    console.log(res);
+    const {error} = await supabase.auth.admin.updateUserById(userId, {
+        password: newPassword
+    }); // logs out after sussessful password reset
+
+    if (error) {
+        console.log("Error resetting password:", error.message);
+        return { success: false, message: error.message };
+    }
+    return { success: true, message: "Password reset successfully, now logging out..." };
 };
 
 export const addUser = async (data: BasicUserInputData) => {
