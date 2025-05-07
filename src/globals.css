@@ -58,7 +58,7 @@
     --muted-foreground: 0 0% 63.9%;
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
-    --destructive: 0, 70%, 37%;
+    --destructive: 0, 61%, 48%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
@@ -145,6 +145,10 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(100, 116, 139, 0.4) transparent;
+}
+
+textarea {
+  background-color: transparent;
 }
 
 @layer base {
