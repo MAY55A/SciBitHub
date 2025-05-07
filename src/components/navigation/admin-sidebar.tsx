@@ -50,8 +50,8 @@ export const AdminSidebar = ({ inUrl, user }: { inUrl: (url: string) => boolean,
             icon: Flag,
         },
         {
-            title: "Settings",
-            url: "/admin/settings",
+            title: "Account Settings",
+            url: "/admin/account-settings",
             icon: Settings,
         },
     ]
