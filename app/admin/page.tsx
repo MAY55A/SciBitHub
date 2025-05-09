@@ -1,3 +1,5 @@
-export default function Page() {
-    return <p>Admin Dashboard Page</p>;
+import { redirect } from "next/navigation";
+
+export default function ProfilePage() {
+    redirect("/admin/home");
 }
