@@ -55,14 +55,40 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
 
 export const formatDate = (dateString: string, showTime: boolean = false): string => {
   const date = new Date(dateString);
-  const today = new Date();
-  const isToday = date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
-  if(isToday) {
-    return format(new Date(dateString), " 'today at' HH:mm")
+  const now = new Date();
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  // Relative time thresholds
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60
+  };
+
+  // Today with time
+  if (seconds < intervals.day && date.getDate() === now.getDate()) {
+    return format(date, showTime ? "'Today at' h:mm a" : "'Today'");
   }
-  if(showTime)
-    return format(new Date(dateString), "'at' HH:mm 'on' MMM dd, yyyy")
-  return format(new Date(dateString), "'on' MMM dd, yyyy")
+
+  // Yesterday
+  if (seconds < intervals.day * 2 && date.getDate() === now.getDate() - 1) {
+    return format(date, showTime ? "'Yesterday at' h:mm a" : "'Yesterday'");
+  }
+
+  // Relative time
+  if (seconds < intervals.month * 2) {
+    if (seconds < intervals.minute) return 'Just now';
+    if (seconds < intervals.hour) return `${Math.floor(seconds / intervals.minute)}m ago`;
+    if (seconds < intervals.day) return `${Math.floor(seconds / intervals.hour)}h ago`;
+    if (seconds < intervals.week) return `${Math.floor(seconds / intervals.day)}d ago`;
+    return `${Math.floor(seconds / intervals.week)}w ago`;
+  }
+
+  // Absolute date for older items
+  return format(date, showTime ? "MMM d, yyyy 'at' h:mm a" : "MMM d, yyyy");
 };
 
 /**
