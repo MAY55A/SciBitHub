@@ -10,15 +10,18 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { Bell, CircleUser, LibraryBig, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/src/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { UserRole } from "@/src/types/enums";
+import { getMenu } from "./profile-sidebar";
+import { adminMenu } from "./admin-sidebar";
 
 
 
 export const signOutAction = async () => {
-    const supabase = await createClient();
+    const supabase = createClient();
     await supabase.auth.signOut();
     return redirect("/sign-in");
 };
@@ -28,9 +31,12 @@ export const NavUser = ({
     user: {
         name: string
         email: string
-        avatar?: string
+        avatar?: string,
+        role: UserRole
     }
 }) => {
+
+    const menu = user.role === UserRole.ADMIN ? adminMenu : getMenu(user.role);
 
     return (
         <DropdownMenu>
@@ -63,18 +69,13 @@ export const NavUser = ({
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="gap-2 text-muted-foreground hover:text-green" onSelect={() => redirect("/profile")}>
-                        <CircleUser size={15} />
-                        Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="gap-2 text-muted-foreground hover:text-green" onSelect={() => redirect("/profile/projects")}>
-                        <LibraryBig size={15} />
-                        Projects
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="gap-2 text-muted-foreground hover:text-green">
-                        <Bell size={15} />
-                        Notifications
-                    </DropdownMenuItem>
+                    {menu.map((item) => (
+                        item &&
+                        <DropdownMenuItem className="gap-2 text-muted-foreground hover:text-green" onSelect={() => redirect(item.url)} key={item.title}>
+                            <item.icon size={15} />
+                            {item?.title}
+                        </DropdownMenuItem>
+                    ))}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="gap-2 text-muted-foreground hover:text-primary" onClick={signOutAction}>

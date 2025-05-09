@@ -12,7 +12,7 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
 } from "@/src/components/ui/sidebar"
-import { Home, Settings, ChevronRight, Bookmark, MessagesSquare, LibraryBig, ClipboardList, MailPlus } from "lucide-react"
+import { Home, Settings, ChevronRight, Bookmark, MessagesSquare, FileText, GitPullRequest, MailPlus } from "lucide-react"
 import { SidebarNavUser } from "./sidebar-nav-user"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
 import { User } from "@/src/types/models"
@@ -20,82 +20,83 @@ import { UserNavSkeleton } from "../skeletons/user-nav-skeleton"
 import Link from "next/link"
 import { UserRole } from "@/src/types/enums"
 
+export const getMenu = (role: UserRole) => [
+    {
+        title: "Home",
+        url: "/profile/home",
+        icon: Home,
+    },
+    {
+        title: role === UserRole.RESEARCHER ? "My Projects" : "My Contributions",
+        url: role === UserRole.RESEARCHER ? "/profile/projects" : "/profile/contributions",
+        icon: role === UserRole.RESEARCHER ? FileText : GitPullRequest,
+        items: role === UserRole.RESEARCHER ? [
+            {
+                title: "Published",
+                url: "/profile/projects?status=published",
+            },
+            {
+                title: "Pending",
+                url: "/profile/projects?status=pending",
+            },
+            {
+                title: "Draft",
+                url: "/profile/projects?status=draft",
+            },
+        ] : [],
+        open: true
+    },
+    {
+        title: "My Discussions",
+        url: "/profile/discussions",
+        icon: MessagesSquare,
+        items: [
+            {
+                title: "Open",
+                url: "/profile/discussions?status=open",
+            },
+            {
+                title: "Closed",
+                url: "/profile/discussions?status=closed",
+            },
+        ],
+        open: true
+    },
+    role === UserRole.CONTRIBUTOR ? {
+        title: "Participation Requests",
+        url: "/profile/participation-requests",
+        icon: MailPlus,
+    } : undefined,
+    {
+        title: "My Bookmarks",
+        url: "/profile/bookmarks",
+        icon: Bookmark,
+    },
+    {
+        title: "Settings",
+        url: "/profile/settings",
+        icon: Settings,
+        items: [
+            {
+                title: "General",
+                url: "/profile/settings",
+            },
+            {
+                title: "Reset Password",
+                url: "/profile/settings/reset-password",
+            },
+            {
+                title: "Delete Account",
+                url: "/profile/settings/delete-account",
+            },
+        ],
+        open: false
+    },
+];
 
 export const ProfileSidebar = ({ inUrl, user }: { inUrl: (url: string) => boolean, user: User | null }) => {
     // Menu items.
-    const menu = [
-        {
-            title: "Home",
-            url: "/profile/home",
-            icon: Home,
-        },
-        {
-            title: user?.role === UserRole.RESEARCHER ? "My Projects" : "My Contributions",
-            url: user?.role === UserRole.RESEARCHER ? "/profile/projects" : "/profile/contributions",
-            icon: user?.role === UserRole.RESEARCHER ? LibraryBig : ClipboardList,
-            items: user?.role === UserRole.RESEARCHER ? [
-                {
-                    title: "Published",
-                    url: "/profile/projects?status=published",
-                },
-                {
-                    title: "Pending",
-                    url: "/profile/projects?status=pending",
-                },
-                {
-                    title: "Draft",
-                    url: "/profile/projects?status=draft",
-                },
-            ] : [],
-            open: true
-        },
-        {
-            title: "My Discussions",
-            url: "/profile/discussions",
-            icon: MessagesSquare,
-            items: [
-                {
-                    title: "Open",
-                    url: "/profile/discussions?status=open",
-                },
-                {
-                    title: "Closed",
-                    url: "/profile/discussions?status=closed",
-                },
-            ],
-            open: true
-        },
-        user?.role === UserRole.CONTRIBUTOR ? {
-            title: "Participation Requests",
-            url: "/profile/participation-requests",
-            icon: MailPlus,
-        } : undefined,
-        {
-            title: "My Bookmarks",
-            url: "/profile/bookmarks",
-            icon: Bookmark,
-        },
-        {
-            title: "Settings",
-            url: "/profile/settings",
-            icon: Settings,
-            items: [
-                {
-                    title: "General",
-                    url: "/profile/settings",
-                },
-                {
-                    title: "Reset Password",
-                    url: "/profile/settings/reset-password",
-                },
-                {
-                    title: "Delete Account",
-                    url: "/profile/settings/delete-account",
-                },
-            ],
-            open: false
-        },
-    ]
+    const menu = getMenu(user?.role || UserRole.CONTRIBUTOR).filter(Boolean) as any[];
     return (
         <Sidebar collapsible="icon">
             <SidebarContent>
@@ -124,7 +125,7 @@ export const ProfileSidebar = ({ inUrl, user }: { inUrl: (url: string) => boolea
                                                 </CollapsibleTrigger>
                                                 <CollapsibleContent>
                                                     <SidebarMenuSub>
-                                                        {item.items.map((subItem) => (
+                                                        {item.items.map((subItem: {title: string, url: string}) => (
                                                             <SidebarMenuSubItem key={subItem.title}>
                                                                 <SidebarMenuSubButton asChild>
                                                                     <Link href={subItem.url}>
