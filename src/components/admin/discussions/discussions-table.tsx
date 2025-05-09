@@ -9,7 +9,7 @@ export default async function DiscussionsTable() {
     const discussions = await fetchAllDiscussions();
 
     return (
-        <div className="">
+        <div className="max-w-[95vw] sm:max-w-[80vw]">
             <DataTable
                 columns={discussionsTableColumns}
                 data={discussions}
