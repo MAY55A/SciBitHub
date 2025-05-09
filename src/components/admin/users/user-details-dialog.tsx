@@ -1,11 +1,10 @@
 "use client"
 
 import { useState } from "react";
-import { Button } from "@/src/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/components/ui/dialog";
 import { User } from "@/src/types/models";
 import { UserRole } from "@/src/types/enums";
-import { Badge } from "../../ui/badge";
+import { Badge } from "@/src/components/ui/badge";
 import { format } from "date-fns";
 
 
@@ -34,7 +33,7 @@ export default function UserDetailsDialog({ user, onClose }: { user: User, onClo
                     </div>
 
                     <div>
-                        <span className="font-semibold">Username:</span> {user.username || "—"}
+                        <span className="font-semibold">Username:</span> {user.username}
                     </div>
 
                     <div>
@@ -98,11 +97,6 @@ export default function UserDetailsDialog({ user, onClose }: { user: User, onClo
                     )}
                 </div>
             </DialogContent>
-            <DialogFooter>
-                <Button variant="outline" onClick={() => setOpen(false)}>
-                    Close
-                </Button>
-            </DialogFooter>
         </Dialog>
     )
 }

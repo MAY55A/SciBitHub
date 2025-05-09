@@ -9,7 +9,7 @@ export default async function UsersTable() {
     const users = await fetchAllUsers();
 
     return (
-        <div className="">
+        <div className="max-w-[95vw] sm:max-w-[80vw]">
             <DataTable
                 columns={usersTableColumns}
                 data={users}

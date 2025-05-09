@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ResearcherType, UserRole } from "@/src/types/enums";
 import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group";
 import { Label } from "@/src/components/ui/label";
+import { UserPlus } from "lucide-react";
 
 
 
@@ -97,7 +98,7 @@ export default function UserFormDialog({ data, onUpdate, onClose }: { data?: Bas
         >
             <DialogTrigger asChild>
                 {!data &&
-                    <Button onClick={() => setOpen(true)} className="w-full">Add a New User</Button>
+                    <Button onClick={() => setOpen(true)} className="w-full flex gap-2 font-semibold"><UserPlus size={16}/> Add a New User</Button>
                 }
             </DialogTrigger>
 
