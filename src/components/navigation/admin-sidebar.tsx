@@ -41,7 +41,7 @@ export const AdminSidebar = ({ inUrl, user }: { inUrl: (url: string) => boolean,
         },
         {
             title: "Forum topics",
-            url: "/admin/forum_topics",
+            url: "/admin/forum-topics",
             icon: MessageCircleQuestion,
         },
         {

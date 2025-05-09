@@ -71,3 +71,16 @@ export async function fetchAllForumTopics(): Promise<ForumTopic[]> {
     }
     return data;
 }
+
+// for stats
+export const fetchMostActiveForums = async () => {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase.rpc('admin_most_active_forums')
+
+    if (error || !data) {
+        console.error("Error fetching most active forums:", error);
+        return [];
+    }
+
+    return data;
+};
