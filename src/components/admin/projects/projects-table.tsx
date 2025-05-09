@@ -9,7 +9,7 @@ export default async function ProjectsTable() {
     const projects = await fetchAllProjects();
 
     return (
-        <div className="">
+        <div className="max-w-[95vw] sm:max-w-[80vw]">
             <DataTable
                 columns={projectsTableColumns}
                 data={projects}
