@@ -3,7 +3,8 @@ import {
     ModerationLevel, ProjectStatus, ActivityStatus, TaskType, TaskStatus, RequestType,
     ValidationStatus, DiscussionCategory, DiscussionStatus, ChartType, VisualizationType,
     AggregationFunction, ReportReason,
-    ReportStatus
+    ReportStatus,
+    NotificationType
 } from "./enums";
 
 interface Metadata {
@@ -204,3 +205,19 @@ export interface Report {
     status: ReportStatus;
     created_at?: string;
 };
+
+export interface Notification {
+    id: string;
+    recipient: PublicUser;
+    type: NotificationType;
+    message_template: string;
+    user: PublicUser;
+    project: Project;
+    discussion: Discussion;
+    forum_topic: ForumTopic;
+    comment: Comment;
+    task: Task;
+    action_url: string;
+    is_read: boolean;
+    created_at: string;
+}

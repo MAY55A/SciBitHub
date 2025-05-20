@@ -184,3 +184,11 @@ export enum ReportStatus {
     RESOLVED = 'resolved',
     DISMISSED = 'dismissed'
 }
+
+export enum NotificationType {
+    TO_SPECIFIC_USER = 'to_specific_user',
+    TO_ALL_ADMINS = 'to_all_admins',
+    TO_ALL_CONTRIBUTORS = 'to_all_contributors',
+    TO_ALL_RESEARCHERS = 'to_all_researchers',
+    TO_ALL_USERS = 'to_all_users',
+}
