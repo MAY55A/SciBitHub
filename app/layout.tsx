@@ -4,6 +4,7 @@ import Header from "@/src/components/navigation/Header";
 import { AuthProvider } from "@/src/contexts/AuthContext";
 import { ClientThemeProvider } from "@/src/components/wrappers/client-theme-provider";
 import { Toaster } from "@/src/components/ui/toaster";
+import { NotificationProvider } from "@/src/contexts/notification-context";
 
 const orbitron = Orbitron({
   display: "swap",
@@ -20,15 +21,17 @@ export default function RootLayout({
       <body className="bg-background text-foreground">
         <ClientThemeProvider>
           <AuthProvider>
-            <main className="min-h-screen flex flex-col items-center">
-              <div className="flex-1 w-full flex flex-col items-center">
-                <Header />
-                <div className="w-full flex-1 flex flex-col gap-20 items-center">
-                  {children}
+            <NotificationProvider>
+              <main className="min-h-screen flex flex-col items-center">
+                <div className="flex-1 w-full flex flex-col items-center">
+                  <Header />
+                  <div className="w-full flex-1 flex flex-col gap-20 items-center">
+                    {children}
+                  </div>
                 </div>
-              </div>
-            </main>
-            <Toaster />
+              </main>
+              <Toaster />
+            </NotificationProvider>
           </AuthProvider>
         </ClientThemeProvider>
       </body>

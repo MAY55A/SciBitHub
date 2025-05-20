@@ -3,6 +3,7 @@ import Link from '../custom/Link'
 import HeaderAuth from './header-auth'
 import { Nav } from './nav'
 import siteMetadata from '@/src/data/siteMetadata'
+import { NotificationBell } from '../notifications/notification-bell'
 
 const Header = () => {
   return (
@@ -16,6 +17,7 @@ const Header = () => {
       <Nav />
 
       <div className="flex items-center space-x-4 leading-5 sm:-mr-6 sm:space-x-6">
+        <NotificationBell/>
         <HeaderAuth />
         <ThemeSwitcher />
       </div>
