@@ -24,13 +24,15 @@ import {
 } from "@/src/components/ui/sidebar"
 import { signOutAction } from "./nav-user"
 import { redirect } from "next/navigation"
+import { UserRole } from "@/src/types/enums"
 export function SidebarNavUser({
     user,
 }: {
     user: {
         name: string
         email: string
-        avatar?: string
+        avatar?: string,
+        role: string
     }
 }) {
     const { isMobile } = useSidebar()
@@ -82,7 +84,7 @@ export function SidebarNavUser({
                         Profile
                     </DropdownMenuItem>
                     <DropdownMenuItem className="gap-2 text-muted-foreground hover:text-green">
-                        <Bell size={15}/>
+                        <Bell size={15} onSelect={() => redirect(user.role === UserRole.ADMIN ? "/admin/notifications" : "/profile/notifications")}/>
                         Notifications
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
