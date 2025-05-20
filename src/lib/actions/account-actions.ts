@@ -2,6 +2,7 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { UserInputData } from "@/src/types/user-form-data";
+import { NotificationType } from "@/src/types/enums";
 
 export const updateEmail = async (newEmail: string) => {
     const supabase = await createClient();
@@ -213,6 +214,16 @@ export const softDeleteAccount = async (userId: string, userName: string) => {
         await supabase.storage
             .from('avatars')
             .remove([userId]);
+
+
+        const adminNotification = {
+            message_template: `${userName} just left the community :( `,
+            type: NotificationType.TO_ALL_ADMINS
+        };
+        const { error: notifError } = await supabase.from("notifications").insert(adminNotification);
+        if (notifError) {
+            console.error("Database error:", notifError.message);
+        }
 
         return { success: true, message: 'Account deleted successfully!' };
     } catch (error) {

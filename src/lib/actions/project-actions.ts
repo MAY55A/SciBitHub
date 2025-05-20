@@ -2,7 +2,7 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { ActivityStatus, ProjectStatus, RequestType } from "@/src/types/enums";
+import { ActivityStatus, NotificationType, ProjectStatus, RequestType } from "@/src/types/enums";
 import { deleteFromMinIO } from "@/src/utils/minio/client";
 
 const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: any, oldParticipants: any, projectId: string, status: string) => {
@@ -51,13 +51,15 @@ export async function softDeleteProject(projectId: string, projectName: string) 
     const supabase = await createClient();
     const currentDate = new Date().toISOString();
     try {
-        const { error: projectError } = await supabase.from("projects")
+        const { error: projectError, data: project } = await supabase.from("projects")
             .update({
                 name: `${projectName} (deleted)`,
                 deleted_at: currentDate,
                 status: ProjectStatus.DELETED,
             })
-            .eq("id", projectId);
+            .eq("id", projectId)
+            .select("id, creator")
+            .single();
         if (projectError) {
             throw projectError;
         }
@@ -85,6 +87,18 @@ export async function softDeleteProject(projectId: string, projectName: string) 
             throw storageError;
         }
 
+        // only notify admins if the project is already published
+        const notification = {
+            type: NotificationType.TO_ALL_ADMINS,
+            message_template: `{user.username} deleted their project "${projectName.length > 50 ? projectName.slice(0, 50) + "..." : projectName}".`,
+            user_id: project.creator
+        }
+
+        const { error: notifError } = await supabase.from("notifications").insert(notification);
+        if (notifError) {
+            console.log("Database notification error:", notifError.message);
+        }
+
         return { success: true, message: "Project deleted successfully." };
 
     } catch (error) {
@@ -93,6 +107,7 @@ export async function softDeleteProject(projectId: string, projectName: string) 
     }
 }
 
+// No notification for admins for deleting unpublished projects
 export async function hardDeleteProject(projectId: string) {
     const supabase = await createClient();
     try {

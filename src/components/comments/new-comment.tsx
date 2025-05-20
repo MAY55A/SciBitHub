@@ -28,7 +28,7 @@ export function NewComment({ user, commentedOn, replyingTo }: NewCommentProps) {
             return;
         }
 
-        const res = await postComment({ content: newComment, ...commentedOn });
+        const res = await postComment({ content: newComment, ...commentedOn }, pathname.replace(/#.*$/, ''));
         if (res.success) {
             setNewComment(undefined);
         }

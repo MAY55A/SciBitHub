@@ -1,4 +1,5 @@
 import { DiscussionInputData } from "@/src/types/discussion-form-data";
+import { NotificationType } from "@/src/types/enums";
 import { deleteFromMinIO, uploadFileToMinIO } from "@/src/utils/minio/client";
 import { createClient } from "@/src/utils/supabase/client";
 
@@ -61,6 +62,19 @@ export const createDiscussion = async (data: DiscussionInputData, files: File[])
             success: true,
             message: `${uploadedPaths.length} file(s) uploaded. ${failedCount} failed.`,
         };
+    }
+
+    // notify admins
+    const notification = {
+        type: NotificationType.TO_ALL_ADMINS,
+        message_template: `{user.username} created a new discussion {discussion.title} `,
+        discussion_id: discussion.id,
+        user_id: userId,
+        action_url: `/discussions/${discussion.id}`,
+    }
+    const { error: notifError } = await supabase.from("notifications").insert(notification);
+    if (notifError) {
+        console.log("Database notification error:", notifError.message);
     }
 
     return {

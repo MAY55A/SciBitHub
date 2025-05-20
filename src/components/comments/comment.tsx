@@ -143,7 +143,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
                             )}
                         </div>
                         <div className="flex items-center gap-1">
-                            <VoteButtons voted_id={comment.id!} voted_type="comment" upvotes={comment.upvotes ?? 0} downvotes={comment.downvotes! ?? 0} />
+                            <VoteButtons voted_id={comment.id!} voted_type="comment" upvotes={comment.upvotes ?? 0} downvotes={comment.downvotes! ?? 0} creatorId={comment.creator.id} />
                             {!!currentUser &&
                                 <ReportFormDialog user={currentUser.id} id={comment.id} type="comment" />
                             }

@@ -74,7 +74,7 @@ export function DiscussionContent({ discussion }: { discussion: Discussion }) {
                     ))}
                 </div>
                 <div className="flex items-center gap-2">
-                    <VoteButtons voted_id={discussion.id!} voted_type="discussion" upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes! ?? 0} />
+                    <VoteButtons voted_id={discussion.id!} voted_type="discussion" upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes! ?? 0} creatorId={discussion.creator.id} />
                     <Suspense fallback={null}>
                         <DiscussionActions discussion={discussion} />
                     </Suspense>

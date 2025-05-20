@@ -5,6 +5,7 @@ import { createClient } from "@/src/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { UserInputData } from "@/src/types/user-form-data";
+import { NotificationType } from "@/src/types/enums";
 
 export const signUpAction = async (inputData: UserInputData) => {
   const supabase = await createClient();
@@ -51,6 +52,21 @@ export const signUpAction = async (inputData: UserInputData) => {
     return encodedRedirect("error", "/sign-up/confirmation", "User registered, but failed to save in database.");
   }
 
+  const adminNotification = {
+    type: NotificationType.TO_ALL_ADMINS,
+    message_template: "{user.username} just joined the community!",
+    user_id: inputData.id,
+    action_url: `/users/${inputData.id}`
+  };
+  const welcomeNotification = {
+    recipient_id: inputData.id,
+    message_template: `👋 Welcome, ${inputData.username}! We're thrilled to have you join us!`,
+  };
+  const { error: notifError } = await supabase.from("notifications").insert([adminNotification, welcomeNotification]);
+  if (notifError) {
+    console.error("Database error:", notifError.message);
+  }
+
   return encodedRedirect(
     "success",
     "/sign-up/confirmation",
@@ -70,7 +86,7 @@ export const signInAction = async (formData: FormData) => {
   if (error) {
     return encodedRedirect("error", "/sign-in", error.message);
   }
-  
+
   if (user?.app_metadata?.role === "admin") {
     return redirect("/admin");
   }
@@ -78,7 +94,7 @@ export const signInAction = async (formData: FormData) => {
   const referer = (await headers()).get("referer");
   const url = new URL(referer || "");
   const redirectTo = url.searchParams.get("redirect_to") || "/profile";
-  
+
   return redirect(redirectTo);
 };
 

@@ -2,22 +2,49 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { RequestType, ValidationStatus } from "@/src/types/enums";
+import { ParticipationRequest } from "@/src/types/models";
 
 export const createRequests = async (projectId: string, users: string[], type: RequestType) => {
     const supabase = await createClient();
+    const requests = [];
+    const notifications = [];
+    const { data: project } = await supabase.from("projects").select("creator").eq("id", projectId).single();
+    if (!project) {
+        return { success: false, message: "Project not found." };
+    }
+
     for (const userId of users) {
-        const request = {
+        requests.push({
             project_id: projectId,
             user_id: userId,
             type: type,
             requested_at: new Date().toISOString()
-        };
-        const { error } = await supabase.from("participation_requests").insert(request);
-        if (error) {
-            console.error("Database error:", error.message);
-            return { success: false, message: users.length === 1 ? "Failed to create request." : "Failed to create requests." };
-        }
+        });
+        notifications.push(type === RequestType.INVITATION
+            ? {
+                recipient_id: userId,
+                message_template: `{user.username} has invited you to join their project {project.name}.`,
+                project_id: projectId,
+                user_id: project.creator,
+            } : {
+                recipient_id: project.creator,
+                message_template: `{user.username} has requested to join your project {project.name}.`,
+                project_id: projectId,
+                user_id: userId,
+            });
     }
+
+    const { error } = await supabase.from("participation_requests").insert(requests);
+    if (error) {
+        console.log("Database error:", error.message);
+        return { success: false, message: users.length === 1 ? "Failed to create request." : "Failed to create requests." };
+    }
+
+    const { error: notifError } = await supabase.from("notifications").insert(notifications);
+    if (notifError) {
+        console.log("Database notification error:", notifError.message);
+    }
+
     return { success: true, message: users.length === 1 ? "Request created successfully." : "Requests created successfully." };
 }
 
@@ -26,11 +53,29 @@ export const updateRequestsStatus = async (ids: string[], status: ValidationStat
         return { success: false, message: "No requests selected!" };
     }
     const supabase = await createClient();
-    const { error } = await supabase.from("participation_requests").update({ status }).in("id", ids);
+    const { error, data: requests } = await supabase.from("participation_requests").update({ status }).in("id", ids).select("id, user_id, type, project:project_id(id, creator)");
     if (error) {
-        console.error("Database error:", error.message);
+        console.log("Database error:", error.message);
         return { success: false, message: ids.length === 1 ? "Failed to update request status!" : "Failed to update all requests status" };
     }
+
+    // Send notifications to the users
+    const areInvitations = requests[0].type === RequestType.INVITATION;
+    const action = status === ValidationStatus.APPROVED ? "accepted" : "rejected";
+    const type = areInvitations ? "invitation" : "request";
+    const notifications = requests.map((request: any) => {
+        return {
+            recipient_id: areInvitations ? request.project.creator : request.user_id,
+            message_template: `{user.username} has ${action} your ${type} to join {project.name}.`,
+            project_id: request.project.id,
+            user_id: areInvitations ? request.user_id : request.project.creator,
+        };
+    });
+    const { error: notifError } = await supabase.from("notifications").insert(notifications);
+    if (notifError) {
+        console.log("Database notification error:", notifError.message);
+    }
+
     return { success: true, message: ids.length === 1 ? "Request status updated successfully!" : "Requests status updated successfully" };
 }
 

@@ -70,7 +70,7 @@ export function ProjectHeader({ project }: { project: Project }) {
                 </div>
             </div>
             <div className="absolute bottom-4 right-4 space-x-2">
-                <LikeButton projectId={project.id!} likes={project.likes ?? 0} />
+                <LikeButton projectId={project.id!} likes={project.likes ?? 0} creatorId={project.creator.id} />
                 <Suspense fallback={null}>
                     <ProjectActions creatorId={project.creator.id} project={project} />
                 </Suspense>

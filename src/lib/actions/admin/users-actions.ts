@@ -5,7 +5,7 @@ import { BasicUserInputData } from "@/src/types/user-form-data";
 
 export const adminResetPassword = async (userId: string, newPassword: string) => {
     const supabase = createAdminClient();
-    const {error} = await supabase.auth.admin.updateUserById(userId, {
+    const { error } = await supabase.auth.admin.updateUserById(userId, {
         password: newPassword
     }); // logs out after sussessful password reset
 
@@ -88,6 +88,18 @@ export const updateUser = async (data: BasicUserInputData) => {
         return { success: false, message: "Failed to update account." };
     }
     updatedUser.email = data.email;
+
+    const notification = {
+        recipient_id: data.id,
+        message_template: `Your account has been updated by an admin !`,
+        action_url: data.role === "admin" ? "/admin/account-settings" : "/profile/settings",
+    };
+
+    const { error: notifError } = await supabase.from("notifications").insert(notification);
+    if (notifError) {
+        console.log("Database notification error:", notifError.message);
+    }
+
     return { success: true, message: "User updated successfully.", user: updatedUser };
 };
 
@@ -99,8 +111,19 @@ export const updateBanStatus = async (userId: string, duration: string) => {
         console.log("Error updating ban status:", authError.message);
         return { success: false, message: "Failed to update ban status." };
     }
+    const action = duration === "none" ? "unbanned" : "banned for " + duration;
 
-    return { success: true, message: duration === "none" ? "User unbanned successfully." : "User banned successfully.", banned_until: user?.banned_until };
+    const notification = {
+        recipient_id: userId,
+        message_template: `Your account has been ${action} !`,
+    };
+
+    const { error: notifError } = await supabase.from("notifications").insert(notification);
+    if (notifError) {
+        console.log("Database notification error:", notifError.message);
+    }
+
+    return { success: true, message: `User ${action} successfully.`, banned_until: user?.banned_until };
 };
 
 
@@ -113,7 +136,19 @@ export const updateVerified = async (userId: string, isVerified: boolean, metada
         console.log("Error updating 'is verified' status:", error.message);
         return { success: false, message: "Failed to update 'is verified' status." };
     }
-    return { success: true, message: isVerified ? "Researcher marked as verified." : "Researcher unmarked as verified." };
+    const action = isVerified ? "marked as verified" : "unmarked as verified ";
+
+    const notification = {
+        recipient_id: userId,
+        message_template: `Your researcher account has been ${action} !`,
+    };
+
+    const { error: notifError } = await supabase.from("notifications").insert(notification);
+    if (notifError) {
+        console.log("Database notification error:", notifError.message);
+    }
+
+    return { success: true, message: `Researcher ${action} successfully.` };
 };
 
 export const deleteUser = async (id: string) => {

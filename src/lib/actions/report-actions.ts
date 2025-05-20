@@ -2,6 +2,7 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { ReportInputData } from "@/src/types/report-form-data";
+import { NotificationType } from "@/src/types/enums";
 
 export const createReport = async (data: ReportInputData) => {
     const supabase = await createClient();
@@ -20,10 +21,23 @@ export const createReport = async (data: ReportInputData) => {
         reporter: user.data.user.id,
     };
 
-    const { error } = await supabase.from("reports").insert(report);
+    const { error, data: reportData } = await supabase.from("reports").insert(report).select("id").single();
     if (error) {
-        console.error("Database error:", error.message);
+        console.log("Database error:", error.message);
         return { success: false, message: "Failed to submit report." };
+    }
+    
+    // Send notification to all admins
+    const notification = {
+        type: NotificationType.TO_ALL_ADMINS,
+        message_template: `{user.username} submitted a new reported on a ${data.reported_type} ⚠ .`,
+        user_id: user.data.user.id,
+        action_url: `/admin/reports?id=${reportData.id}`
+    }
+
+    const { error: notifError } = await supabase.from("notifications").insert(notification);
+    if (notifError) {
+        console.log("Database notification error:", notifError.message);
     }
 
     return { success: true, message: "Report submitted successfully." };

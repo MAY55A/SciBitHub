@@ -6,11 +6,22 @@ import { createAdminClient } from "@/src/utils/supabase/admin";
 const supabase = createAdminClient();
 
 export const updateReportStatus = async (id: string, status: ReportStatus) => {
-    const { error } = await supabase.from('reports').update({status}).eq('id', id);
+    const { error, data: report } = await supabase.from('reports').update({status}).eq('id', id).select('reporter, reported_type, reported_link').single();
 
     if (error) {
         console.log("Error updating status:", error.message);
         return { success: false, message: "Failed to update report status." };
+    }
+
+    const notification = {
+        recipient_id: report.reporter,
+        message_template: `Your report to this ${report.reported_type} has been ${status} .`,
+        action_url: report.reported_link,
+    };
+
+    const { error: notifError } = await supabase.from("notifications").insert(notification);
+    if (notifError) {
+        console.log("Database notification error:", notifError.message);
     }
 
     return { success: true, message: `Report ${status} successfully.` };

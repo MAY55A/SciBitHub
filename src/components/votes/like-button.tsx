@@ -1,13 +1,12 @@
 'use client'
 
-import { Heart, LucideHeart } from "lucide-react";
+import { LucideHeart } from "lucide-react";
 import { Button } from "../ui/button";
 import { createClient } from "@/src/utils/supabase/client";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/src/contexts/AuthContext";
-import { cn } from "@/src/lib/utils";
 
-export const LikeButton = ({ projectId, likes }: { projectId: string, likes: number }) => {
+export const LikeButton = ({ projectId, likes, creatorId }: { projectId: string, likes: number, creatorId: string }) => {
     const [existingLike, setExistingLike] = useState<{ id: String } | null>(null);
     const [currentLikes, setCurrentLikes] = useState(likes);
     const supabase = createClient();
@@ -35,6 +34,19 @@ export const LikeButton = ({ projectId, likes }: { projectId: string, likes: num
             if (error) {
                 console.log("Error inserting Like:", error);
             } else {
+                // notify project creator if the user is not the creator
+                if (creatorId !== user!.id) {
+                    const notification = {
+                        recipient_id: creatorId,
+                        message_template: `{user.username} hearted your project {project.name} ❤ .`,
+                        project_id: projectId,
+                        user_id: user!.id,
+                    }
+                    const { error: notifError } = await supabase.from("notifications").insert(notification);
+                    if (notifError) {
+                        console.log("Database notification error:", notifError.message);
+                    }
+                }
                 setExistingLike(like);
                 setCurrentLikes(currentLikes + 1);
             }

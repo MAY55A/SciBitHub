@@ -4,11 +4,11 @@ import { ProjectInputData, TaskInputData } from "@/src/types/project-form-data";
 import { deleteFromMinIO, uploadFileToMinIO } from "@/src/utils/minio/client";
 import { createClient } from "@/src/utils/supabase/client";
 import { base64ToFile } from "@/src/utils/utils";
-import { ParticipationLevel, ProjectStatus, RequestType } from "@/src/types/enums";
+import { NotificationType, ParticipationLevel, ProjectStatus, RequestType } from "@/src/types/enums";
 
 
 export const createProject = async (inputData: Partial<ProjectInputData>, status: ProjectStatus, files: TaskFilesMap) => {
-    const supabase = await createClient();
+    const supabase = createClient();
     const user = await supabase.auth.getUser();
     if (!user.data.user) {
         return { success: false, message: "You are not authenticated." };
@@ -71,6 +71,21 @@ export const createProject = async (inputData: Partial<ProjectInputData>, status
             return { success: false, message: "Failed to save participation requests" };
         }
     }
+
+    // notify admins if project is not draft (pending)
+    if (status !== ProjectStatus.DRAFT) {
+        const notification = {
+            type: NotificationType.TO_ALL_ADMINS,
+            message_template: `{user.username} created a new project "${inputData.name!.length > 50 ? inputData.name!.slice(0,50): inputData.name}". Review it!`,
+            user_id: user.data.user.id,
+            action_url: `/admin/projects?id=${projectData.id}`,
+        }
+        const { error: notifError } = await supabase.from("notifications").insert(notification);
+        if (notifError) {
+            console.log("Database notification error:", notifError.message);
+        }
+    }
+
     return { success: true, message: "Project created successfully!" };
 };
 
@@ -297,7 +312,7 @@ const deleteTasks = async (supabase: SupabaseClient<any, "public", any>, tasks: 
                 await deleteFromMinIO(task.datasetPath, true);
             }
 
-        // soft delete if contributions exist
+            // soft delete if contributions exist
         } else {
             const { error: updateError } = await supabase.from("tasks").update({ deleted_at: new Date().toISOString() }).eq("id", task.id);
             if (updateError) {
