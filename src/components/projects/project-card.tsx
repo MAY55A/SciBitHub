@@ -11,21 +11,29 @@ import { LikesDisplay } from "../votes/likes-display";
 
 
 export function ProjectCard({ project, editable = false }: { project: Project, editable?: boolean }) {
-    let color = "#1e40af";
-    let prefix = "created on ";
-    if (project.status === "published") {
-        color = "#22c55e";
-        prefix = "published on ";
-    }
-    if (project.status === "pending") {
-        color = "#eab308";
+    let prefix = "published ";
+    let color = undefined;
+    if (editable) {
+        color = "#1e40af";
+        prefix = "create ";
+        if (project.status === "published") {
+            color = "#009900";
+            prefix = "published ";
+        }
+        if (project.status === "declined") {
+            color = "#990000";
+            prefix = "created ";
+        }
+        if (project.status === "pending") {
+            color = "#eab308";
+        }
     }
 
     const date = project.published_at || project.created_at;
     const formattedDate = formatDate(date);
     return (
         <Card
-            className="relative max-w-[400px] border-2 text-sm shadow-lg rounded-lg shadow-muted transform transition-all hover:scale-105 hover:shadow-2xl hover:shadow-muted"
+            className="relative w-full max-w-[900px] h-full border-2 border-primary/30 text-sm shadow-lg rounded-lg shadow-muted transform transition-all hover:scale-105 hover:shadow-2xl hover:shadow-muted"
             style={{
                 borderColor: color,
             }}
@@ -69,7 +77,7 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
                     </h2></Link>
 
                 <p
-                    className="text-muted-foreground max-h-40 overflow-hidden whitespace-normal pl-2"
+                    className="text-muted-foreground pl-2"
                 >
                     {project.short_description}
                 </p>

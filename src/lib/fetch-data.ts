@@ -7,8 +7,10 @@ import { ActivityStatus, ProjectStatus } from "../types/enums";
 export const fetchProjects = async (
     creator?: string,
     query?: string,
+    domain?: string,
     status?: ProjectStatus,
     activityStatus?: ActivityStatus,
+    tags?: string[],
     currentPage: number = 1,
     orderBy: string = "created_at",
     sort: "asc" | "desc" = "desc",
@@ -30,11 +32,17 @@ export const fetchProjects = async (
         if (query) {
             queryBuilder = queryBuilder.ilike("name", `%${query}%`);
         }
+        if (domain) {
+            queryBuilder = queryBuilder.ilike("domain", `%${domain}%`);
+        }
         if (status) {
             queryBuilder = queryBuilder.eq("status", status);
         }
         if (activityStatus) {
             queryBuilder = queryBuilder.eq("activity_status", activityStatus);
+        }
+        if (tags && tags.length > 0) {
+            queryBuilder = queryBuilder.contains("tags", tags);
         }
 
         // Apply sorting and pagination
@@ -495,6 +503,17 @@ export async function fetchParticipationRequests(
     const { data, error } = await queryBuilder;
     if (error) {
         console.error("Error fetching participation requests:", error);
+        return [];
+    }
+    return data;
+}
+
+export async function fetchProjectsTags(): Promise<string[]> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.rpc("get_all_projects_tags");
+    if (error) {
+        console.error("Error fetching projects tags:", error);
         return [];
     }
     return data;

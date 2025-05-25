@@ -13,6 +13,7 @@ import { ProjectStatus } from "@/src/types/enums";
 export default async function MyProjects(props: {
     searchParams?: Promise<{
         query?: string;
+        domain?: string;
         page?: string;
         status?: ProjectStatus;
         success?: string;
@@ -30,11 +31,13 @@ export default async function MyProjects(props: {
     const success = searchParams?.success;
     const error = searchParams?.error;
     const query = searchParams?.query || '';
+    const domain = searchParams?.domain;
     const status = searchParams?.status;
     const currentPage = Number(searchParams?.page) || 1;
     const pages = await fetchProjects(
         user.id,
         query,
+        domain,
         status
     );
     const totalPages = pages?.totalPages;
@@ -46,7 +49,7 @@ export default async function MyProjects(props: {
             <ClearSearchParams />
             <div className="w-full flex flex-wrap items-center justify-between gap-8 border-b border-muted-foreground/30 p-8 rounded-t-lg">
                 <Search placeholder="Search my projects..." />
-                <Link href={'/projects/create'} className='w-full max-w-[300px] font-bold bg-primary text-primary-foreground hover:bg-primary/90 hover:text-secondary-foreground text-center p-2 border border-primary rounded-lg'>
+                <Link href={'/projects/create'} className='w-full max-w-[300px] font-bold bg-primary text-primary-foreground hover:bg-muted hover:text-secondary-foreground text-center p-2 border border-primary rounded-lg'>
                     Start A New Project
                 </Link>
             </div>
