@@ -222,6 +222,8 @@ export const fetchDiscussions = async (
     creator?: string,
     query?: string,
     status?: string,
+    category?: string,
+    tags?: string[],
     currentPage: number = 1,
     orderBy: string = "created_at",
     sort: "asc" | "desc" = "desc",
@@ -244,6 +246,12 @@ export const fetchDiscussions = async (
         }
         if (status) {
             queryBuilder = queryBuilder.eq("status", status);
+        }
+        if(category) {
+            queryBuilder = queryBuilder.eq("category", category);
+        }
+        if(tags && tags.length > 0) {
+            queryBuilder = queryBuilder.contains("tags", tags);
         }
 
         // Apply sorting and pagination
@@ -514,6 +522,17 @@ export async function fetchProjectsTags(): Promise<string[]> {
     const { data, error } = await supabase.rpc("get_all_projects_tags");
     if (error) {
         console.error("Error fetching projects tags:", error);
+        return [];
+    }
+    return data;
+}
+
+export async function fetchDiscussionsTags(): Promise<string[]> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.rpc("get_all_discussions_tags");
+    if (error) {
+        console.error("Error fetching discussions tags:", error);
         return [];
     }
     return data;

@@ -125,8 +125,30 @@ export enum DiscussionStatus {
 }
 
 export enum DiscussionCategory {
-    RESEARCH = 'research',
+    SCIENTIFIC_DEBATE = 'scientific debate',     // Debates on scientific theories, ideas, or controversies
+    SOCIAL_IMPACT = 'social impact',             // Discussions about how science affects society, politics, environment, etc.
+    PHILOSOPHY_OF_SCIENCE = 'philosophy',        // Epistemology, ethics, methodology, purpose of science
+    EMERGING_TOPICS = 'emerging topics',         // AI, quantum computing, climate science — evolving areas
+    INTERDISCIPLINARY = 'interdisciplinary',     // Where domains intersect (e.g. biology + data science)
+    OPEN_QUESTIONS = 'open questions',           // Unsolved or thought-provoking scientific problems
+    PLATFORM_DISCUSSION = 'platform',            // About SciBitHub itself (features, issues, ideas)
+    CASUAL_SCIENCE = 'casual science',           // Fun facts, interesting finds, thought experiments
+    COLLABORATION_CALLS = 'collaboration calls', // Find people to help with general initiatives
+    OTHER = 'other',                             // For anything that doesn’t clearly fit
 }
+
+export const DiscussionCategoriesDescriptions: Record<DiscussionCategory, string> = {
+    [DiscussionCategory.SCIENTIFIC_DEBATE]: 'Engage in thoughtful debates around scientific theories, hypotheses, and controversial findings.',
+    [DiscussionCategory.SOCIAL_IMPACT]: 'Discuss how science and research affect society, politics, the environment, and culture.',
+    [DiscussionCategory.PHILOSOPHY_OF_SCIENCE]: 'Reflect on ethics, epistemology, and the purpose and limits of science.',
+    [DiscussionCategory.EMERGING_TOPICS]: 'Talk about new or fast-changing scientific fields such as AI, space tech, or biotechnology.',
+    [DiscussionCategory.INTERDISCIPLINARY]: 'Explore discussions at the intersection of multiple disciplines.',
+    [DiscussionCategory.OPEN_QUESTIONS]: 'Pose and discuss big scientific questions that are unsolved or open-ended.',
+    [DiscussionCategory.COLLABORATION_CALLS]: 'Find or propose collaborations around general ideas or themes not tied to specific projects.',
+    [DiscussionCategory.CASUAL_SCIENCE]: 'Share fun facts, surprising science, thought experiments, or ask “what if” questions.',
+    [DiscussionCategory.PLATFORM_DISCUSSION]: 'Talk about the platform itself: features, bugs, improvements, community norms.',
+    [DiscussionCategory.OTHER]: "Anything that doesn’t fit clearly into another category."
+};
 
 export enum FieldType {
     TEXT = 'text',

@@ -7,6 +7,8 @@ export default async function Discussions({
     editable,
     query,
     status,
+    category,
+    tags,
     currentPage,
     orderBy,
     sort,
@@ -16,6 +18,8 @@ export default async function Discussions({
     editable?: boolean;
     query?: string;
     status?: string;
+    category?: string;
+    tags?: string[];
     currentPage?: number;
     orderBy?: string;
     sort?: "asc" | "desc";
@@ -27,6 +31,8 @@ export default async function Discussions({
         creator,
         query,
         status,
+        category,
+        tags,
         currentPage,
         orderBy,
         sort,
