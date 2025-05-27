@@ -44,7 +44,7 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple
                     <FormLabel className={multiple ? "text-primary" : ""}>{multiple ? "Countries" : "Country"}</FormLabel>
                     <FormControl>
                         {loading ? (
-                            <div>Loading...</div> // Replace with a loading spinner if desired
+                            <div>Loading...</div>
                         ) : (
                             <Select
                                 isMulti={multiple ?? false}
@@ -67,12 +67,17 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple
                                         field.onChange(undefined);
                                     }
                                 }}
-                                className="text-green"
+                                className="text-green font-retro"
                                 styles={{
-                                    control: (provided) => ({
+                                    control: (provided, state) => ({
                                         ...provided,
                                         background: "hsl(var(--background))",
                                         borderColor: "hsl(var(--border))",
+                                        boxShadow: state.isFocused ? "0 0 0 1px hsl(var(--ring))" : "none",
+                                        "&:hover": {
+                                            borderColor: "hsl(var(--ring))"
+                                        }
+
                                     }),
                                     menu: (provided) => ({
                                         ...provided,
@@ -80,8 +85,12 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple
                                     }),
                                     option: (provided, state) => ({
                                         ...provided,
-                                        backgroundColor: state.isSelected ? "hsl(var(--muted))" : state.isFocused ? "hsl(var(--muted))" : "hsl(var(--background))",
+                                        backgroundColor: state.isSelected || state.isFocused ? "hsl(var(--muted))" : "hsl(var(--background))",
                                         color: "hsl(var(--foreground))",
+                                        ":active": {
+                                            backgroundColor: "hsl(var(--accent))",
+                                            color: "hsl(var(--green))"
+                                        },
                                     }),
                                     singleValue: (provided) => ({
                                         ...provided,
@@ -96,14 +105,14 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple
                                         ...provided,
                                         color: "hsl(var(--foreground))"
                                     }),
-                                    multiValueRemove: (provided, state) => ({
+                                    multiValueRemove: (provided) => ({
                                         ...provided,
                                         color: "hsl(var(--destructive))"
                                     }),
                                     input: (provided) => ({
                                         ...provided,
-                                        color: "hsl(var(--muted-foreground))", // Change search text color
-                                    }),             
+                                        color: "hsl(var(--muted-foreground))",
+                                    }),
                                 }}
                             />
                         )}

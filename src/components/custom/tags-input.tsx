@@ -24,14 +24,14 @@ export default function TagsInput({ onChange, tags }: { onChange: (values: strin
     }
 
     return (
-        <div className="flex flex-wrap border border-input rounded-md p-1 gap-2">
+        <div className="flex flex-wrap border border-input rounded-md p-1 gap-2 font-retro">
             {values.map((value, index) => (
                 <div className="bg-muted rounded-3xl py-2 px-3" key={index}>
                     <span className="text-sm">{value}</span>
                     <span className="inline-flex justify-center items-center h-4 w-4 rounded-full text-red-400 hover:text-red-500 cursor-pointer ml-2" onClick={() => removeValue(index)}>&times;</span>
                 </div>
             ))}
-            <input onKeyDown={handleKeyDown} type="text" className="w-full flex-grow-1 p-2 border-none outline-none text-sm text-muted-foreground" placeholder="write tag   (press Enter)" />
+            <input onKeyDown={handleKeyDown} type="text" className="flex-grow-1 p-2 border-none outline-none text-sm text-muted-foreground placeholder:text-muted-foreground rounded-xl bg-muted" placeholder="write tag..." />
         </div>
     )
 }
