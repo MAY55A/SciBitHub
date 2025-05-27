@@ -88,18 +88,21 @@ export const columns: ColumnDef<Contribution>[] = [
         cell: ({ row, table }) => {
             const tableMeta = table.options.meta;
             const contribution = row.original
-            const router = useRouter();
             return (
                 <div className="w-[300px] flex items-center gap-2 justify-end">
-                    <Actions showText={false} contributions={[contribution.id!]} status={contribution.status} onUpdate={(newStatus) => { tableMeta?.updateData(row.index, "status", newStatus) }} onDelete={() => tableMeta?.removeRow(row.index)} />
+                    <Actions
+                        showText={false}
+                        contributions={[contribution.id!]}
+                        status={contribution.status}
+                        onUpdate={(newStatus) => { tableMeta?.updateData(row.index, "status", newStatus) }}
+                        onDelete={() => tableMeta?.removeRow(row.index)} />
                 </div>
             )
         },
     },
     {
         id: "more",
-        cell: ({ row, table }) => {
-            const tableMeta = table.options.meta;
+        cell: ({ row }) => {
             const contribution = row.original
             const router = useRouter();
             return (

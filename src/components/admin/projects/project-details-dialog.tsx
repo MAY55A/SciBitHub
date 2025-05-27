@@ -80,7 +80,8 @@ export default function ProjectDetailsDialog({ project, onClose }: { project: Pr
                                 <AccordionTrigger className="text-md data-[state=open]:text-primary">General</AccordionTrigger>
                                 <AccordionContent className="max-h-[60vh] overflow-y-auto">
                                     <div className="grid gap-1 text-sm">
-                                        <p><strong>Name: </strong>{project.name}</p>
+                                    <div><strong>Creator: </strong><UserHoverCard user={project.creator} /></div>
+                                    <p><strong>Name: </strong>{project.name}</p>
                                         <div><strong>Status: </strong>
                                             <Badge
                                                 variant="secondary"
@@ -119,10 +120,9 @@ export default function ProjectDetailsDialog({ project, onClose }: { project: Pr
                                         {project.updated_at && <p><strong>Updated At: </strong>{format(new Date(project.updated_at), "PPPpp")}</p>}
                                         {project.status === ProjectStatus.PUBLISHED && <p><strong>Published At: </strong>{project.published_at ? format(new Date(project.published_at), "PPPpp") : "Just now"}</p>}
                                         {project.status === ProjectStatus.DELETED && <p><strong>Deleted At: </strong>{project.deleted_at ? format(new Date(project.deleted_at), "PPPpp") : "Just now"}</p>}
-                                        <div><strong>Creator: </strong><UserHoverCard user={project.creator} /></div>
                                         <p><strong>Domain: </strong>{project.domain}</p>
                                         {project.tags && project.tags.length > 0 && (
-                                            <p><strong>Countries:</strong> {project.tags.join(", ")}</p>
+                                            <p><strong>Tags:</strong> {project.tags.join(", ")}</p>
                                         )}
                                         <p><strong>Short Description: </strong>{project.short_description}</p>
                                         <div><strong>Full Description: </strong>

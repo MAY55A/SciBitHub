@@ -79,12 +79,18 @@ export function SidebarNavUser({
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="gap-2 text-muted-foreground hover:text-green" onSelect={() => redirect("/profile")}>
+                    <DropdownMenuItem
+                        className="gap-2 text-muted-foreground hover:text-green"
+                        onSelect={() => redirect(user.role === UserRole.ADMIN ? "/admin" : "/profile")}
+                    >
                         <CircleUser size={15} />
                         Profile
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="gap-2 text-muted-foreground hover:text-green">
-                        <Bell size={15} onSelect={() => redirect(user.role === UserRole.ADMIN ? "/admin/notifications" : "/profile/notifications")}/>
+                    <DropdownMenuItem
+                        className="gap-2 text-muted-foreground hover:text-green"
+                        onSelect={() => redirect(user.role === UserRole.ADMIN ? "/admin/notifications" : "/profile/notifications")}
+                    >
+                        <Bell size={15} />
                         Notifications
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
@@ -94,6 +100,6 @@ export function SidebarNavUser({
                     Sign out
                 </DropdownMenuItem>
             </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu >
     )
 }

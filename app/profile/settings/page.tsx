@@ -1,11 +1,11 @@
 "use client"
 
 import { useAuth } from "@/src/contexts/AuthContext";
-import { EmailForm } from "../../../src/components/account-settings/email-form";
-import { PersonalInformationForm } from "../../../src/components/account-settings/personal-info-form";
-import { ContactsForm } from "../../../src/components/account-settings/contacts-form";
-import { InterestsForm } from "../../../src/components/account-settings/interests-form";
-import { ProfilePictureUpload } from "../../../src/components/account-settings/profile-picture-form";
+import { EmailForm } from "@/src/components/account-settings/email-form";
+import { PersonalInformationForm } from "@/src/components/account-settings/personal-info-form";
+import { ContactsForm } from "@/src/components/account-settings/contacts-form";
+import { InterestsForm } from "@/src/components/account-settings/interests-form";
+import { ProfilePictureUpload } from "@/src/components/account-settings/profile-picture-form";
 import { AccountSettingsSkeleton } from "@/src/components/skeletons/account-settings-skeleton";
 import { Suspense } from "react";
 import { OraganizationDetailsForm } from "@/src/components/account-settings/organization-details-form";

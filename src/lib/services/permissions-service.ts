@@ -46,7 +46,7 @@ export async function getProjectPermissions(
             .from("participation_requests")
             .select("id")
             .eq("project_id", projectId)
-            .eq("user_id", user!.id)
+            .eq("user_id", user?.id)
             .eq("status", "approved")
             .is("deleted_at", null)
             .limit(1)
