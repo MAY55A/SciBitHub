@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DiscussionInputData, discussionInputDataSchema } from "@/src/types/discussion-form-data";
 import { Button } from "@/src/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage } from "@/src/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage, FormDescription } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select";
 import FileDropzone from "../custom/file-dropzone";
@@ -14,7 +14,7 @@ import TagsInput from "@/src/components/custom/tags-input";
 import { createDiscussion, updateDiscussion } from "@/src/lib/services/discussion-service";
 import { useToast } from "@/src/hooks/use-toast";
 import { getFileWithMetadata } from "@/src/utils/minio/client";
-import { DiscussionCategory } from "@/src/types/enums";
+import { DiscussionCategoriesDescriptions, DiscussionCategory } from "@/src/types/enums";
 import { MarkdownEditor } from "../custom/markdown-editor";
 import { areEqualArrays } from "@/src/utils/utils";
 import { Message, FormMessage } from "../custom/form-message";
@@ -51,14 +51,18 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
         setSubmitting(true);
         const res = await createDiscussion(formData, newFiles);
         setSubmitting(false);
-        if (res.success) {
-            form.reset();
-            setOpen(false);
-        }
         toast({
             description: res.message,
             variant: res.success ? "default" : "destructive",
         })
+
+        if (res.success) {
+            setOpen(false);
+            startTransition(() => {
+                router.refresh();
+                setOpen(false);
+            });
+        }
     }
 
     const handleEdit = async (formData: DiscussionInputData) => {
@@ -132,12 +136,13 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
 
     return (
         //fix overflow issue when dialog is closed
-        <Dialog open={open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>            <DialogTrigger asChild>
-            {data ?
-                <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :
-                <Button onClick={() => setOpen(true)}>open a discussion</Button>
-            }
-        </DialogTrigger>
+        <Dialog open={open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>
+            <DialogTrigger asChild>
+                {data ?
+                    <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :
+                    <Button onClick={() => setOpen(true)}>open a discussion</Button>
+                }
+            </DialogTrigger>
             <DialogContent className="lg:min-w-[700px] md:min-w-[700px] sm:max-w-[425px] max-h-[90vh]">
                 <DialogHeader>
                     <DialogTitle>{data ? "Edit Discussion" : "Create A New Discussion"}</DialogTitle>
@@ -187,16 +192,17 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select a type" />
+                                                    <SelectValue placeholder="Select a category" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {Object.values(DiscussionCategory).map((type) => (
-                                                    <SelectItem value={type} key={type}>{type}</SelectItem>
+                                                {Object.values(DiscussionCategory).map((category) => (
+                                                    <SelectItem value={category} key={category}>{category}</SelectItem>
                                                 ))}
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
+                                    <FormDescription>{DiscussionCategoriesDescriptions[field.value as DiscussionCategory]}</FormDescription>
                                     <FormFieldMessage></FormFieldMessage>
                                 </FormItem>
                             )}

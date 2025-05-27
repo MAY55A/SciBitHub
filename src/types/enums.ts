@@ -127,7 +127,7 @@ export enum DiscussionStatus {
 export enum DiscussionCategory {
     SCIENTIFIC_DEBATE = 'scientific debate',     // Debates on scientific theories, ideas, or controversies
     SOCIAL_IMPACT = 'social impact',             // Discussions about how science affects society, politics, environment, etc.
-    PHILOSOPHY_OF_SCIENCE = 'philosophy',        // Epistemology, ethics, methodology, purpose of science
+    PHILOSOPHY_OF_SCIENCE = 'philosophy of science',        // Epistemology, ethics, methodology, purpose of science
     EMERGING_TOPICS = 'emerging topics',         // AI, quantum computing, climate science — evolving areas
     INTERDISCIPLINARY = 'interdisciplinary',     // Where domains intersect (e.g. biology + data science)
     OPEN_QUESTIONS = 'open questions',           // Unsolved or thought-provoking scientific problems
