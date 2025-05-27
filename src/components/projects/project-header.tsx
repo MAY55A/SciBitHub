@@ -18,15 +18,22 @@ export function ProjectHeader({ project }: { project: Project }) {
     };
     return (
         <div className="relative w-full min-h-[50vh] p-4 rounded-lg">
-            {project.cover_image !== undefined &&
-                <Image
-                    priority
-                    src={project.cover_image}
-                    fill
-                    alt="project cover image"
-                    className="z-[-1] object-cover object-center opacity-40 rounded-lg"
+            {project.cover_image ?
+                <>
+                    <Image
+                        priority
+                        src={project.cover_image}
+                        fill
+                        alt="project cover image"
+                        className="z-[-1] object-cover object-center rounded-lg"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-background to-muted/60"></div>
+                </> :
+                <div
+                    className="absolute top-0 right-0 w-full h-full bg-[url('/images/project-background-light.png')] dark:bg-[url('/images/project-background-dark.png')] bg-cover bg-center bg-no-repeat rounded-lg"
                 />
             }
+
             <div className="relative w-full flex justify-between gap-4 font-retro">
                 <div className="flex gap-2 px-2 py-1.5 text-left text-sm hover:bg-muted/20 rounded-lg">
                     <Avatar className="flex shrink-0 overflow-hidden h-10 w-10 rounded-lg hover:shadow-lg hover:bg-muted">
@@ -45,7 +52,7 @@ export function ProjectHeader({ project }: { project: Project }) {
                 </div>
             </div>
             <div className="relative flex flex-col justify-between w-full max-w-[800px] h-full text-foreground p-8">
-                    <h1 className="text-xl lg:text-2xl font-bold text-primary">{project.name}</h1>
+                <h1 className="text-xl lg:text-2xl font-bold text-primary">{project.name}</h1>
                 <div className="mt-4 font-retro">
                     <p className="text-foreground"><strong>+ Scope:</strong> {project.scope}</p>
                     {project.countries &&
