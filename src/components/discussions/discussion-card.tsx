@@ -15,7 +15,7 @@ export function DiscussionCard({ discussion, editable = false, showBody = true }
 
     return (
         <Card
-            className="relative max-w-[500px] border-2 text-sm shadow-lg rounded-lg shadow-muted transform transition-all hover:scale-105 hover:shadow-2xl hover:shadow-muted"
+            className="relative flex flex-col justify-between max-w-[500px] border-2 text-sm shadow-lg rounded-lg shadow-muted transform transition-all hover:scale-105 hover:shadow-2xl hover:shadow-muted"
         >
             <CardHeader>
                 {editable &&
@@ -30,12 +30,12 @@ export function DiscussionCard({ discussion, editable = false, showBody = true }
                     >
                         {discussion.status}
                     </span>
-                    <span className="text-end text-muted-foreground mb-4">
+                    <span className="text-end text-muted-foreground mb-4 font-retro">
                         Posted {formatDate(discussion.created_at!)}
                     </span>
                 </div>
-                <div className="flex flex-row-reverse items-center justify-between">
-                    <ShinyText text={discussion.category} disabled={false} speed={4} className='self-end max-w-48 break-words text-center text-green uppercase tracking-[.1em] text-xs border border-green rounded-2xl px-2 py-2' />
+                <div className="flex flex-row-reverse items-center justify-between font-retro">
+                    <ShinyText text={discussion.category} disabled={false} speed={4} className='max-w-52 text-center text-green uppercase tracking-[.1em] text-xs border border-green rounded-full px-2 py-2' />
                     {!editable &&
                         <div>
                             <strong className="text-muted-foreground">Author :</strong>
@@ -54,22 +54,23 @@ export function DiscussionCard({ discussion, editable = false, showBody = true }
                     </h2></Link>
                 {showBody &&
                     <p
-                        className="text-xs text-muted-foreground line-clamp-3 pl-2"
+                        className="text-sm text-muted-foreground line-clamp-3 pl-2 font-retro"
                     >
                         {discussion.body}
                     </p>}
-                <div className="w-full flex flex-wrap gap-2 mt-2">
+                <div className="w-full flex flex-wrap gap-2 mt-2 font-retro">
                     {discussion.tags && discussion.tags?.map((tag) => (
-                        <span
+                        <a
+                            href={`/discussions?tags=${tag}`}
                             key={tag}
-                            className="text-xs font-semibold underline text-green"
+                            className="text-sm font-semibold hover:underline text-green/80"
                         >
                             #{tag}
-                        </span>
+                        </a>
                     ))}
                 </div>
             </CardContent>
-            <CardFooter className="flex justify-between items-center">
+            <CardFooter className="flex justify-between items-center font-retro">
                 <span className="text-muted-foreground text-xs font-semibold">{discussion.replies ?? 0} replies</span>
                 <VoteDisplay upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes ?? 0} />
             </CardFooter>

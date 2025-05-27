@@ -22,14 +22,14 @@ export function DiscussionContent({ discussion }: { discussion: Discussion }) {
             className="relative border-2 text-sm shadow-lg rounded-lg shadow-muted"
         >
             <CardHeader>
-                <div className="flex flex-row items-center justify-between text-xs">
+                <div className="flex flex-row items-center justify-between text-sm">
                     <span
                         className={cn("uppercase tracking-[.25em] animate-glow m-2",
                             discussion.status === DiscussionStatus.CLOSED ? "text-destructive" : "text-green-700")}
                     >
                         {discussion.status}
                     </span>
-                    <div className="flex flex-col items-end text-muted-foreground text-end p-1">
+                    <div className="flex flex-col items-end text-muted-foreground text-end p-1 font-retro">
                         <span>
                             Posted {formatDate(discussion.created_at!, true)}
                         </span>
@@ -42,11 +42,11 @@ export function DiscussionContent({ discussion }: { discussion: Discussion }) {
                 </div>
                 <div className="flex flex-row items-center justify-between pb-4">
                     <UserAvatar user={discussion.creator} />
-                    <ShinyText text={discussion.category} disabled={false} speed={4} className='max-w-48 break-words text-center text-green text-xs font-semibold uppercase tracking-[.1em] border border-green rounded-2xl px-3 py-2' />
+                    <ShinyText text={discussion.category} disabled={false} speed={4} className='font-retro text-center text-green text-xs font-semibold uppercase tracking-[.1em] border border-green rounded-2xl px-3 py-2' />
                 </div>
 
             </CardHeader>
-            <CardContent className="px-16">
+            <CardContent className="pl-12">
                 <h1
                     className="flex text-xl font-bold text-primary capitalize"
                 >
@@ -61,13 +61,13 @@ export function DiscussionContent({ discussion }: { discussion: Discussion }) {
                         </Suspense>
                     </div>}
             </CardContent>
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex justify-between font-retro">
                 <div className="flex flex-wrap gap-2">
                     {discussion.tags && discussion.tags?.map((tag) => (
                         <Link
-                            href="#"
+                            href={`/discussions?tags=${tag}`}
                             key={tag}
-                            className="text-green underline font-semibold"
+                            className="text-green hover:underline font-semibold"
                         >
                             #{tag}
                         </Link>
