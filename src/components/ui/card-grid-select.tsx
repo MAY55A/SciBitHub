@@ -24,7 +24,7 @@ export default function CardGridSelect({ options, value, showDescription, onChan
     };
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4">
             {options.map(({ title, description }) => (
                 <Card
                     key={title}
@@ -40,7 +40,7 @@ export default function CardGridSelect({ options, value, showDescription, onChan
                                 "font-semibold",
                                 selected.includes(title) ? "text-green" : null,
                             )}>{title}</h3>
-                        {showDescription && <p className="text-sm text-muted-foreground">{description}</p>}
+                        {showDescription && <p className="text-sm text-muted-foreground font-retro">{description}</p>}
                     </CardContent>
                 </Card>
             ))}

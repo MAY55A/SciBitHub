@@ -15,7 +15,7 @@ export default function Layout({
     children: React.ReactNode;
 }>) {
     return (
-        <main className="py-12">
+        <main className="flex items-center justify-center sm:h-[calc(100vh-8rem)] pt-4">
             <MultistepSignupFormContextProvider>{children}</MultistepSignupFormContextProvider>
         </main>
     );

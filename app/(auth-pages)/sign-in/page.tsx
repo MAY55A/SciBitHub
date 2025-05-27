@@ -10,9 +10,9 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
   return (
     <>
-      <form className="space-y-7 w-full max-w-md px-4 py-12">
-        <h1 className="text-2xl font-medium">Welcome Back !</h1>
-        <p className="text-sm text-foreground">
+      <form className="space-y-7 w-full max-w-md px-4 pt-[40%]">
+        <h1 className="text-2xl font-medium text-center">Welcome Back !</h1>
+        <p className="text-sm text-foreground font-retro">
           Don't have an account ?{" "}
           <Link className="text-green font-medium underline" href="/sign-up/credentials">
             Sign up
@@ -24,7 +24,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           <div className="flex justify-between items-center">
             <Label htmlFor="password">Password</Label>
             <Link
-              className="text-xs text-foreground underline"
+              className="text-xs text-foreground underline font-retro"
               href="/forgot-password"
             >
               Forgot Password?
@@ -41,7 +41,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           </SubmitButton>
           <FormMessage message={searchParams} />
           <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-            <span className="relative z-10 bg-background px-2 text-muted-foreground">
+            <span className="relative z-10 bg-background px-2 text-muted-foreground font-retro">
               Or continue with
             </span>
           </div>

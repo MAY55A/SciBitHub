@@ -11,6 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Button } from "@/src/components/ui/button";
+import { Label } from "@/src/components/ui/label";
 
 export default function Signup() {
 
@@ -49,35 +50,36 @@ export default function Signup() {
     <form
       onSubmit={form.handleSubmit(onSubmit)}
       className="space-y-8 w-full max-w-md px-4">
-      <h1 className="text-2xl font-medium">Confirm & Sign up</h1>
-      <p className="text-sm text-muted-foreground">
+      <h1 className="text-2xl font-medium text-center">Confirm & Sign up</h1>
+      <p className="text-sm opacity-80 font-retro">
         Hello <strong className="text-green">{formData.username}</strong>, this is the final step, you are almost there !<br />
         All that's left is to confirm your details.<br />
         Please note that the information you have provided will be **publicly visible** to anyone,
         but you will have the option to edit it later.
+        Your role however <strong>cannot</strong> be changed later, so please choose wisely.
       </p>
-      <div className="items-top flex space-x-2">
+      <div className="items-top flex space-x-2 font-retro">
         <Checkbox id="checkbox1" checked={isConfirmed}
           onCheckedChange={setIsConfirmed} />
         <div className="grid gap-1.5 leading-none">
-          <label
+          <Label
             htmlFor="checkbox1"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             I confirm that my details are correct and understand they will be public.
-          </label>
+          </Label>
         </div>
       </div>
-      <div className="items-top flex space-x-2">
+      <div className="items-top flex space-x-2 font-retro">
         <Checkbox id="checkbox2" checked={isTermsAccepted}
           onCheckedChange={setIsTermsAccepted} />
         <div className="grid gap-1.5 leading-none">
-          <label
+          <Label
             htmlFor="checkbox2"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             I Accept terms and conditions
-          </label>
+          </Label>
           <p className="text-sm text-muted-foreground">
             You agree to our <a href="/tos" className="text-green underline">Terms of Service</a> and our <a href="/privacy" className="text-green underline">Privacy Policy</a>.
           </p>

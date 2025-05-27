@@ -1,14 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMultistepSignupFormContext } from "../../../../src/contexts/multistep-signup-form-context";
+import { useMultistepSignupFormContext } from "@/src/contexts/multistep-signup-form-context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { motion } from "framer-motion";
 import { Button } from "@/src/components/ui/button";
 import Card from "@/src/components/ui/motion-card";
-import { FlaskConical, Users } from "lucide-react";
+import { FlaskConical, User } from "lucide-react";
 
 
 export default function RoleSelection() {
@@ -38,19 +38,19 @@ export default function RoleSelection() {
     return (
         <motion.form
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-8 w-full max-w-md px-4"
+            className="space-y-8 w-72 sm:w-96 px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
         >
             <h2 className="text-xl font-semibold text-center">Choose Your Role</h2>
 
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-10 py-4">
                 {/* Contributor Card */}
                 <Card
                     title="Contributor"
                     content="Join and contribute to projects."
-                    icon={Users}
+                    icon={User}
                     isSelected={selectedRole === "contributor"}
                     onClick={() => handleSelectRole("contributor")}
                 />

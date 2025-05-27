@@ -30,33 +30,32 @@ export default function Signup() {
     resolver: zodResolver(userInputDataSchema.pick({ email: true, password: true })),
     defaultValues: { email: formData.email, password: formData.password },
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
 
   const onSubmit = async (data: Partial<UserInputData>) => {
-      setIsVerifying(true);
-      const supabase = await createClient();
-      const result = await checkEmailExists(supabase, data.email!);
-      setIsVerifying(false);
-      if (result.exists) {
-        form.setError("email", {
-          type: "manual",
-          message: result.message,
-        });
-        return;
-      }
+    setIsVerifying(true);
+    const supabase = await createClient();
+    const result = await checkEmailExists(supabase, data.email!);
+    setIsVerifying(false);
+    if (result.exists) {
+      form.setError("email", {
+        type: "manual",
+        message: result.message,
+      });
+      return;
+    }
 
-      updateFormData(data);
-      router.push("/sign-up/name-and-country");
+    updateFormData(data);
+    router.push("/sign-up/name-and-country");
   };
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-7 w-full max-w-md px-4"
+        className="space-y-7 w-72 sm:w-96 px-4"
       >
-        <h1 className="text-2xl font-medium">Hello, Join Us !</h1>
-        <p className="text-sm text-foreground">
+        <h1 className="text-2xl font-medium text-center">Hello, Join Us !</h1>
+        <p className="text-sm text-foreground font-retro">
           Already have an account ?{" "}
           <Link className="text-green font-medium underline" href="/sign-in">
             Sign in
@@ -69,7 +68,7 @@ export default function Signup() {
             <FormItem>
               <FormLabel htmlFor="email">Email</FormLabel>
               <FormControl>
-                <Input placeholder="your email address" type="email" {...field}/>
+                <Input placeholder="your email address" type="email" {...field} />
               </FormControl>
               <FormMessage>{isVerifying ? "Verifying email..." : undefined}</FormMessage>
             </FormItem>
@@ -84,16 +83,7 @@ export default function Signup() {
               <FormLabel htmlFor="password">Password</FormLabel>
               <FormControl>
                 <div className="relative">
-                  <Input placeholder="your password" type={showPassword ? "text" : "password"} {...field} />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </Button>
+                  <Input placeholder="your password" type="password" {...field} />
                 </div>
               </FormControl>
               <FormMessage />
@@ -101,16 +91,12 @@ export default function Signup() {
           )}
         />
         <div className="flex gap-4 w-full max-w-md">
-
-          {/* Continue Button (Disabled if no field is selected) */}
-          <Button
-            type="submit"
-            className="w-full"          >
+          <Button type="submit" className="w-full" >
             Continue
           </Button>
         </div>
-        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-          <span className="relative z-10 bg-background px-2 text-muted-foreground">
+        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border dark:after:border-t-2">
+          <span className="relative z-10 bg-background px-2 text-muted-foreground font-retro">
             Or continue with
           </span>
         </div>

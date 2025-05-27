@@ -40,7 +40,7 @@ return (
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
     >
-        <h2 className="text-xl font-medium">Select Your Fields Of Interest</h2>
+        <h2 className="text-xl font-medium text-center">Select Your Fields of Interest</h2>
         <CardGridSelect
             options={researchDomains}
             value={selectedInterests}

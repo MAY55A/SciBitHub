@@ -29,7 +29,7 @@ export default function Card({ title, content, icon: Icon, isSelected, onClick }
                 <h3 className="font-semibold">{title}</h3>
             </div>
 
-            <p className="text-sm text-muted-foreground">{content}</p>
+            <p className="text-sm text-muted-foreground font-retro">{content}</p>
         </motion.div>
     );
 }

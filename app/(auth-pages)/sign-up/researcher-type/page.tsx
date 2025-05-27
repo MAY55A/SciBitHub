@@ -34,7 +34,7 @@ export default function ResearcherTypeSelection() {
     return (
         <motion.form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col items-center gap-10 pt-20"
+            className="flex flex-col items-center gap-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
