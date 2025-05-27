@@ -10,6 +10,7 @@ import { ActivityStatus, ProjectStatus } from "@/src/types/enums";
 import { DomainsCarousel } from "@/src/components/projects/domains-carousel";
 import { SortByDropdown } from "@/src/components/projects/sort-by-dropdown";
 import { TagsFilter } from "@/src/components/custom/tags-filter";
+import { CreateProjectButton } from "@/src/components/projects/create-project-button";
 
 export default async function Page(props: {
     searchParams?: Promise<{
@@ -49,16 +50,12 @@ export default async function Page(props: {
     return (
         <div className="w-full flex flex-col items-center">
             <HeroSection image="/images/bg-6.jpg" title="Projects" subtitle="Discover and contribute to a wide range of community-driven projects across diverse domains, from science and technology to art and social impact.">
-            <div className="text-right">
-                    <Link href={'/projects/create'} className='text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 hover:text-secondary-foreground py-2 px-4 border border-primary rounded-lg'>
-                        start a project
-                    </Link>
-                </div>
+                <CreateProjectButton />
             </HeroSection>
             <div className="w-full flex flex-col gap-8 items-center rounded-lg mt-6 p-12">
-                <h2>Choose a Research Domain</h2>
+                <h2 className="text-lg font-semibold">Filter by Research Domain</h2>
                 <DomainsCarousel />
-                <TagsFilter allTags={allTags}/>
+                <TagsFilter allTags={allTags} />
                 <div className="w-full flex justify-between gap-8 border-b border-muted-foreground/30 py-8 rounded-t-lg">
                     <Search placeholder="Search projects..." />
                     <SortByDropdown />
