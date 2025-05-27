@@ -57,8 +57,8 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
                         </span>
                         <ProjectDropdownMenu project={project} />
                     </div>}
-                <div className="flex flex-row justify-between gap-2">
-                    <span className="italic text-muted-foreground text-xs mb-4">
+                <div className="flex flex-row justify-between gap-2 font-retro">
+                    <span className="text-muted-foreground text-sm mb-4">
                         {prefix + formattedDate}
                     </span>
                     <ShinyText text={project.domain} disabled={false} speed={4} className='max-w-48 break-words text-center text-green font-semibold uppercase tracking-[.1em] text-xs border border-green rounded-2xl px-3 py-2' />
@@ -77,13 +77,13 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
                     </h2></Link>
 
                 <p
-                    className="text-muted-foreground pl-2"
+                    className="text-foreground/80 pl-2 font-retro"
                 >
                     {project.short_description}
                 </p>
             </CardContent>
             <CardFooter>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 font-retro mr-8">
                     {project.tags && project.tags?.map((tag) => (
                         <span
                             key={tag}

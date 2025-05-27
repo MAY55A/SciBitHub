@@ -55,11 +55,11 @@ export function TagsFilter({ allTags }: { allTags: string[] }) {
                         aria-expanded={open}
                         className=" justify-between rounded-full"
                     >
-                        {"add tag"}
+                        {"Add Tag"}
                         <Plus className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="p-0">
+                <PopoverContent className="p-0 font-retro">
                     <Command>
                         <CommandInput
                             placeholder="Start typing to search..."
@@ -91,7 +91,7 @@ export function TagsFilter({ allTags }: { allTags: string[] }) {
                     </Command>
                 </PopoverContent>
             </Popover>
-            <div className="flex-1 flex flex-wrap gap-2">
+            <div className="flex-1 flex flex-wrap gap-2 font-retro">
                 {selectedTags.length ?
                     selectedTags.map((tag) => (
                         <Badge
