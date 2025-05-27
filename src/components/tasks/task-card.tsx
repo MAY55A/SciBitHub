@@ -24,7 +24,7 @@ export function TaskCard({ task }: { task: Task }) {
                     {task.title}
                 </h2>
                 <p
-                    className="text-muted-foreground max-h-40 overflow-hidden whitespace-normal line-clamp-3 pl-2"
+                    className="text-muted-foreground max-h-40 overflow-hidden whitespace-normal line-clamp-3 pl-2 font-retro"
                 >
                     {task.description}
                 </p>

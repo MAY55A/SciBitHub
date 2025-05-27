@@ -11,16 +11,16 @@ export function TaskHeader({ task }: { task: Task }) {
     return (
         <div className="relative w-full flex flex-col min-h-[30vh] p-8 rounded-lg bg-muted/40">
             <div className="w-full flex justify-between gap-4">
-                <Link href="/projects/[id]?tab=contribution" as={`/projects/${task.project.id}?tab=contribution`} className="">
-                    <span className="flex items-center gap-1 font-semibold text-sm underline">
+                <Link href="/projects/[id]?tab=contribution" as={`/projects/${task.project.id}?tab=contribution`}>
+                    <span className="flex items-center gap-1 font-semibold text-sm underline font-retro">
                         <ChevronLeft size={15} />
                         {"Project: " + task.project.name}
                     </span>
                 </Link>
-                <div className="flex flex-col items-end mb-4">
-                    <span className="italic text-muted-foreground text-xs">Created on {formatDate(task.created_at!)}</span>
+                <div className="flex flex-col items-end mb-4 text-sm font-retro">
+                    <span className="text-muted-foreground">Added {formatDate(task.created_at!)}</span>
                     {task.updated_at ?
-                        <span className="italic text-muted-foreground text-xs">Updated on {formatDate(task.updated_at)}</span>
+                        <span className="text-muted-foreground">Updated {formatDate(task.updated_at)}</span>
                         : null
                     }
                 </div>
@@ -33,13 +33,11 @@ export function TaskHeader({ task }: { task: Task }) {
             </div>
             <div className="relative flex flex-col justify-between w-full h-full text-foreground">
                 <div className="mt-8">
-                    <h1 className="text-2xl font-bold text-primary">{task.title}</h1>
                     <p className="text-muted-foreground uppercase text-sm">{task.type}</p>
+                    <h1 className="text-2xl font-bold text-primary">{task.title}</h1>
                 </div>
-                <div className="mt-8">
-                    <p className="">{task.description}</p>
-                </div>
-                <div className="mt-8">
+                <p className="mt-8 font-retro">{task.description}</p>
+                <div className="mt-8 font-retro">
                     <p><strong className="text-green mr-2">+ Target Contributions Count :</strong> {task.target_count ?? "---"} </p>
                     <p><strong className="text-green mr-2">+ Contributions :</strong> {task.contributions ?? 0} </p>
                     <p><strong className="text-green mr-2">+ Progress :</strong> {task.target_count ? (100 * (task.contributions ?? 0) / task.target_count).toFixed(1) : "---"} %</p>

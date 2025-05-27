@@ -168,12 +168,12 @@ export const FormGenerator = (
     return (
         <form ref={ref} onSubmit={handleSubmit} className="space-y-8 p-6">
             {fields.map((field: any) => (fieldRenderers[field.type] ?
-                <div key={field.label} className="flex flex-col space-y-2 w-full">
-                    <Label htmlFor={field.label} className="font-medium">
+                <div key={field.label} className="flex flex-col space-y-2 w-full font-retro">
+                    <Label htmlFor={field.label} className="font-semibold">
                         {field.label}
                         {field.required && <span className="ml-1 text-red-500">*</span>}
                     </Label>
-                    {field.description && <p className="text-sm text-muted-foreground pb-4">{field.description}</p>}
+                    {field.description && <p className="text-sm text-muted-foreground pb-2">{field.description}</p>}
                     {fieldRenderers[field.type](field)}
                 </div>
                 : null))}

@@ -5,7 +5,7 @@ import { FormGenerator } from "./form-generator";
 import { Button } from "../ui/button";
 import { createContribution, hasUserContributed } from "@/src/lib/services/contribution-service";
 import { FormMessage, Message } from "../custom/form-message";
-import { Flag, Info } from "lucide-react";
+import { MessageCircleQuestion, Info } from "lucide-react";
 import ImageViewer from "../custom/image-viewer";
 import { getRandomFile } from "@/src/utils/minio/client";
 import { AudioVisualizer } from "../custom/audio-visualizer";
@@ -16,6 +16,7 @@ import { Checkbox } from "../ui/checkbox";
 import { useToast } from "@/src/hooks/use-toast";
 import { TaskType, DataType } from "@/src/types/enums";
 import { Task } from "@/src/types/models";
+import { Label } from "../ui/label";
 
 export function TaskFields({ task }: { task: Task }) {
     const { user } = useAuth();
@@ -85,7 +86,7 @@ export function TaskFields({ task }: { task: Task }) {
 
     if (!isFirstSurvey) {
         return (
-            <div className="w-full flex-col justify-center rounded-lg p-10 py-24 my-8 border">
+            <div className="w-full flex-col justify-center rounded-lg p-10 py-24 my-8 border font-retro">
                 <h3 className="text-center">You have already contributed to this task</h3>
                 <p className="text-center text-sm text-muted-foreground">You can only contribute once to a survey type task</p>
             </div>
@@ -108,32 +109,32 @@ export function TaskFields({ task }: { task: Task }) {
                     formData={formData}
                     setFormData={setFormData}>
 
-                    <div className="items-top flex space-x-2 pt-12">
+                    <div className="items-top flex space-x-2 pt-12 font-retro">
                         <Checkbox id="terms1"
                             onCheckedChange={(checked) => setAccepted(checked.valueOf() as boolean)} />
                         <div className="grid gap-1.5 leading-none">
-                            <label
+                            <Label
                                 htmlFor="terms1"
                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                             >
                                 I confirm that my contribution is accurate and appropriate.
-                            </label>
+                            </Label>
                             <p className="text-xs text-muted-foreground">
                                 Providing false or inappropriate data may result in reporting or restrictions on your account.
                             </p>
                         </div>
                     </div>
-                    <ul className="text-xs text-muted-foreground">
-                        <li className="flex gap-1"> <Info size={15} />Once submitted, contributions cannot be deleted.</li>
+                    <ul className="text-sm text-muted-foreground font-retro">
+                        <li className="flex items-center gap-1"> <Info size={15} />Once submitted, contributions cannot be deleted.</li>
                         {task.type === TaskType.SURVEY && <li className="flex gap-1"> <Info size={15} />Each user can submit only once to survey type tasks.</li>}
                     </ul>
 
                     {!!message && <FormMessage message={message} />}
 
                     <div className="flex justify-between items-end space-y-4">
-                        <Flag color="red" opacity={0.3} size={15} />
+                        <MessageCircleQuestion className="text-green" opacity={0.3} size={15} />
                         <div className="flex items-center gap-2">
-                            {!isContributor && <Link href={`/sign-in?redirect_to=${pathname}`} className="flex items-center gap-1 text-muted-foreground text-xs">
+                            {!isContributor && <Link href={`/sign-in?redirect_to=${pathname}`} className="flex items-center gap-1 text-muted-foreground text-xs font-retro">
                                 <Info size={15} /> You need to login as a contributor first
                             </Link>}
                             <Button type="submit" disabled={loading || !isContributor || !accepted || (task.type === TaskType.DATALABELLING && !file)}>
