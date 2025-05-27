@@ -24,7 +24,7 @@ export function NewComment({ user, commentedOn, replyingTo }: NewCommentProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user) {
-            router.push(`/login?redirect_to=${encodeURIComponent(pathname)}`);
+            router.push(`/sign-in?redirect_to=${encodeURIComponent(pathname)}`);
             return;
         }
 
@@ -52,8 +52,8 @@ export function NewComment({ user, commentedOn, replyingTo }: NewCommentProps) {
                 <div className="text-sm text-muted-foreground pb-2">
                     <strong>{user?.username}</strong>
                     {!!replyingTo &&
-                        <span className="mx-1 text-xs">
-                            replying to <a href={`#${replyingTo.comment}`} className="truncate underline">{replyingTo.user}</a>
+                        <span className="mx-1 text-xs font-retro">
+                            replying to <a href={`#${replyingTo.comment}`} className="truncate underline font-semibold">{replyingTo.user}</a>
                         </span>
                     }
                 </div>

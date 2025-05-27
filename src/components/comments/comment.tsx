@@ -69,7 +69,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
         <div>
             <div className="w-full flex gap-2" id={comment.id} tabIndex={-1}>
                 <Avatar className="flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg hover:bg-muted">
-                    <AvatarImage src={creator.profile_picture} alt={creator.username} />
+                    {!!creator.profile_picture && <AvatarImage src={creator.profile_picture} alt={creator.username} />}
                     <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
                         {creator.username.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
@@ -84,7 +84,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
                                 </span>
                             }
                         </div>
-                        <div className="flex flex-col items-end text-muted-foreground text-xs text-end  p-1">
+                        <div className="flex flex-col items-end text-muted-foreground text-xs text-end font-retro p-1">
                             <span>
                                 Posted {formatDate(comment.created_at!, true)}
                             </span>
@@ -112,7 +112,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
                             <MarkdownViewer source={content} />
                         }
                     </CardContent>
-                    <CardFooter className="flex items-center justify-between gap-2 p-2">
+                    <CardFooter className="flex items-center justify-between gap-2 p-2 font-retro font-semibold">
                         <div className="flex items-center gap-2">
                             <Button variant="ghost" size="sm" className={cn("flex gap-1 items-center text-xs h-8 px-1", showReplies && "text-green")} disabled={isSubmitting || isEditing} onClick={() => setShowReplies(!showReplies)}>
                                 <Reply size={14} />

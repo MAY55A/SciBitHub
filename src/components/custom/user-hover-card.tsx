@@ -10,22 +10,22 @@ export function UserHoverCard({ user }: { user: PublicUser }) {
     return (
         <HoverCard>
             <HoverCardTrigger asChild>
-                <Button variant="link" className="max-w-full justify-start italic truncate pl-1">{username}</Button>
+                <Button variant="link" className="max-w-full justify-start font-semibold truncate pl-1">{username}</Button>
             </HoverCardTrigger>
-            <HoverCardContent className="w-80">
+            <HoverCardContent className="w-80" side="right" align="start">
                 <div className="flex space-x-4">
                     <Avatar className="relative flex shrink-0 overflow-hidden h-10 w-10 rounded-lg hover:shadow-lg">
-                        <AvatarImage src={user.profile_picture} alt={username} />
+                        {!!user.profile_picture && <AvatarImage src={user.profile_picture} alt={username} />}
                         <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
                             {username.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
-                    <div className="space-y-1">
+                    <div className="space-y-1 font-retro">
                         <h4 className="text-sm font-semibold">{username}</h4>
                         <p className="text-sm">
                             <span>{user.role}</span>
                             {!!user.metadata?.researcherType &&
-                                <span className="flex items-center gap-1 text-muted-foreground"><ResearcherIcon type={user.metadata!.researcherType!} size={16} />{user.metadata!.researcherType} researcher</span>
+                                <span className="flex items-center gap-1 text-muted-foreground"><ResearcherIcon type={user.metadata!.researcherType!} size={13} />{user.metadata!.researcherType} researcher</span>
                             }
                         </p>
                         {!!user.metadata?.isVerified &&

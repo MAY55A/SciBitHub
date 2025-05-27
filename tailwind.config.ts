@@ -18,6 +18,9 @@ const config = {
 			}
 		},
 		extend: {
+			fontFamily: {
+				retro: ['"Courier New"', 'Courier', 'monospace'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',

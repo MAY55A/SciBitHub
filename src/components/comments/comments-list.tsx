@@ -64,8 +64,8 @@ export default function CommentsList({ commentedOn, replyingTo, allowNewComments
 
     return (
         <>
-            <div className={cn("py-8 text-sm", !!replyingTo && "py-2 text-xs")}>{count} {count === 1 ? "Reply" : "Replies"}</div>
-            <div className={cn(!!replyingTo && "rounded-lg border-l-2 pl-2 pt-2")}>
+            <div className={cn("pb-8 pt-2 text-sm font-retro font-semibold", !!replyingTo && "py-2 text-xs")}>{count} {count === 1 ? "Reply" : "Replies"}</div>
+            <div className={cn(!!replyingTo && "rounded-xl border-l-2 pl-4 pt-2")}>
                 {allowNewComments ?
                     <NewComment commentedOn={commentedOn} user={user} replyingTo={replyingTo} /> :
                     <div className="flex flex-col items-center text-muted-foreground p-8 border m-4 rounded-lg">

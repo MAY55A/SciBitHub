@@ -83,7 +83,7 @@
 
 .wmde-markdown,
 .wmde-markdown-var {
-
+    font-family: 'Courier New', monospace !important;
   ol,
   ul {
     list-style: auto !important;

@@ -12,7 +12,8 @@ export const MarkdownViewer = ({ source, className }: { source: string, classNam
             <MDEditor.Markdown
                 source={source}
                 className={className}
-                style={{ backgroundColor: 'transparent' }}
+                style={{ backgroundColor: 'transparent', fontFamily: "Courier New, Courier, monospace" }}
             />
-        </div>);
+        </div>
+    );
 }
