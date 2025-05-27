@@ -5,10 +5,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { NotificationItem } from "./notification-item";
 import { Button } from "../ui/button";
 import { useNotifications } from "@/src/contexts/notification-context";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 
 export function NotificationBell() {
     const { lastNotifications, unreadCount, markAsRead } = useNotifications();
+    const { user } = useAuth();
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <div className="relative">
