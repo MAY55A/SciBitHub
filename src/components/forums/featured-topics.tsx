@@ -6,7 +6,7 @@ export async function FeaturedTopics({ project }: { project: string }) {
     const topics = await fetchFeaturedTopics(project);
 
     return (
-        <aside className="sticky top-32 flex flex-col gap-2 border-2 border-input rounded-lg p-8 h-[calc(100vh-8rem)] bg-muted/30">
+        <div className="lg:flex-1 overflow-auto flex flex-col gap-2 border-2 border-input rounded-lg bg-muted/30 p-4">
             <h2 className="flex gap-2 items-center text-lg font-semibold text-green mb-4"><MessageCircleQuestion /> Featured Topics</h2>
             {topics.length ?
                 topics.map((topic) => (
@@ -24,6 +24,6 @@ export async function FeaturedTopics({ project }: { project: string }) {
                     No topics are featured yet.
                 </div>
             }
-        </aside>
+        </div>
     );
 }

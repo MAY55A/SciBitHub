@@ -6,6 +6,7 @@ import { TopicCard } from "./topic-card";
 export default async function Topics({
     project,
     query,
+    tag,
     currentPage,
     orderBy,
     sort,
@@ -14,6 +15,7 @@ export default async function Topics({
 }: {
     project: string;
     query?: string;
+    tag?: string;
     currentPage?: number;
     orderBy?: string;
     sort?: "asc" | "desc";
@@ -24,6 +26,7 @@ export default async function Topics({
     const topics = await fetchForumTopics(
         project,
         query,
+        tag,
         creator,
         currentPage,
         orderBy,

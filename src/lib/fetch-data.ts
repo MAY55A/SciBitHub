@@ -329,6 +329,7 @@ export async function fetchSimilarDiscussions(
 export const fetchForumTopics = async (
     project: string,
     query?: string,
+    tag?: string,
     creator?: string,
     currentPage: number = 1,
     orderBy: string = "created_at",
@@ -350,6 +351,9 @@ export const fetchForumTopics = async (
         }
         if (query) {
             queryBuilder = queryBuilder.ilike("title", `%${query}%`);
+        }
+        if (tag) {
+            queryBuilder = queryBuilder.contains("tags", [tag]);
         }
 
         // Apply sorting and pagination
@@ -533,6 +537,17 @@ export async function fetchDiscussionsTags(): Promise<string[]> {
     const { data, error } = await supabase.rpc("get_all_discussions_tags");
     if (error) {
         console.error("Error fetching discussions tags:", error);
+        return [];
+    }
+    return data;
+}
+
+export async function fetchForumTopicsTags(projectId: string): Promise<string[]> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.rpc("get_all_forum_topics_tags", { project_id: projectId });
+    if (error) {
+        console.error("Error fetching forum topics tags:", error);
         return [];
     }
     return data;

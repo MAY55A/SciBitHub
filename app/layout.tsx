@@ -18,16 +18,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={orbitron.className}>
-      <body className="bg-background text-foreground">
+      <body className="h-full bg-background text-foreground">
         <ClientThemeProvider>
           <AuthProvider>
             <NotificationProvider>
-              <main className="min-h-screen flex flex-col items-center">
-                <div className="flex-1 w-full flex flex-col items-center">
-                  <Header />
-                  <div className="w-full flex-1 flex flex-col gap-20 items-center">
-                    {children}
-                  </div>
+              <main className="min-h-screen w-full flex flex-col items-center">
+                <Header />
+                <div className="w-full flex flex-col gap-20 items-center">
+                  {children}
                 </div>
               </main>
               <Toaster />

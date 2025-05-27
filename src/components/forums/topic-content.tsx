@@ -52,13 +52,9 @@ export function TopicContent({ topic }: { topic: ForumTopic }) {
             <CardFooter className="flex justify-between">
                 <div className="flex flex-wrap gap-2">
                     {topic.tags && topic.tags?.map((tag) => (
-                        <Link
-                            href="#"
-                            key={tag}
-                            className="hover:text-green underline font-semibold"
-                        >
+                        <a href={`/projects/${topic.project.id}?tab=forum&tag=${tag}`} className="underline hover:text-green" key={tag}>
                             #{tag}
-                        </Link>
+                        </a>
                     ))}
                 </div>
                 <div className="flex items-center gap-2">

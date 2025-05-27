@@ -27,12 +27,9 @@ export function TopicCard({ topic }: { topic: ForumTopic }) {
                 </div>
                 <div className="w-full flex flex-wrap gap-2">
                     {topic.tags && topic.tags?.map((tag) => (
-                        <span
-                            key={tag}
-                            className="text-xs underline hover:text-green"
-                        >
+                        <a href={`/projects/${topic.project.id}?tab=forum&tag=${tag}`} className="underline hover:text-green" key={tag}>
                             #{tag}
-                        </span>
+                        </a>
                     ))}
                 </div>
                 <div>
