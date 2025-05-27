@@ -15,7 +15,7 @@ export async function FeaturedTopics({ project }: { project: string }) {
                             <span className="text-xl">&#8227;</span>
                             <span className="hover:underline">{topic.title}</span>
                         </Link>
-                        <div className="line-clamp-3 text-muted-foreground">
+                        <div className="line-clamp-3 text-muted-foreground font-retro">
                             {topic.content}
                         </div>
                     </div>

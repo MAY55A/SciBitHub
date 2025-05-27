@@ -15,7 +15,7 @@ import { VoteButtons } from "../votes/vote-buttons";
 export function TopicContent({ topic }: { topic: ForumTopic }) {
     return (
         <Card
-            className="relative border-2 text-sm shadow-lg rounded-lg shadow-muted"
+            className="relative bg-muted/50 border-2 text-sm shadow-lg rounded-lg shadow-muted"
         >
             <CardHeader>
                 <div className="flex flex-row justify-between text-xs">
@@ -28,7 +28,7 @@ export function TopicContent({ topic }: { topic: ForumTopic }) {
                         }
                         <UserAvatar user={topic.creator} />
                     </div>
-                    <div className="flex flex-col items-end text-muted-foreground text-end">
+                    <div className="flex flex-col items-end text-muted-foreground text-end font-retro">
                         <span>
                             Posted {formatDate(topic.created_at!, true)}
                         </span>
@@ -49,7 +49,7 @@ export function TopicContent({ topic }: { topic: ForumTopic }) {
                 </h1>
                 <MarkdownViewer source={topic.content} className="p-2" />
             </CardContent>
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex justify-between font-retro font-semibold">
                 <div className="flex flex-wrap gap-2">
                     {topic.tags && topic.tags?.map((tag) => (
                         <a href={`/projects/${topic.project.id}?tab=forum&tag=${tag}`} className="underline hover:text-green" key={tag}>

@@ -86,7 +86,7 @@ export const VoteButtons = ({ voted_id, voted_type, upvotes, downvotes, creatorI
         <div className="flex gap-1">
             <Button
                 variant="ghost"
-                className={cn("text-green-700 hover:text-green-500 h-8 px-2", existingVote?.vote === 1 && "border border-green-700")}
+                className={cn("text-green-700 hover:text-green-500 h-8 px-2 font-bold", existingVote?.vote === 1 && "border border-green-700")}
                 disabled={!user}
                 title={existingVote?.vote === 1 ? "cancel upvote" : "upvote"}
                 onClick={() => vote(1)}
@@ -96,7 +96,7 @@ export const VoteButtons = ({ voted_id, voted_type, upvotes, downvotes, creatorI
             </Button>
             <Button
                 variant="ghost"
-                className={cn("text-red-700 hover:text-red-500 h-8 px-2", existingVote?.vote === -1 && "border border-red-700")}
+                className={cn("text-red-700 hover:text-red-500 h-8 px-2 font-bold", existingVote?.vote === -1 && "border border-red-700")}
                 disabled={!user}
                 title={existingVote?.vote === -1 ? "cancel downvote" : "downvote"}
                 onClick={() => vote(-1)}
