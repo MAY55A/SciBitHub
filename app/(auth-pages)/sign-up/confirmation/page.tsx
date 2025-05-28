@@ -81,7 +81,7 @@ export default function Signup() {
             I Accept terms and conditions
           </Label>
           <p className="text-sm text-muted-foreground">
-            You agree to our <a href="/tos" className="text-green underline">Terms of Service</a> and our <a href="/privacy" className="text-green underline">Privacy Policy</a>.
+            You agree to our <a href="/terms-of-service" target="_blank" className="text-green underline">Terms of Service</a> and our <a href="/privacy" target="_blank" className="text-green underline">Privacy Policy</a>.
           </p>
         </div>
       </div>
