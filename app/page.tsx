@@ -1,6 +1,10 @@
 import { FormMessage } from "@/src/components/custom/form-message";
 import { Footer } from "@/src/components/custom/footer";
-import Hero from "@/src/components/custom/hero";
+import Hero from "@/src/components/home/hero";
+
+import LatestProjects from "@/src/components/home/latest-projects";
+import LatestDiscussions from "@/src/components/home/latest-discussions";
+import HowItWorks from "@/src/components/home/how-it-works";
 
 export default async function Home(props: { searchParams?: { error?: string; error_description?: string; message?: string } }) {
   const searchParams = await props.searchParams;
@@ -21,11 +25,12 @@ export default async function Home(props: { searchParams?: { error?: string; err
   }
 
   return (
-    <>
+    <div className="flex flex-col items-center w-full">
       <Hero />
-      <main className="flex-1 flex flex-col gap-6 px-4">
-      </main>
+      <LatestProjects />
+      <HowItWorks />
+      <LatestDiscussions />
       <Footer />
-    </>
+    </div>
   );
 }

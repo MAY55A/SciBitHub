@@ -1,6 +1,6 @@
-import { createClient } from "../utils/supabase/server";
-import { Contribution, Discussion, ForumTopic, ParticipationRequest, Project, Task, Visualization } from "../types/models";
-import { ActivityStatus, ProjectStatus } from "../types/enums";
+import { createClient } from "@/src/utils/supabase/server";
+import { Contribution, Discussion, ForumTopic, ParticipationRequest, Project, Task, Visualization } from "@/src/types/models";
+import { ActivityStatus, ProjectStatus } from "@/src/types/enums";
 
 
 
@@ -552,3 +552,39 @@ export async function fetchForumTopicsTags(projectId: string): Promise<string[]>
     }
     return data;
 }
+
+
+export const fetchLatestProjects = async (): Promise<Project[]> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("projects_with_likes")
+        .select(`*, creator:creator_info`)
+        .eq("status", "published")
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+    if (error) {
+        console.error("Error fetching latest projects:", error);
+        return [];
+    }
+
+    return data;
+};
+
+export const fetchLatestDiscussions = async (): Promise<Discussion[]> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("discussions_with_replies_and_votes")
+        .select(`*, creator:creator_info`)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+    if (error) {
+        console.error("Error fetching latest discussions:", error);
+        return [];
+    }
+
+    return data;
+};
