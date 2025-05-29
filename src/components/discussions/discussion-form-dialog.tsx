@@ -19,9 +19,11 @@ import { MarkdownEditor } from "../custom/markdown-editor";
 import { areEqualArrays } from "@/src/utils/utils";
 import { Message, FormMessage } from "../custom/form-message";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 
 export default function DiscussionFormDialog({ data }: { data?: DiscussionInputData }) {
+    const { user, loading } = useAuth();
     const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState<Message | undefined>(undefined);
@@ -134,13 +136,17 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
         }
     }, [data]);
 
+    if (loading) {
+        return null;
+    }
+
     return (
         //fix overflow issue when dialog is closed
-        <Dialog open={open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>
+        <Dialog open={!!user && open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>
             <DialogTrigger asChild>
                 {data ?
                     <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :
-                    <Button onClick={() => setOpen(true)}>open a discussion</Button>
+                    <Button className="font-bold" onClick={() => user ? setOpen(true) : router.push("/sign-in?redirect_to=/discussions")}>Open a Discussion</Button>
                 }
             </DialogTrigger>
             <DialogContent className="lg:min-w-[700px] md:min-w-[700px] sm:max-w-[425px] max-h-[90vh]">
@@ -236,6 +242,6 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
                     </form>
                 </Form>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     );
 }
