@@ -1,5 +1,5 @@
 import { createClient } from "@/src/utils/supabase/server";
-import { Contribution, Discussion, ForumTopic, ParticipationRequest, Project, Task, Visualization } from "@/src/types/models";
+import { Bookmark, Contribution, Discussion, ForumTopic, ParticipationRequest, Project, Task, Visualization } from "@/src/types/models";
 import { ActivityStatus, ProjectStatus } from "@/src/types/enums";
 
 
@@ -588,3 +588,20 @@ export const fetchLatestDiscussions = async (): Promise<Discussion[]> => {
 
     return data;
 };
+
+export async function fetchMyBookmarks(): Promise<Bookmark[]> {
+    const supabase = await createClient();
+    const user = await supabase.auth.getUser();
+
+    const queryBuilder = supabase
+        .from("bookmarks")
+        .select("*, project:projects_with_likes(*, creator: creator_info), discussion:discussions_with_replies_and_votes(*, creator: creator_info)")
+        .eq("user_id", user.data.user?.id)
+
+    const { data, error } = await queryBuilder;
+    if (error) {
+        console.error("Error fetching bookmarks:", error);
+        return [];
+    }
+    return data;
+}

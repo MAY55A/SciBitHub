@@ -9,6 +9,7 @@ import { UserHoverCard } from "../custom/user-hover-card";
 import { cn } from "@/src/lib/utils";
 import { DiscussionStatus } from "@/src/types/enums";
 import { VoteDisplay } from "../votes/vote-display";
+import { BookmarkButton } from "../bookmarks/bookmark-button";
 
 
 export function DiscussionCard({ discussion, editable = false, showBody = true }: { discussion: Discussion, editable?: boolean, showBody?: boolean }) {
@@ -72,7 +73,10 @@ export function DiscussionCard({ discussion, editable = false, showBody = true }
             </CardContent>
             <CardFooter className="flex justify-between items-center font-retro">
                 <span className="text-muted-foreground text-xs font-semibold">{discussion.replies ?? 0} replies</span>
-                <VoteDisplay upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes ?? 0} />
+                <div className="flex items-center gap-2">
+                    <VoteDisplay upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes ?? 0} />
+                    <BookmarkButton discussionId={discussion.id} />
+                </div>
             </CardFooter>
         </Card>
     );

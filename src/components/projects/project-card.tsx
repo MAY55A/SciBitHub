@@ -8,6 +8,7 @@ import ShinyText from "../ui/shiny-text";
 import { ProjectDropdownMenu } from "./project-options-menu";
 import { UserHoverCard } from "../custom/user-hover-card";
 import { LikesDisplay } from "../votes/likes-display";
+import { BookmarkButton } from "../bookmarks/bookmark-button";
 
 
 export function ProjectCard({ project, editable = false }: { project: Project, editable?: boolean }) {
@@ -91,8 +92,8 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
                     {project.short_description}
                 </p>
             </CardContent>
-            <CardFooter>
-                <div className="flex flex-wrap gap-2 font-retro mr-8">
+            <CardFooter className="flex justify-between items-end gap-4 pb-2 pr-2">
+                <div className="flex flex-wrap gap-2 font-retro pb-4">
                     {project.tags && project.tags?.map((tag) => (
                         <a
                             href={`/projects?tags=${tag}`}
@@ -107,7 +108,10 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
                         </a>
                     ))}
                 </div>
-                <LikesDisplay likes={project.likes ?? 0} />
+                <div className="flex items-center gap-2">
+                    <LikesDisplay likes={project.likes ?? 0} />
+                    <BookmarkButton projectId={project.id} />
+                </div>
             </CardFooter>
         </Card>
     );

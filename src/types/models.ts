@@ -221,3 +221,11 @@ export interface Notification {
     is_read: boolean;
     created_at: string;
 }
+
+export interface Bookmark {
+    id: string;
+    user: PublicUser;
+    project: Project;
+    discussion: Discussion;
+    created_at: string;
+}

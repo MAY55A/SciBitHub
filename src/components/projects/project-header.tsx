@@ -10,6 +10,7 @@ import ReportFormDialog from "../reports/report-form-dialog";
 import { LikeButton } from "../votes/like-button";
 import { UserHoverCard } from "../custom/user-hover-card";
 import { Badge } from "../ui/badge";
+import { BookmarkButton } from "../bookmarks/bookmark-button";
 
 export function ProjectHeader({ project }: { project: Project }) {
     const creator = {
@@ -71,6 +72,7 @@ export function ProjectHeader({ project }: { project: Project }) {
             </div>
             <div className="absolute bottom-4 right-4 space-x-2">
                 <LikeButton projectId={project.id!} likes={project.likes ?? 0} creatorId={project.creator.id} />
+                <BookmarkButton projectId={project.id} />
                 <Suspense fallback={null}>
                     <ProjectActions creatorId={project.creator.id} project={project} />
                 </Suspense>
