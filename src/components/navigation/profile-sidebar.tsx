@@ -43,7 +43,7 @@ export const getMenu = (role: UserRole) => [
                 title: "Draft",
                 url: "/profile/projects?status=draft",
             },
-        ] : [],
+        ] : undefined,
         open: true
     },
     {

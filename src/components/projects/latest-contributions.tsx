@@ -4,7 +4,7 @@ import { formatDate } from "@/src/utils/utils";
 import { ValidationStatusUI } from "../custom/validation-status";
 
 export async function LatestContributions({tasks}: {tasks: string[]}) {
-    const contributions = await fetchContributions(tasks);
+    const {contributions} = await fetchContributions(tasks);
 
     return (
         <div className="w-full max-w-[1000px] flex flex-col items-center gap-4 mb-12">

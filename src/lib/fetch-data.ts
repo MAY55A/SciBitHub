@@ -131,10 +131,11 @@ export const fetchTasks = async (
 }
 
 export const fetchContributions = async (
-    tasks: string[],
+    tasks?: string[],
+    user?: string,
     page?: number,
     pageSize: number = 10
-): Promise<Contribution[] | null> => {
+): Promise<{ contributions: Contribution[] | null, totalPages: number }> => {
     const supabase = await createClient();
     const queryBuilder = supabase
         .from("contributions")
@@ -142,11 +143,18 @@ export const fetchContributions = async (
             `
             *,
             user:users(id, username, deleted_at),
-            task:tasks(id, title)
+            task:tasks(id, title, type)
             `
-        )
-        .in("task", tasks)
-        .is("deleted_at", null);
+            , { count: "exact" })
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false });
+
+    if (tasks) {
+        queryBuilder.in("task", tasks);
+    }
+    if (user) {
+        queryBuilder.eq("user", user);
+    }
 
     if (page) {
         const start = (page - 1) * pageSize;
@@ -154,14 +162,15 @@ export const fetchContributions = async (
         queryBuilder.range(start, end);
     }
 
-    const { data, error } = await queryBuilder;
+    const { data, error, count } = await queryBuilder;
 
     if (error) {
         console.error("Error fetching contributions:", error);
-        return null;
+        return { contributions: null, totalPages: 0 };
     }
 
-    return data;
+    const totalPages = Math.ceil((count || 0) / pageSize);
+    return { contributions: data, totalPages };
 };
 
 export const fetchFirstTaskContributions = async (
@@ -247,10 +256,10 @@ export const fetchDiscussions = async (
         if (status) {
             queryBuilder = queryBuilder.eq("status", status);
         }
-        if(category) {
+        if (category) {
             queryBuilder = queryBuilder.eq("category", category);
         }
-        if(tags && tags.length > 0) {
+        if (tags && tags.length > 0) {
             queryBuilder = queryBuilder.contains("tags", tags);
         }
 
@@ -501,7 +510,7 @@ export async function fetchParticipationRequests(
 
     const queryBuilder = supabase
         .from("participation_requests")
-        .select("*, project:projects(id, name), user:users(id, username, profile_picture)")
+        .select("*, project:projects(id, name, creator:users(id)), user:users(id, username, profile_picture)")
         .not("requested_at", "is", null) // Only fetch requests that have been made (in case of project draft requests have been created but not sent)
 
     if (user) {
@@ -605,3 +614,32 @@ export async function fetchMyBookmarks(): Promise<Bookmark[]> {
     }
     return data;
 }
+
+export const fetchContributionsPerDay = async (
+    user: string,
+): Promise<{ contributions: Map<string, number>, years: string[] } | null> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("contributions")
+        .select("id, created_at")
+        .is("deleted_at", null)
+        .eq("user", user);
+
+    if (error || !data) {
+        console.error("Error fetching contributions:", error);
+        return null;
+    }
+
+    const years: string[] = [];
+    // Group by date
+    const grouped = data.reduce<Map<string, number>>((acc, row) => {
+        const date = row.created_at.split("T")[0]; // 'YYYY-MM-DD'
+        if (!years.includes(date.split("-")[0])) {
+            years.push(date.split("-")[0]);
+        }
+        acc.set(date, (acc.get(date) || 0) + 1);
+        return acc;
+    }, new Map<string, number>());
+
+    return { contributions: grouped, years };
+};
