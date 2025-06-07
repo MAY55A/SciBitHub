@@ -5,7 +5,7 @@ import useSupabaseClient from "@/src/utils/supabase/client";
 
 
 
-export function GoogleButton() {
+export function GoogleButton({text}: {text: string}) {
   const supabase = useSupabaseClient();
 
   const loginWithGoogle = async () => {
@@ -30,7 +30,7 @@ export function GoogleButton() {
           fill="currentColor"
         />
       </svg>
-      Login with Google
+      {text}
     </Button>
   );
 }
