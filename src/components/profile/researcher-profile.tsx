@@ -16,7 +16,7 @@ export function ResearcherProfile({ user }: { user: User }) {
                     }
                 </span>
                 <div className="flex items-center border-primary lg:border-r lg:pr-8 lg:border-b-0 lg:pb-0 border-b pb-8">
-                    <Avatar className="flex shrink-0 overflow-hidden h-32 w-32 rounded-fully hover:shadow-lg hover:bg-muted">
+                    <Avatar className="flex shrink-0 border border-primary/50 overflow-hidden h-32 w-32 rounded-fully hover:shadow-lg hover:bg-muted">
                         <AvatarImage src={user.profile_picture} alt={user.username} />
                         <AvatarFallback className="rounded-lg text-3xl text-primary font-semibold tracking-[.25em] pl-1">
                             {user.username?.slice(0, 2).toUpperCase()}
@@ -26,17 +26,17 @@ export function ResearcherProfile({ user }: { user: User }) {
                         <h2 className="text-xl font-semibold">{user.username}</h2>
                         <p className="text-[12px] text-primary uppercase tracking-[.25em]">{user.role}</p>
                         {user.metadata?.isVerified ?
-                            <span className="flex items-center text-sm text-green font-semibold gap-2 rounded-3xl border py-2 px-4">verified <Check size={"15"} /> </span>
+                            <span className="flex items-center text-sm text-green font-semibold gap-2 rounded-3xl border py-2 px-4"><Check size={"15"} /> verified</span>
                             : <span className="items-center text-sm text-muted-foreground font-semibold rounded-3xl border border-muted-foreground py-2 px-4">not verified</span>
                         }
                     </div>
                 </div>
-                <p className="flex-1 max-h-64 items-center text-muted-foreground text-sm whitespace-normal break-words ">
+                <p className="flex-1 max-h-64 items-center text-muted-foreground text-sm whitespace-normal break-words font-retro">
                     {user.metadata?.bio ? user.metadata.bio : "Hi, welcome to my profile!"}
                 </p>
             </div>
             {user.metadata?.researcherType === ResearcherType.ORGANIZATION &&
-                <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 ">
+                <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 font-retro">
                     <p className="flex items-center gap-2 text-sm ">
                         <Building size={"15"} />
                         Organization :
@@ -62,7 +62,7 @@ export function ResearcherProfile({ user }: { user: User }) {
                 </div>
             }
             {user.metadata?.researcherType === ResearcherType.ACADEMIC &&
-                <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 ">
+                <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 font-retro">
                     <p className="flex flex-wrap items-center gap-2 text-sm ">
                         <GraduationCap size={"15"} />
                         Academic Degree :
@@ -88,7 +88,7 @@ export function ResearcherProfile({ user }: { user: User }) {
                 </div>
             }
             {user.metadata?.researcherType === ResearcherType.CASUAL &&
-                <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 ">
+                <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 font-retro">
                     <p className="flex flex-wrap items-center gap-2 text-sm ">
                         <Globe2 size={"15"} />
                         Country :
@@ -103,7 +103,7 @@ export function ResearcherProfile({ user }: { user: User }) {
                     </p>
                 </div>
             }
-            <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 ">
+            <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 font-retro">
                 {user.metadata?.contactEmail &&
                     <p className="flex items-center gap-2 text-sm ">
                         <Mail size={"15"} />
