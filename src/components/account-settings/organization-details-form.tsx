@@ -2,7 +2,7 @@
 
 import { FormMessage, Message } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage } from "@/src/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage, FormDescription } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { updateMetadata } from "@/src/lib/actions/account-actions";
@@ -27,7 +27,7 @@ export function OraganizationDetailsForm({ ...details }: { name: string, locatio
 
         const res = await updateMetadata(data);
         if (res.success) {
-            setInitialDetails({...initialDetails, ...data});
+            setInitialDetails({ ...initialDetails, ...data });
             setMessage({ success: res.message });
         } else {
             setMessage({ error: res.message });
@@ -46,11 +46,10 @@ export function OraganizationDetailsForm({ ...details }: { name: string, locatio
                 className="border rounded-lg p-10 flex flex-col gap-6"
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <h2 className="text-primary font-semibold">Organization Details</h2>
-                <p className="text-sm text-muted-foreground">
-                    This information will be used for verifying your account. Make sure to provide accurate information.
-                </p>
-
+                <div>
+                    <h2 className="text-primary font-semibold">Organization Details</h2>
+                    <FormDescription>This information will be used for verifying your account. Make sure to provide accurate information.</FormDescription>
+                </div>
                 <FormField
                     control={form.control}
                     name="organizationName"
@@ -64,7 +63,7 @@ export function OraganizationDetailsForm({ ...details }: { name: string, locatio
                         </FormItem>
                     )}
                 />
-                
+
                 <FormField
                     control={form.control}
                     name="organizationLocation"

@@ -2,7 +2,7 @@
 
 import { Message, FormMessage } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage as FieldMessage } from "@/src/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage as FieldMessage, FormDescription } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { updateEmail } from "@/src/lib/actions/account-actions";
 import { useState } from "react";
@@ -38,11 +38,10 @@ export function EmailForm({ currentEmail }: { currentEmail: string }) {
                 className="flex flex-col gap-4 border rounded-lg p-10"
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <h2 className="text-primary font-semibold">Email</h2>
-                <p className="mt-1 text-sm text-muted-foreground">
-                    This is your account email, it will not be visible to others.
-                </p>
-
+                <div>
+                    <h2 className="text-primary font-semibold">Email</h2>
+                    <FormDescription>This is your account email, it will not be visible to others.</FormDescription>
+                </div>
                 <FormField
                     control={form.control}
                     name="email"

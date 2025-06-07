@@ -3,7 +3,7 @@
 import CountrySelector from "@/src/components/custom/countries-selector";
 import { FormMessage, Message } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage } from "@/src/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage, FormDescription } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { updateInfo } from "@/src/lib/actions/account-actions";
@@ -52,11 +52,10 @@ export function PersonalInformationForm({ ...info }: { username: string, country
                 className="border rounded-lg p-10 flex flex-col gap-6"
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <h2 className="text-primary font-semibold">Personal Information</h2>
-                <p className="text-sm text-muted-foreground">
-                    This information will be displayed publicly so be careful what you share.
-                </p>
-
+                <div>
+                    <h2 className="text-primary font-semibold">Personal Information</h2>
+                    <FormDescription>This information will be displayed publicly so be careful what you share.</FormDescription>
+                </div>
                 <FormField
                     control={form.control}
                     name="username"
@@ -82,7 +81,7 @@ export function PersonalInformationForm({ ...info }: { username: string, country
                                     rows={3}
                                     maxLength={500}
                                     placeholder="Write a few sentences about yourself..."
-                                    className="w-full p-2 border rounded-lg text-sm text-muted-foreground"
+                                    className="w-full p-2 border rounded-lg text-sm text-muted-foreground placeholder:text-muted-foreground font-retro"
                                     disabled={form.formState.isSubmitting}
                                     {...field} />
                             </FormControl>

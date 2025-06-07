@@ -30,13 +30,13 @@ export function InterestsForm({ interests }: { interests: string[] }) {
             return;
         }
         setIsSubmitting(true);
-        const res = await updateMetadata({interests: selected})
+        const res = await updateMetadata({ interests: selected })
         setIsSubmitting(false);
         if (res.success) {
             setInitialInterests(selected);
-            setMessage({success: "Interests updated successfully."});
+            setMessage({ success: "Interests updated successfully." });
         } else {
-            setMessage({error: "Error updating interests."});
+            setMessage({ error: "Error updating interests." });
         }
     }
 
@@ -48,11 +48,12 @@ export function InterestsForm({ interests }: { interests: string[] }) {
                 onSubmit();
             }}
         >
-            <h2 className="text-primary font-semibold">Fields of Interest</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-                Pick the fields that intrest you the most.
-            </p>
-
+            <div>
+                <h2 className="text-primary font-semibold">Fields of Interest</h2>
+                <p className="mt-1 text-sm text-muted-foreground font-retro">
+                    Pick the fields that interest you the most.
+                </p>
+            </div>
             <CardGridSelect
                 key={selected.join(',')}
                 options={researchDomains}

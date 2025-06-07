@@ -92,10 +92,12 @@ export const ProfilePictureUpload = ({ userId, image, imageFallback }: { userId:
             className="border rounded-lg p-10 flex flex-col gap-6"
             onSubmit={handleSubmit}
         >
-            <h2 className="text-primary font-semibold">Profile Picture</h2>
-            <p className="text-sm text-muted-foreground">
-                This picture will be your profile avatar.
-            </p>
+            <div>
+                <h2 className="text-primary font-semibold">Profile Picture</h2>
+                <p className="text-sm text-muted-foreground font-retro">
+                    This picture will be your profile avatar.
+                </p>
+            </div>
             <div className="flex items-center gap-4 text-muted-foreground">
                 {previewUrl ?
                     <Image

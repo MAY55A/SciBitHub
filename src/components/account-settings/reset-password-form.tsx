@@ -2,7 +2,7 @@
 
 import { Message, FormMessage } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage as FieldMessage, FormLabel } from "@/src/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage as FieldMessage, FormLabel, FormDescription } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { adminResetPassword } from "@/src/lib/actions/admin/users-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,11 +53,10 @@ export function ResetPasswordForm({ userId }: { userId: string }) {
                 className="flex flex-col gap-4 border rounded-lg p-10"
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <h2 className="text-primary font-semibold">Reset Password</h2>
-                <p className="mt-1 text-sm text-muted-foreground">
-                    You will be logged out after successful reset.
-                </p>
-
+                <div>
+                    <h2 className="text-primary font-semibold">Reset Password</h2>
+                    <FormDescription>You will be logged out after successful reset.</FormDescription>
+                </div>
                 <FormField
                     control={form.control}
                     name="password"

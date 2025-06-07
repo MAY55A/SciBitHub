@@ -2,7 +2,7 @@
 
 import { FormMessage, Message } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage } from "@/src/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FormFieldMessage, FormDescription } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { updateMetadata } from "@/src/lib/actions/account-actions";
@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export function EducationDetailsForm({ ...details }: { degree: string, institution: string }) {
-        const [initialDetails, setInitialDetails] = useState({ academicDegree: details.degree, institutionName: details.institution });
+    const [initialDetails, setInitialDetails] = useState({ academicDegree: details.degree, institutionName: details.institution });
 
     const form = useForm({
         resolver: zodResolver(userInputDataSchema.pick({ academicDegree: true, institutionName: true })),
@@ -28,7 +28,7 @@ export function EducationDetailsForm({ ...details }: { degree: string, instituti
 
         const res = await updateMetadata(data);
         if (res.success) {
-            setInitialDetails({...initialDetails, ...data});
+            setInitialDetails({ ...initialDetails, ...data });
             setMessage({ success: res.message });
         } else {
             setMessage({ error: res.message });
@@ -47,11 +47,10 @@ export function EducationDetailsForm({ ...details }: { degree: string, instituti
                 className="border rounded-lg p-10 flex flex-col gap-6"
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <h2 className="text-primary font-semibold">Education Details</h2>
-                <p className="text-sm text-muted-foreground">
-                    This information will be used for verifying your account. Make sure to provide accurate information.
-                </p>
-
+                <div>
+                    <h2 className="text-primary font-semibold">Education Details</h2>
+                    <FormDescription>This information will be used for verifying your account. Make sure to provide accurate information.</FormDescription>
+                </div>
                 <FormField
                     control={form.control}
                     name="academicDegree"
@@ -65,7 +64,7 @@ export function EducationDetailsForm({ ...details }: { degree: string, instituti
                         </FormItem>
                     )}
                 />
-                
+
                 <FormField
                     control={form.control}
                     name="institutionName"

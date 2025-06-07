@@ -2,7 +2,7 @@
 
 import { Message, FormMessage } from "@/src/components/custom/form-message";
 import { Button } from "@/src/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FieldMessage } from "@/src/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage as FieldMessage, FormDescription } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { UserInputData, userInputDataSchema } from "@/src/types/user-form-data";
 import { updateMetadata } from "@/src/lib/actions/account-actions";
@@ -53,8 +53,8 @@ export function ContactsForm({ ...contacts }: { contactEmail: string, phone: str
         }
 
         const res = await updateMetadata(data);
-        if(res.success) {
-            setInitialContacts({...initialContacts, ...data});
+        if (res.success) {
+            setInitialContacts({ ...initialContacts, ...data });
             setMessage({ success: res.message });
         } else {
             setMessage({ error: res.message });
@@ -75,10 +75,10 @@ export function ContactsForm({ ...contacts }: { contactEmail: string, phone: str
                 className="border rounded-lg p-10 flex flex-col gap-6"
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <h2 className="text-primary font-semibold">Contact</h2>
-                <p className="mt-1 text-sm text-muted-foreground">
-                    This is how others can contact you.
-                </p>
+                <div>
+                    <h2 className="text-primary font-semibold">Contact</h2>
+                    <FormDescription>This is how others can contact you.</FormDescription>
+                </div>
                 <FormField
                     control={form.control}
                     name="phone"
