@@ -3,7 +3,7 @@
 import MDEditor from "@uiw/react-md-editor";
 import { useTheme } from "next-themes";
 
-export const MarkdownViewer = ({ source, className }: { source: string, className?: string }) => {
+export const MarkdownViewer = ({ source, className, style }: { source: string, className?: string, style?: React.CSSProperties }) => {
     const { resolvedTheme } = useTheme();
     const currentTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
 
@@ -12,7 +12,7 @@ export const MarkdownViewer = ({ source, className }: { source: string, classNam
             <MDEditor.Markdown
                 source={source}
                 className={className}
-                style={{ backgroundColor: 'transparent', fontFamily: "Courier New, Courier, monospace" }}
+                style={{ backgroundColor: 'transparent', fontFamily: "Courier New, Courier, monospace", ...style }}
             />
         </div>
     );

@@ -83,7 +83,7 @@ export default function TaskFieldSetup({ className, icon: Icon, triggerText, tit
                                 <FormItem>
                                     <FormLabel className="text-green">Description</FormLabel>
                                     <FormControl>
-                                        <textarea {...field} placeholder="Field Description" className="border p-2 w-full rounded placeholder:text-muted-foreground text-sm" />
+                                        <textarea {...field} placeholder="Field Description" className="border p-2 w-full rounded placeholder:text-muted-foreground text-sm font-retro" />
                                     </FormControl>
                                     <FormMessage></FormMessage>
                                 </FormItem>

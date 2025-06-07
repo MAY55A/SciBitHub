@@ -4,8 +4,6 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { FieldInputData, TaskInputData, taskInputDataSchema } from "@/src/types/project-form-data";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import MDEditor from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { ArrowDown, ArrowUp, Edit2, PlusCircle, X } from "lucide-react";
 import TaskFieldSetup from "./task-field-setup";
@@ -13,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { TaskType, DataType } from "@/src/types/enums";
+import { MarkdownEditor } from "../custom/markdown-editor";
 
 export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEditType = true }: { buttonText: string, data?: Partial<TaskInputData>, onSubmit: (data: TaskInputData) => void, onChange: (data: any) => void, canEditType?: boolean }) {
     const form = useForm({
@@ -107,7 +106,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                             <FormLabel className="text-primary">Description</FormLabel>
                             <FormDescription>Details about what the task involves and expectations</FormDescription>
                             <FormControl>
-                                <textarea {...field} placeholder="Task Description" className="border p-2 w-full rounded placeholder:text-muted-foreground text-sm" />
+                                <textarea {...field} placeholder="Task Description" className="border p-2 w-full rounded placeholder:text-muted-foreground text-sm font-retro" />
                             </FormControl>
                             <FormMessage></FormMessage>
                         </FormItem>
@@ -212,7 +211,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                             <FormControl>
                                 <Input
                                     type="number"
-                                    placeholder="target number of contributions"
+                                    placeholder="Target number of contributions"
                                     className="border p-2 w-full"
                                     value={field.value ?? ""}
                                     onChange={(e) => field.onChange(e.target.value !== "" ? Number(e.target.value) : null)}
@@ -230,14 +229,9 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                             <FormLabel className="text-primary">Tutorial</FormLabel>
                             <FormDescription>Guide or example showing how to contribute correctly</FormDescription>
                             <FormControl>
-                                <MDEditor
-                                    onFocus={() => { }}
-                                    preview="edit"
-                                    previewOptions={{
-                                        rehypePlugins: [[rehypeSanitize]],
-                                    }}
+                                <MarkdownEditor
                                     value={field.value}
-                                    onChange={(value) => field.onChange(value)}
+                                    onChange={(value: string) => field.onChange(value)}
                                 />
                             </FormControl>
                             <FormMessage></FormMessage>

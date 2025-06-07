@@ -48,7 +48,7 @@ export function Step2Card({ data, onEdit }: { data: ProjectInputData, onEdit: (s
                     </div>
                     <div className="flex flex-col space-y-1.5">
                         <Label className="text-primary">Deadline</Label>
-                        <Input value={formatDate(data.deadline?.toString() || "", true) || "not specified"} readOnly />
+                        <Input value={data.deadline ? formatDate(data.deadline?.toString(), true) : "not specified"} readOnly />
                     </div>
                 </div>
             </CardContent>

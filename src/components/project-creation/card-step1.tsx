@@ -1,10 +1,10 @@
 import { ProjectInputData } from "@/src/types/project-form-data";
-import MDEditor from "@uiw/react-md-editor";
 import { Edit2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../ui/card";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { MarkdownViewer } from "../custom/markdown-viewer";
 
 export function Step1Card({ data, onEdit }: { data: ProjectInputData, onEdit: (step: number) => void }) {
     return (
@@ -24,7 +24,7 @@ export function Step1Card({ data, onEdit }: { data: ProjectInputData, onEdit: (s
                     </div>
                     <div className="flex flex-col space-y-1.5">
                         <Label className="text-primary">Detailed Description</Label>
-                        <MDEditor.Markdown
+                        <MarkdownViewer
                             source={data.longDescription}
                             className="w-full border border-input rounded-lg p-2"
                             style={{
@@ -32,8 +32,6 @@ export function Step1Card({ data, onEdit }: { data: ProjectInputData, onEdit: (s
                                 maxWidth: '100%',
                                 overflowY: 'auto',
                                 overflowX: 'auto',
-                                scrollbarWidth: 'thin',
-                                scrollbarColor: "hsl(var(--background)) hsl(var(--muted))",
                                 overflowWrap: "break-word", // Prevents text overflow
                                 wordBreak: "break-word",
                                 whiteSpace: "pre-wrap",

@@ -2,8 +2,6 @@
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import MDEditor from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
 import { ProjectInputData, projectInputDataSchema } from "@/src/types/project-form-data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,6 +13,7 @@ import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { ProjectStatus, ProjectDomain } from "@/src/types/enums";
+import { MarkdownEditor } from "../custom/markdown-editor";
 
 export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveProject, dataChanged }: { initialName?: string, data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const [isVerifiying, setIsVerifying] = useState(false);
@@ -91,7 +90,7 @@ export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveP
                             <FormLabel className="text-primary">Short Description</FormLabel>
                             <FormDescription>Brief summary shown on project cards or listings</FormDescription>
                             <FormControl>
-                                <textarea {...field} placeholder="Task Description" className="border p-2 w-full rounded placeholder:text-muted-foreground text-sm" />
+                                <textarea {...field} placeholder="Enter Description" className="border p-2 w-full rounded placeholder:text-muted-foreground text-sm font-retro" />
                             </FormControl>
                             <FormMessage></FormMessage>
                         </FormItem>
@@ -105,12 +104,7 @@ export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveP
                             <FormLabel className="text-primary">Detailed Description</FormLabel>
                             <FormDescription>Full explanation of the project, goals, and context</FormDescription>
                             <FormControl>
-                                <MDEditor
-                                    height={300}
-                                    preview="edit"
-                                    previewOptions={{
-                                        rehypePlugins: [[rehypeSanitize]],
-                                    }}
+                                <MarkdownEditor
                                     value={field.value}
                                     onChange={field.onChange}
                                 />
