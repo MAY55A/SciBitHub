@@ -12,10 +12,10 @@ export default function Visualizations(
                 {visualizations.map((visualization) => {
                     const data = dataPerTask.get(visualization.task);
                     const files = filesPerTask.get(visualization.task);
-
+                    
                     if (data && data.length > 0) {
                         return (
-                            <div key={visualization.id} className="mb-4">
+                            <div key={visualization.id} className="mb-4 font-retro text-sm max-w-3xl">
                                 <VisualizationRenderer data={data} files={files} config={visualization} />
                             </div>
                         );
@@ -27,7 +27,7 @@ export default function Visualizations(
     }, [visualizations, dataPerTask, filesPerTask]);
 
     return (
-        <div className="grid gap-8">
+        <div className="flex flex-wrap gap-8 items-center justify-center">
             {renderedVisualizations}
         </div>
     );

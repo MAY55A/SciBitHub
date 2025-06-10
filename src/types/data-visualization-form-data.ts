@@ -32,6 +32,7 @@ export const visualizationInputDataSchema = z.object({
             });
         }
         if (data.chart_type !== "pie") {
+            /*
             if (!data.value_field) {
                 ctx.addIssue({
                     path: ["value_field"],
@@ -39,6 +40,7 @@ export const visualizationInputDataSchema = z.object({
                     code: z.ZodIssueCode.custom
                 });
             }
+            */
             if (data.group_by === data.value_field) {
                 ctx.addIssue({
                     path: ["value_field"],

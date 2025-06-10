@@ -7,8 +7,8 @@ import { useState } from "react";
 export function CustomCollapsible({ triggerText, button, children }: { triggerText: string, button?: React.ReactNode, children: React.ReactNode }) {
     const [open, setOpen] = useState(true);
     return (
-        <div className="w-full">
-            <div className="flex items-center justify-between border-b py-2">
+        <div className="w-full py-2 border-b">
+            <div className="flex items-center justify-between">
                 <button
                     onClick={() => setOpen(!open)}
                     className="flex items-center text-lg font-semibold hover:underline transition-all"

@@ -2,7 +2,7 @@
 
 import { AggregationFunction, ChartType, VisualizationType } from "@/src/types/enums";
 import { Visualization } from "@/src/types/models";
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import {
     LineChart, Line,
     BarChart, Bar,
@@ -22,45 +22,54 @@ const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"];
 
 export const VisualizationRenderer: React.FC<ChartRendererProps> = memo(({ data, files, config }) => {
     const { type, chart_type, group_by, value_field, display_field, table_columns, title } = config;
+    const [displayFiles, setDisplayFiles] = useState<{ fileName: string, url: string }[] | null>(null);
     const chartData = useMemo(() => {
         if (type === VisualizationType.TABLE || type === VisualizationType.GALLERY) return data;
 
         return transformDataForChart(data, config);
     }, [data, config]);
 
-    const renderChart = async () => {
-        if (type === VisualizationType.GALLERY) {
-            if (!data?.length) return <p>No data found.</p>;
-            const displayFiles: { fileName: string, url: string }[] = [];
+    useEffect(() => {
+        const loadFiles = async () => {
+            if (type !== VisualizationType.GALLERY || !chartData?.length) return;
+
+            const results: { fileName: string, url: string }[] = [];
 
             for (const item of chartData) {
                 const fileName = item[display_field!];
-                if (!fileName) return null;
+                if (!fileName) continue;
                 const filePath = files.get(fileName);
-                if (!filePath) return null;
+                if (!filePath) continue;
                 const fileUrl = await getFile(filePath);
-                if (!fileUrl) return null;
-                displayFiles.push({ fileName: fileName, url: fileUrl });
-            };
+                if (!fileUrl) continue;
+                results.push({ fileName, url: fileUrl });
+            }
 
-            if (!displayFiles?.length) return <p>No files found.</p>;
+            setDisplayFiles(results);
+        };
+
+        loadFiles();
+    }, [chartData, files, display_field, type]);
+
+    const renderChart =  () => {
+        if (type === VisualizationType.GALLERY) {
+            if (!displayFiles) return <p>Loading files...</p>;
+            if (!displayFiles.length) return <p>No files found.</p>;
 
             return (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {displayFiles.map((file, index) =>
-                        file && (
-                            <div key={index} className="rounded overflow-hidden shadow">
-                                <Image
-                                    src={file.url}
-                                    alt={file.fileName}
-                                    width={300}
-                                    height={200}
-                                    className="w-full h-auto object-cover"
-                                />
-                                <div className="text-sm text-center mt-1">{file.fileName}</div>
-                            </div>
-                        )
-                    )}
+                    {displayFiles.map((file, index) => (
+                        <div key={index} className="rounded overflow-hidden shadow">
+                            <Image
+                                src={file.url}
+                                alt={file.fileName}
+                                width={300}
+                                height={200}
+                                className="w-full h-auto object-cover"
+                            />
+                            <div className="text-sm text-center mt-1">{file.fileName}</div>
+                        </div>
+                    ))}
                 </div>
             );
         }

@@ -17,12 +17,16 @@ export async function ProjectResults({ projectId, canEdit }: { projectId: string
 
     for (const task of tasks) {
         const data = await fetchContributionsData(task.id);
+        const allFiles = new Map<string, string>();
         const flattenedData = data?.map((item) => {
             const { flat, files } = flattenData(item.data);
-            filesPerTask.set(task.id, files);
-            return { contribution_id: item.id, ...flat };
+            for (const [key, value] of files) {
+                allFiles.set(key, value);
+            }
+            return { contribution_id: item.id, ...Object.fromEntries(flat) };
         }) || [];
         dataPerTask.set(task.id, flattenedData);
+        filesPerTask.set(task.id, allFiles);
     };
 
     return (
@@ -36,7 +40,7 @@ export async function ProjectResults({ projectId, canEdit }: { projectId: string
                         {canEdit && <ResultsSummaryFormDialog projectId={projectId} currentSummary={summary ?? ""} />}
                     </div>
                     <AccordionContent>
-                        {summary?.length ? <MarkdownViewer source={summary} /> : <p className="text-gray-500">No summary available.</p>}
+                        {summary?.length ? <MarkdownViewer source={summary} /> : <p className="text-muted-foreground font-retro">No summary available.</p>}
                     </AccordionContent>
                 </AccordionItem>
                 <CustomCollapsible
@@ -49,7 +53,7 @@ export async function ProjectResults({ projectId, canEdit }: { projectId: string
                 >
                     {visualizations.length ?
                         <Visualizations visualizations={visualizations} dataPerTask={dataPerTask} filesPerTask={filesPerTask} /> :
-                        <p className="text-gray-500">No visualizations available.</p>
+                        <p className="text-muted-foreground font-retro text-sm">No visualizations available.</p>
                     }
                 </CustomCollapsible>
                 <AccordionItem value="export">
@@ -86,8 +90,11 @@ function flattenData(data: Record<string, any>) {
             const filename = path.split("/").pop()!;
             flat.set(key, filename);
             files.set(filename, path);
-        } else if (typeof value === "string") {
-            // key = data_file
+        } else if (value?.files !== undefined && value.files.length > 0) {
+            const filename = value.files[0].split("/").pop()!;
+            files.set(filename, value.files[0]);
+            flat.set(key, filename);
+        } else if (typeof value === "string") { // if key = data_file
             const path = value;
             const filename = path.split("/").pop()!;
             flat.set(key, filename);
