@@ -84,15 +84,15 @@ export const reportsTableColumns: ColumnDef<Report>[] = [
         cell: ({ row }) => {
             const status = row.getValue("status") as ReportStatus;
             if (status === ReportStatus.REVIEWED) {
-                return <div className="text-orange-500">{status}</div>
+                return <div className="text-[#4682B4]">{status}</div>
             }
             if (status === ReportStatus.RESOLVED) {
-                return <div className="text-green-600">{status}</div>
+                return <div className="text-[#4CAF50]">{status}</div>
             }
             if (status === ReportStatus.PENDING) {
-                return <div className="text-yellow-600">{status}</div>
+                return <div className="text-[#FFC107]">{status}</div>
             }
-            return <div className="text-red-700">{status}</div>
+            return <div className="text-[#F44336]">{status}</div>
         },
         filterFn: (row, columnId, filterValue) => {
             // If multiple values are selected, check if the row's value matches any of them

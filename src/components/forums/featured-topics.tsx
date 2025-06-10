@@ -11,7 +11,7 @@ export async function FeaturedTopics({ project }: { project: string }) {
             {topics.length ?
                 topics.map((topic) => (
                     <div key={topic.id} className="flex flex-col gap-2 p-2 pb-4 border-b border-input last:border-b-0 text-sm">
-                        <Link href="/topics/[id]" as={`/projects/${topic.project.id}`} className="flex items-center gap-2 font-semibold">
+                        <Link href="/topics/[id]" as={`/projects/${topic.project.id}`} className="flex gap-2 font-semibold">
                             <span className="text-xl">&#8227;</span>
                             <span className="hover:underline">{topic.title}</span>
                         </Link>

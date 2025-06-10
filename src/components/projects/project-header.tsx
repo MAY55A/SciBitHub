@@ -11,6 +11,7 @@ import { LikeButton } from "../votes/like-button";
 import { UserHoverCard } from "../custom/user-hover-card";
 import { Badge } from "../ui/badge";
 import { BookmarkButton } from "../bookmarks/bookmark-button";
+import { format } from "date-fns";
 
 export function ProjectHeader({ project }: { project: Project }) {
     const creator = {
@@ -48,7 +49,7 @@ export function ProjectHeader({ project }: { project: Project }) {
                 <div className="flex flex-col">
                     <span className="text-muted-foreground text-xs mb-4 text-end">Published {formatDate(project.created_at)}</span>
                     <div className="bg-muted/50 rounded-2xl">
-                        <ShinyText text={project.domain} disabled={false} speed={4} className='text-green text-center font-semibold uppercase tracking-[.1em] text-xs border border-green rounded-2xl px-2 py-2' />
+                        <ShinyText text={project.domain} disabled={false} speed={4} className='w-full text-green text-center font-semibold uppercase tracking-[.1em] text-xs border border-green rounded-2xl px-2 py-2' />
                     </div>
                 </div>
             </div>
@@ -61,7 +62,7 @@ export function ProjectHeader({ project }: { project: Project }) {
                     }
                     <p className="text-foreground"><strong>+ Participation:</strong> {project.participation_level}</p>
                     <p className="text-foreground"><strong>+ Moderation:</strong> {project.moderation_level}</p>
-                    {!!project.deadline && <p className="text-foreground"><strong>+ Deadline:</strong> {formatDate(project.deadline.toString())}</p>}
+                    {!!project.deadline && <p className="text-foreground"><strong>+ Deadline:</strong> {format(project.deadline, "PPP")}</p>}
                 </div>
                 <div className="flex flex-wrap mt-8 font-retro">
                     <strong className="mr-2">Tags: </strong>
