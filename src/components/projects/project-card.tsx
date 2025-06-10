@@ -9,6 +9,7 @@ import { ProjectDropdownMenu } from "./project-options-menu";
 import { UserHoverCard } from "../custom/user-hover-card";
 import { LikesDisplay } from "../votes/likes-display";
 import { BookmarkButton } from "../bookmarks/bookmark-button";
+import { ProjectStatus } from "@/src/types/enums";
 
 
 export function ProjectCard({ project, editable = false }: { project: Project, editable?: boolean }) {
@@ -16,7 +17,7 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
     let color = undefined;
     if (editable) {
         color = "#1e40af";
-        prefix = "create ";
+        prefix = "created ";
         if (project.status === "published") {
             color = "#009900";
             prefix = "Published ";
@@ -78,7 +79,7 @@ export function ProjectCard({ project, editable = false }: { project: Project, e
                 }
             </CardHeader>
             <CardContent>
-                <Link href="/projects/[id]" as={`/projects/${project.id}`}>
+                <Link href={project.status === ProjectStatus.PUBLISHED ? `/projects/${project.id}` : `/projects/${project.id}/edit`}>
                     <h2
                         className="flex text-base font-bold mb-4"
                     >

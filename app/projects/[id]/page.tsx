@@ -6,7 +6,7 @@ import { ProjectOverview } from "@/src/components/projects/project-overview";
 import Link from "next/link";
 import { ProjectContribution } from "@/src/components/projects/project-contribution";
 import ProjectForum from "@/src/components/projects/project-forum";
-import { ActivityStatus } from "@/src/types/enums";
+import { ActivityStatus, ProjectStatus } from "@/src/types/enums";
 import { NotAvailable } from "@/src/components/errors/not-available";
 import { ProjectResults } from "@/src/components/projects/project-results";
 import { getProjectPermissions } from "@/src/lib/services/permissions-service";
@@ -30,7 +30,7 @@ export default async function ProjectPage({ ...props }: {
         return notFound();
     }
 
-    if (project.deleted_at) {
+    if (project.status !== ProjectStatus.PUBLISHED || project.deleted_at) {
         return NotAvailable({ type: "project" });
     }
 
