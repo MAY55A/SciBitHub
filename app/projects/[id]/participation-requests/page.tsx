@@ -18,7 +18,7 @@ export default async function Page({
         <div className="flex flex-col w-full gap-12 p-16 mx-8">
             <h2 className="text-center font-semibold text-lg">Project Participation Requests</h2>
             <div className="flex items-center justify-between gap-4">
-                <p className="text-sm text-muted-foreground">Manage the requests for your project. You can accept or reject incoming applications.</p>
+                <p className="text-sm text-muted-foreground font-retro">Manage the requests for your project. You can accept or reject incoming applications.</p>
                 <RequestFormDialog projectId={project}/>
             </div>
             <DataTable

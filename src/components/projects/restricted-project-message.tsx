@@ -70,14 +70,14 @@ export function RestrictedProjectMessage({ projectId, canSendRequest }: { projec
         <div className="w-full h-80 flex-col justify-center rounded-lg p-10 py-32 my-8 border">
             <h3 className="text-center">This project is <strong className="text-primary t">Restricted</strong></h3>
             {hasInvitation ?
-                <p className="text-center text-sm text-muted-foreground">
+                <p className="text-center text-sm text-muted-foreground font-retro">
                     You have been invited to this project.<br />
                     <Link href={"/profile/participation-requests"} className="underline">check your invitations</Link>
                 </p>
                 : hasRequested ?
-                    <p className="text-center text-sm text-muted-foreground">You have already sent a participation request.</p>
+                    <p className="text-center text-sm text-muted-foreground font-retro">You have already sent a participation request.</p>
                     : canSendRequest &&
-                    <p className="text-center text-sm text-muted-foreground">
+                    <p className="text-center text-sm text-muted-foreground font-retro">
                         You can
                         <CustomAlertDialog
                             triggerText="send a request"

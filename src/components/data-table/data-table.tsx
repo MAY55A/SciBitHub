@@ -124,7 +124,7 @@ export function DataTable<TData, TValue>({
     })
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 font-retro">
             <DataTableToolbar table={table} searchColumn={searchColumn} filters={filters} />
             <div className="rounded-md border">
                 <Table>

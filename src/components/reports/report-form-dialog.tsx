@@ -75,7 +75,7 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
             </DialogTrigger>
             {hasReported ?
                 <DialogContent>
-                    <DialogTitle className="m-8 text-md font-normal">You’ve already reported this item.<br /> Thank you for your feedback.</DialogTitle>
+                    <DialogTitle className="m-8 text-md font-normal font-retro">You’ve already reported this item.<br /> Thank you for your feedback.</DialogTitle>
                 </DialogContent>
                 : <DialogContent className="lg:min-w-[700px] md:min-w-[700px] sm:max-w-[425px]">
                     <DialogHeader>
@@ -98,7 +98,7 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
                                             {...field}
                                             defaultValue={field.value}
                                             onValueChange={field.onChange}
-                                            className="w-full flex flex-col gap-4 px-6"
+                                            className="w-full flex flex-col gap-4 px-6 font-retro"
                                         >
                                             {Object.values(ReportReason).map(reason => (
                                                 <div className="flex items-center space-x-2" key={reason}>
@@ -124,7 +124,7 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
                                             <textarea
                                                 {...field}
                                                 placeholder="Add any context or explanation you think would help us review this report..."
-                                                className="min-h-28 border p-2 w-full rounded placeholder:text-muted-foreground text-sm" />
+                                                className="min-h-28 border p-2 w-full rounded placeholder:text-muted-foreground text-sm font-retro" />
                                         </FormControl>
                                         <FormMessage></FormMessage>
                                     </FormItem>
@@ -136,7 +136,7 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
                                         onCheckedChange={(checked) => setHasConfirmed(checked.valueOf() as boolean)}
                                         checked={hasConfirmed}
                                     />
-                                    <div className="grid gap-1.5 leading-none">
+                                    <div className="grid gap-1.5 leading-none font-retro">
                                         <Label
                                             htmlFor="term"
                                             className={hasConfirmed ? "opacity-100" : "opacity-50"}
