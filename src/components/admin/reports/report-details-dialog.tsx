@@ -24,29 +24,30 @@ export default function ReportDetailsDialog({ report, onClose }: { report: Repor
                 <DialogHeader>
                     <DialogTitle>Report Details</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-1 text-sm">
+                <div className="grid gap-2 text-sm font-retro">
+                    <p><strong>Report ID: </strong>{report.id}</p>
                     <div><strong>Reporter: </strong><UserHoverCard user={report.reporter} /></div>
-                    <div><strong>Status: </strong>
+                    <p><strong>Status: </strong>
                         <Badge
                             variant="secondary"
                             className={
                                 report.status === ReportStatus.DISMISSED
-                                    ? "text-destructive border-destructive"
+                                    ? "text-[#F44336] border-[#F44336]"
                                     : report.status === ReportStatus.RESOLVED
-                                        ? "text-green-500 border-green-500"
+                                        ? "text-[#4CAF50] border-[#4CAF50]"
                                         : report.status === ReportStatus.PENDING
-                                            ? "text-yellow-500 border-yellow-500"
-                                            : "text-orange-500 border-orange-500"
+                                            ? "text-[#FFC107] border-[#FFC107]"
+                                            : "text-[#4682B4] border-[#4682B4]"
                             }
                         >
                             {report.status}
                         </Badge>
-                    </div>
+                    </p>
                     <p><strong>Reported At: </strong> {format(new Date(report.created_at!), "PPPpp")}</p>
                     <p><strong>Reason: </strong><span>{report.reason}</span></p>
                     {report.description && <p><strong>Description: </strong>{report.description}</p>}
                     <p><strong className="capitalize">Reported {report.reported_type}: </strong>
-                        <Link href={report.reported_link} className="hover:underline">
+                        <Link href={report.reported_link} className="underline">
                             view {report.reported_type}
                         </Link>
                     </p>

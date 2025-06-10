@@ -26,7 +26,7 @@ export default function DiscussionDetailsDialog({ discussion, onClose }: { discu
                 <DialogHeader>
                     <DialogTitle>Discussion Details</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-1 text-sm">
+                <div className="grid gap-1 text-sm font-retro">
                     <div><strong>Author: </strong><UserHoverCard user={discussion.creator} /></div>
                     <p><strong>Title: </strong>{discussion.title}</p>
                     <div><strong>Status: </strong>
@@ -58,9 +58,11 @@ export default function DiscussionDetailsDialog({ discussion, onClose }: { discu
                             <DiscussionFiles paths={discussion.files} />
                         </div>
                     }
-                    <p><strong>Replies: </strong>{discussion.replies}</p>
-                    <p><strong>Upvotes: </strong><span className="text-green-500">{discussion.upvotes}</span></p>
-                    <p><strong>Downvotes: </strong><span className="text-red-500">{discussion.downvotes}</span></p>
+                    <div className="flex gap-2">
+                        <p><strong>Replies: </strong>{discussion.replies}</p>
+                        <p><strong>Upvotes: </strong><span className="text-green-500">{discussion.upvotes}</span></p>
+                        <p><strong>Downvotes: </strong><span className="text-red-500">{discussion.downvotes}</span></p>
+                    </div>
                 </div>
             </DialogContent>
         </Dialog >

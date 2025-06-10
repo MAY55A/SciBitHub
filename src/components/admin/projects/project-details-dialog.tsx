@@ -30,11 +30,11 @@ export default function ProjectDetailsDialog({ project, onClose }: { project: Pr
                 </DialogHeader>
                 {selectedTask
                     ? (
-                        <div>
+                        <div className="font-retro">
                             <h2 className="text-primary font-semibold mb-4">Task: {selectedTask.title}</h2>
                             <div className="grid gap-2 text-sm">
                                 <div><strong>Status: </strong>
-                                    <Badge
+                                    {project.status === ProjectStatus.PUBLISHED ? <Badge
                                         variant="secondary"
                                         className={
                                             selectedTask.deleted_at
@@ -49,6 +49,8 @@ export default function ProjectDetailsDialog({ project, onClose }: { project: Pr
                                             : selectedTask.status
                                         }
                                     </Badge>
+                                        : "--"
+                                    }
                                 </div>
                                 <p><strong>Created At: </strong> {format(new Date(project.created_at), "PPPpp")}</p>
                                 {project.updated_at && <p><strong>Updated At: </strong>{format(new Date(project.updated_at), "PPPpp")}</p>}
@@ -74,14 +76,14 @@ export default function ProjectDetailsDialog({ project, onClose }: { project: Pr
                         </div>
                     )
                     : (
-                        <Accordion type="single" collapsible className="w-full space-y-2">
+                        <Accordion type="single" collapsible className="w-full space-y-2 font-retro">
                             {/* General Info */}
                             <AccordionItem value="general">
                                 <AccordionTrigger className="text-md data-[state=open]:text-primary">General</AccordionTrigger>
                                 <AccordionContent className="max-h-[60vh] overflow-y-auto">
                                     <div className="grid gap-1 text-sm">
-                                    <div><strong>Creator: </strong><UserHoverCard user={project.creator} /></div>
-                                    <p><strong>Name: </strong>{project.name}</p>
+                                        <div><strong>Creator: </strong><UserHoverCard user={project.creator} /></div>
+                                        <p><strong>Name: </strong>{project.name}</p>
                                         <div><strong>Status: </strong>
                                             <Badge
                                                 variant="secondary"

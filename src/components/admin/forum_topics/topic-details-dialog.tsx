@@ -24,7 +24,7 @@ export default function TopicDetailsDialog({ topic, onClose }: { topic: ForumTop
                 <DialogHeader>
                     <DialogTitle>Topic Details</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-1 text-sm">
+                <div className="grid gap-1 text-sm font-retro">
                     <div><strong>Author: </strong><UserHoverCard user={topic.creator} /></div>
                     <div><strong>Status: </strong>
                         <Badge
@@ -50,10 +50,12 @@ export default function TopicDetailsDialog({ topic, onClose }: { topic: ForumTop
                     <div><strong>Content: </strong>
                         <MarkdownViewer source={topic.content} className="p-2 max-h-60 overflow-y-auto border m-2" />
                     </div>
-                    <p><strong>Views: </strong>{topic.views}</p>
-                    <p><strong>Replies: </strong>{topic.replies}</p>
-                    <p><strong>Upvotes: </strong><span className="text-green-500">{topic.upvotes}</span></p>
-                    <p><strong>Downvotes: </strong><span className="text-red-500">{topic.downvotes}</span></p>
+                    <div className="flex gap-4 flex-wrap">
+                        <p><strong>Views: </strong>{topic.views}</p>
+                        <p><strong>Replies: </strong>{topic.replies}</p>
+                        <p><strong>Upvotes: </strong><span className="text-green-500">{topic.upvotes}</span></p>
+                        <p><strong>Downvotes: </strong><span className="text-red-500">{topic.downvotes}</span></p>
+                    </div>
                 </div>
             </DialogContent >
         </Dialog >

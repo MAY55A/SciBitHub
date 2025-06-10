@@ -27,7 +27,7 @@ export default function UserDetailsDialog({ user, onClose }: { user: User, onClo
                     <DialogTitle>User Details</DialogTitle>
                 </DialogHeader>
 
-                <div className="space-y-4 text-sm">
+                <div className="space-y-4 text-sm font-retro">
                     <div>
                         <span className="font-semibold">ID:</span> {user.id}
                     </div>
