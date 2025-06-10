@@ -39,7 +39,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
         project:project_id (id, name),
         forum_topic:topic_id (id, title),
         comment:comment_id (id, content),
-        task:task_id (type),
+        task:task_id (id, title),
         discussion:discussion_id (title)
     `;
 

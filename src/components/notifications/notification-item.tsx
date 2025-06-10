@@ -25,7 +25,7 @@ export function NotificationItem({ notification, markAsRead }: { notification: N
                     <AvatarImage src={notification.user.profile_picture ?? undefined} alt="avatar" />
                     <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">{notification.user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
                 </Avatar>)}
-            <div className="flex-1">
+            <div className="flex-1 font-retro text-sm">
                 {parseNotification(notification)}
                 <p className="text-xs text-muted-foreground mt-1">
                     {formatDate(notification.created_at, true)}
@@ -53,9 +53,9 @@ export function NotificationItem({ notification, markAsRead }: { notification: N
 export function parseNotification(
     notification: Notification,
 ) {
-    const parts = notification.message_template.split(" ");
+    const parts = notification.message_template.split(" "); 
     return parts.map((part, i) => {
-        if (part.startsWith('{') && part.endsWith('}')) { // ex: '{user.username}'
+        if (part.startsWith('{') && part.endsWith('}')) { // if it is at the end of a phrase, make sure there is no dot exactly after } ({user.username} is valid, {user.username}. is not)
             const keys = part.slice(1, -1).split('.'); // ex: 'user.username' => ['user', 'username']
             const entity = notification[keys[0] as keyof Notification]; // ex: user object
             if (!entity) return part;

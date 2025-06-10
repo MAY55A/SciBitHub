@@ -56,7 +56,7 @@ export const createContribution = async (data: any, taskId: string, moderation: 
     const contribution = inserted as unknown as Contribution;
     const notification = {
         recipient_id: contribution.task.project.creator,
-        message_template: `{user.username} submitted a new contribution to {task.title}.`,
+        message_template: `{user.username} submitted a new contribution to {task.title} .`,
         task_id: taskId,
         user_id: userId,
         action_url: `/contributions/${contribution.id}`,

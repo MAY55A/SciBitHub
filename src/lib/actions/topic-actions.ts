@@ -29,7 +29,7 @@ export const createTopic = async (data: TopicInputData) => {
     // notify project creator
     const notification = {
         recipient_id: (topicData as unknown as ForumTopic).project.creator,
-        message_template: "{user.username} created a new topic {topic.title} in {project.name} forum.",
+        message_template: "{user.username} created a new topic {forum_topic.title} in {project.name} forum.",
         user_id: user.data.user.id,
         topic_id: topicData.id,
         action_url: `/forum_topics/${topicData.id}`
@@ -67,7 +67,7 @@ export async function toggleIsFeatured(is_featured: boolean, id: string, client:
     // notify topic creator
     const notification = {
         recipient_id: topic.creator,
-        message_template: `Your forum topic {topic.title} has been ${action}ed as featured.`,
+        message_template: `Your forum topic {forum_topic.title} has been ${action}ed as featured.`,
         topic_id: id,
         action_url: `/forum_topics/${id}`
     };

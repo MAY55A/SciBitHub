@@ -20,7 +20,7 @@ export const updateProjectStatus = async (projectId: string, status: ProjectStat
 
     const notification = {
         recipient_id: project.creator,
-        message_template: `Your project {project.title} has been ${status} .`,
+        message_template: `Your project {project.name} has been ${status}.`,
         project_id: projectId,
         action_url: `/profile/projects`,
     };

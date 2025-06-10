@@ -43,7 +43,7 @@ export const postComment = async (data: any, commentPage: string) => {
     } else if (commentData.topic) {
         notification = {
             topic_id: comment.forum_topic,
-            message_template: `{user.username} replied to your topic: {topic.title} ↩ .`,
+            message_template: `{user.username} replied to your topic: {forum_topic.title} ↩ .`,
             action_url: `/forum_topics/${comment.topic_id}#${commentData.id}`,
         }
     } else if (commentData.parent_comment) {
@@ -53,7 +53,7 @@ export const postComment = async (data: any, commentPage: string) => {
         }
     }
 
-    const { error: notifError } = await supabase.from("notifications").insert({notification, ...notificationParties});
+    const { error: notifError } = await supabase.from("notifications").insert({...notification, ...notificationParties});
     if (notifError) {
         console.error("Database notification error:", notifError.message);
     }

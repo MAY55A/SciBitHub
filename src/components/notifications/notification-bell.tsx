@@ -30,7 +30,7 @@ export function NotificationBell() {
                         )}
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="max-w-96 m-2">
+                <DropdownMenuContent className="max-w-96 m-2 overflow-y-auto max-h-[80vh]">
                     {lastNotifications.length === 0
                         ? <div className="px-4 py-12 text-sm">
                             No notifications available
