@@ -29,7 +29,7 @@ export function ContributionBody({ data }: { data: { [key: string]: any } }) {
                         <TableHead>Field Data</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className="font-retro">
                     {Object.entries(data).map(([label, fieldData]) => (
                         <TableRow key={label}>
                             <TableCell className="font-medium capitalize">{label.replace(/_/g, " ")}</TableCell>

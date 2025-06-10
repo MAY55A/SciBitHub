@@ -7,9 +7,9 @@ import { UserHoverCard } from "../custom/user-hover-card";
 
 export function ContributionHeader({ contribution, showActions }: { contribution: Contribution, showActions: boolean }) {
     return (
-        <div className="w-full flex flex-col min-h-[30vh] p-8 rounded-lg bg-muted/50 shadow-md">
+        <div className="w-full flex flex-col min-h-[30vh] p-8 rounded-lg bg-muted/50 shadow-md font-retro">
             <div className="w-full flex justify-between gap-4">
-                <div className="italic text-muted-foreground text-xs">Submitted {formatDate(contribution.created_at!, true)},  by
+                <div className="italic text-muted-foreground text-xs">Submitted {formatDate(contribution.created_at!, true)},  by {" "}
                     <UserHoverCard user={contribution.user} />
                 </div>
                 {!showActions && <div className="rounded-2xl shadow-md font-bold uppercase tracking-[.1em] text-xs">
@@ -21,13 +21,13 @@ export function ContributionHeader({ contribution, showActions }: { contribution
                 <p><strong className="text-muted-foreground mr-2">+ ID :</strong> {contribution.id} </p>
                 <p><strong className="text-muted-foreground mr-2">+ Type :</strong> {contribution.task.type} </p>
                 <p><strong className="text-muted-foreground mr-2">+ Task :</strong>
-                    <Link href="/tasks/[id]" as={`/tasks/${contribution.task.id}`} className="underline">
+                    <Link href="/tasks/[id]" as={`/tasks/${contribution.task.id}`} className="hover:underline">
                         {contribution.task.title}
                         {contribution.task.deleted_at && " (deleted)"}
                     </Link>
                 </p>
                 <p><strong className="text-muted-foreground mr-2">+ Project :</strong>
-                    <Link href="/projects/[id]" as={`/projects/${contribution.task.project.id}`} className="underline">
+                    <Link href="/projects/[id]" as={`/projects/${contribution.task.project.id}`} className="hover:underline">
                         {contribution.task.project.name}
                     </Link>
                 </p>
