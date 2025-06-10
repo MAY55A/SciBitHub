@@ -90,7 +90,7 @@ export const FormGenerator = (
                 name={field.label}
                 placeholder={field.placeholder}
                 accept={field.params?.extensions
-                    ? field.params.extensions.split(",").map(ext => `.${ext.trim()}`).join(",")
+                    ? field.params.extensions.map(ext => `.${ext.trim()}`)?.join(",")
                     : field.params?.fileType ? fileTypeMap[field.params.fileType] : undefined}
                 required={field.required}
                 multiple={!field.params?.maxFiles || field.params.maxFiles > 1}
@@ -104,8 +104,18 @@ export const FormGenerator = (
                 required={field.required}
                 value={formData[field.label]?.value || ''}
                 onChange={handleChange}
-                className="p-2 border rounded w-full resize-none"
+                className="p-2 border rounded w-full"
             ></textarea>
+        ),
+        date: (field) => (
+            <Input
+                type="date"
+                name={field.label}
+                required={field.required}
+                value={formData[field.label]?.value || ''}
+                onChange={handleChange}
+                className="p-2 border rounded"
+            />
         ),
         select: (field) =>
             !!field.params?.options && field.params.options.length < 6 ?

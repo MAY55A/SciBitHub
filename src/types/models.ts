@@ -85,7 +85,7 @@ export interface FieldParams {
     maxLength?: number;
     minValue?: number;
     maxValue?: number;
-    extensions?: string;
+    extensions?: string[];
     fileType?: string;
     maxFiles?: number;
     options?: string[];
