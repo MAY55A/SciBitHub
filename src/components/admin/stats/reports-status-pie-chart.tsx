@@ -10,19 +10,19 @@ import { PieGraphSkeleton } from './pie-graph-skeleton';
 const chartConfig = {
     resolved: {
         label: 'Resolved',
-        color: '#4CAF50AA',  // Green (success)
+        color: '#4CAF50AA',  // Green
     },
     pending: {
         label: 'Pending',
-        color: '#FFC107AA',  // Amber (warning)
+        color: '#FFC107AA',  // Amber
     },
     dismissed: {
         label: 'Dismissed',
-        color: '#F44336AA',  // Red (danger/termination)
+        color: '#F44336AA',  // Red
     },
     reviewed: {
         label: 'Reviewed',
-        color: '#2196F3AA',  // Blue (neutral/processing)
+        color: '#4682B4AA',  // Blue
     },
 } satisfies ChartConfig;
 
@@ -54,7 +54,7 @@ export default function ReportsStatusPieChart() {
         <Card className='@container/card'>
             <CardHeader>
                 <CardTitle>Report Status Overview</CardTitle>
-                <CardDescription>
+                <CardDescription className='font-retro mt-1'>
                     <span className='hidden @[540px]/card:block'>
                         Total reports by status distribution
                     </span>
@@ -69,9 +69,9 @@ export default function ReportsStatusPieChart() {
                     <PieChart>
                         <ChartTooltip
                             cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
+                            content={<ChartTooltipContent hideLabel className='font-retro' />}
                         />
-                        <ChartLegend content={<ChartLegendContent className='flex-wrap' />} />
+                        <ChartLegend content={<ChartLegendContent className='flex-wrap font-retro' />} />
                         <Pie
                             data={data.map((item) => ({
                                 ...item,

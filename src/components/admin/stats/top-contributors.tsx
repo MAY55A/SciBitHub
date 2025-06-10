@@ -17,12 +17,12 @@ export async function TopContributors() {
         <Card className='h-full'>
             <CardHeader>
                 <CardTitle>Top Contributors</CardTitle>
-                <CardDescription>Contributions made for the last 30 days.</CardDescription>
+                <CardDescription className='font-retro'>Contributions made for the last 30 days.</CardDescription>
             </CardHeader>
             <CardContent>
                 {contributors.length === 0 &&
                     <div className='flex items-center justify-center h-full w-full p-16'>
-                        <p className='text-sm'>No contributions found.</p>
+                        <p className='text-sm font-retro'>No contributions found.</p>
                     </div>
                 }
                 <div className='space-y-8'>
@@ -32,11 +32,11 @@ export async function TopContributors() {
                                 <AvatarImage src={contributor.profile_picture ?? undefined} alt="avatar" />
                                 <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">{contributor.username.slice(0, 2).toUpperCase()}</AvatarFallback>
                             </Avatar>
-                            <div className='ml-4 space-y-1'>
-                                <Link href={`/users/${contributor.user_id}`} className='text-sm leading-none font-medium hover:underline'>{contributor.username}</Link>
-                                <p className='text-muted-foreground text-sm'>last contribution {formatDate(contributor.last_contribution)}</p>
+                            <div className='ml-3'>
+                                <Link href={`/users/${contributor.user_id}`} className='text-sm leading-none font-medium hover:underline font-retro text-primary/90'>{contributor.username}</Link>
+                                <p className='text-muted-foreground text-sm font-retro'>last contribution {formatDate(contributor.last_contribution)}</p>
                             </div>
-                            <div className='ml-auto font-medium text-sm'>{contributor.contribution_count} contributions</div>
+                            <div className='ml-auto font-medium text-sm font-retro'>{contributor.contribution_count} contributions</div>
                         </div>
                     ))}
                 </div>

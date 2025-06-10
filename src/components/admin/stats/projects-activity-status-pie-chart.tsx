@@ -55,7 +55,7 @@ export default function ProjectsActivityStatusPieChart() {
         <Card className='@container/card'>
             <CardHeader>
                 <CardTitle>Published Project activity Distribution</CardTitle>
-                <CardDescription>
+                <CardDescription className='font-retro'>
                     <span className='hidden @[540px]/card:block'>
                         Total Published Projects by activity status distribution
                     </span>
@@ -65,7 +65,7 @@ export default function ProjectsActivityStatusPieChart() {
             <CardContent className='px-2 sm:px-6'>
                 <ChartContainer
                     config={chartConfig}
-                    className='mx-auto aspect-square min-h-[250px] max-h-[300px]'
+                    className='mx-auto aspect-square min-h-[250px] max-h-[300px] font-retro'
                 >
                     <PieChart>
                         <ChartTooltip

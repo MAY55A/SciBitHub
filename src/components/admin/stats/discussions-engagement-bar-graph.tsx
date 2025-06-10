@@ -79,7 +79,7 @@ export function DiscussionsEngagementBarGraph() {
             <CardHeader className='flex flex-col items-stretch space-y-0 border-b !p-0 sm:flex-row'>
                 <div className='flex flex-1 flex-col justify-center gap-1 px-6 !py-0'>
                     <CardTitle>Discussions Engagement</CardTitle>
-                    <CardDescription>
+                    <CardDescription className='font-retro'>
                         <span className='hidden @[540px]/card:block'>
                             Top 5 discussions with most {activeChart}
                         </span>
@@ -134,13 +134,25 @@ export function DiscussionsEngagementBarGraph() {
                             </linearGradient>
                         </defs>
                         <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey='discussion_title'
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                            minTickGap={32}
-                        />
+                        {data.length < 4 && (
+                            <XAxis
+                                dataKey='discussion_title'
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                interval={0}
+                                tick={({ x, y, payload }) => (
+                                    <text
+                                        x={x}
+                                        y={y + 12}
+                                        textAnchor="middle"
+                                        fontSize={11}
+                                    >
+                                        {payload.value.length > 20 ? `${payload.value.slice(0, 17)}...` : payload.value}
+                                    </text>
+                                )}
+                            />
+                        )}
                         <ChartTooltip
                             cursor={{ opacity: 0.5 }}
                             content={
@@ -155,6 +167,7 @@ export function DiscussionsEngagementBarGraph() {
                             dataKey={activeChart}
                             fill='url(#fillBar)'
                             radius={[4, 4, 0, 0]}
+                            minPointSize={2}
                         />
                     </BarChart>
                 </ChartContainer>

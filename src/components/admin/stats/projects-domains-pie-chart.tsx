@@ -50,7 +50,7 @@ export default function ProjectsDomainsPieChart() {
         <Card className='@container/card'>
             <CardHeader>
                 <CardTitle>Project Domain Distribution</CardTitle>
-                <CardDescription>
+                <CardDescription className='font-retro'>
                     <span className='hidden @[540px]/card:block'>
                         Total Projects by domain distribution
                     </span>
@@ -60,14 +60,14 @@ export default function ProjectsDomainsPieChart() {
             <CardContent className='px-2 sm:px-6'>
                 <ChartContainer
                     config={chartConfig}
-                    className='mx-auto aspect-square min-h-[250px] max-h-[300px]'
+                    className='mx-auto aspect-square min-h-[250px] max-h-[300px] font-retro'
                 >
                     <PieChart>
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent hideLabel />}
                         />
-                        {data.length < 6 &&
+                        {data.length < 7 &&
                             <ChartLegend content={<ChartLegendContent className='flex-wrap' />} />
                         }
                         <Pie

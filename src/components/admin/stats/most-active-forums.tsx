@@ -17,10 +17,10 @@ export async function MostActiveForums() {
         <Card className='h-full'>
             <CardHeader>
                 <CardTitle>Most Active Forums</CardTitle>
-                <CardDescription>With {total} topics in total.</CardDescription>
+                <CardDescription className='font-retro'>With {total} topics in total.</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className='space-y-4'>
+                <div className='space-y-4 font-retro'>
                     {data.map((item: any, index: number) => (
                         <div key={index} className='flex items-center gap-2 border-b pb-4 last:border-b-0'>
                             <div className='ml-4 space-y-1'>

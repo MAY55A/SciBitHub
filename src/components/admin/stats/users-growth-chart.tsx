@@ -83,10 +83,10 @@ export function UsersGrowthChart() {
 
     return (
         <Card className='@container/card'>
-            <CardHeader className='flex-row gap-3 justify-between'>
+            <CardHeader className='flex-row gap-4 justify-between'>
                 <div>
                     <CardTitle>Account Registration History</CardTitle>
-                    <CardDescription>
+                    <CardDescription className='font-retro mt-2'>
                         Showing total of new users for the last {selectedInterval} months
                     </CardDescription>
                 </div>
@@ -106,7 +106,7 @@ export function UsersGrowthChart() {
             <CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
                 <ChartContainer
                     config={chartConfig}
-                    className='aspect-auto h-[250px] w-full'
+                    className='aspect-auto h-[250px] w-full font-retro'
                 >
                     <AreaChart
                         data={data}
@@ -150,7 +150,13 @@ export function UsersGrowthChart() {
                             minTickGap={32}
                             interval={0} // Force all labels to show
                         />
-                        <YAxis width={40} tickLine={false} axisLine={false} />
+                        <YAxis
+                            width={40}
+                            tickLine={false}
+                            axisLine={false}
+                            padding={{ top: 15, bottom: 10 }}
+                            allowDecimals={false}
+                        />
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent indicator='dot' />}
@@ -202,7 +208,7 @@ function UserGrowthSummary({ growthData }: { growthData: { month: string, resear
     }, [growthData]);
 
     return (
-        <div className='grid gap-2'>
+        <div className='grid gap-2 font-retro'>
             <div className='flex items-center gap-2 leading-none font-medium'>
                 {growthRate > 0
                     ? <>

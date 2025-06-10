@@ -54,7 +54,7 @@ export function ReportsGrowthChart() {
             <CardHeader className='flex-row gap-3 justify-between'>
                 <div>
                     <CardTitle>Moderation Reports Over Time</CardTitle>
-                    <CardDescription>
+                    <CardDescription className='font-retro mt-1'>
                         Showing total of new reports for the last {selectedInterval} days
                     </CardDescription>
                 </div>
@@ -74,7 +74,7 @@ export function ReportsGrowthChart() {
             <CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
                 <ChartContainer
                     config={chartConfig}
-                    className='aspect-auto h-[250px] w-full'
+                    className='aspect-auto h-[250px] w-full font-retro'
                 >
                     <LineChart
                         data={data}

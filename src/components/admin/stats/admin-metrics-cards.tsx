@@ -162,19 +162,19 @@ const MetricsCard = ({ title, value, change, icon, breakdown }: any) => {
                 </CardTitle>
                 {icon}
             </CardHeader>
-            <CardContent>
+            <CardContent className='font-retro'>
                 <div className="text-2xl font-bold">{value}</div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                     <span className={"text-green-500"}>
                         {change}
                     </span> growth this month
                 </p>
 
-                <div className="mt-4 flex space-x-4">
+                <div className="mt-4 flex justify-end space-x-4">
                     {breakdown.map((item: any) => (
                         <div key={item.label}>
                             <span className="text-xs text-muted-foreground">{item.label}</span>
-                            <p className="text-sm font-medium">{item.value}</p>
+                            <p className="text-sm font-medium text-end">{item.value}</p>
                         </div>
                     ))}
                 </div>
@@ -193,7 +193,7 @@ const ErrorCard = ({ type }: { type: string }) => {
                 <LucideSearchX color='red' opacity={0.3} />
             </CardHeader>
             <CardContent>
-                <div className="p-4"> Oops, an <span className='text-destructive'>error</span> happened while fetching {type} metrics</div>
+                <div className="p-4 font-retro"> Oops, an <span className='text-destructive'>error</span> happened while fetching {type} metrics</div>
             </CardContent>
         </Card>
     );

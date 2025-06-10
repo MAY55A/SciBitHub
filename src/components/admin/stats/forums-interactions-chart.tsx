@@ -19,20 +19,19 @@ import {
 import { useEffect, useState, useTransition } from 'react';
 import { createClient } from '@/src/utils/supabase/client';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/src/components/ui/select';
-import { c } from 'framer-motion/dist/types.d-6pKw1mTI';
 
 const chartConfig = {
     replies: {
         label: 'Replies',
-        color: '#FFC107AA'
+        color: '#FFC107AA' // Yellow
     },
     upvotes: {
         label: 'Upvotes',
-        color: '#4CAF50AA',  // Green (success)
+        color: '#4CAF50AA',  // Green
     },
     downvotes: {
         label: 'Downvotes',
-        color: '#F44336AA',  // Red (danger/termination)
+        color: '#F44336AA',  // Red
     }
 } satisfies ChartConfig;
 
@@ -54,7 +53,6 @@ export function ForumsInteractionsChart() {
             const { data, error } = await supabase.rpc('admin_topics_interactivity', {
                 days: selectedInterval,
             });
-            console.log(data, error);
             if (!error) {
                 setData(data);
             } else {
@@ -68,7 +66,7 @@ export function ForumsInteractionsChart() {
             <CardHeader className='flex-row gap-3 justify-between'>
                 <div>
                     <CardTitle>Forum Topics Interactivity</CardTitle>
-                    <CardDescription>
+                    <CardDescription className='font-retro mt-1'>
                         Showing interactions with topics for the last {selectedInterval} days
                     </CardDescription>
                 </div>
@@ -88,7 +86,7 @@ export function ForumsInteractionsChart() {
             <CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
                 <ChartContainer
                     config={chartConfig}
-                    className='aspect-auto h-[250px] w-full'
+                    className='aspect-auto h-[250px] w-full font-retro'
                 >
                     <LineChart
                         data={data}

@@ -10,23 +10,23 @@ import { PieGraphSkeleton } from './pie-graph-skeleton';
 const chartConfig = {
     contributor: {
         label: 'Contributors',
-        color: 'hsla(var(--green), 0.8)'
+        color: 'hsla(var(--green)/ 0.8)'
     },
     researcher: {
         label: 'Researchers',
-        color: 'hsla(var(--green), 0.5)'
+        color: 'hsla(var(--green)/ 0.5)'
     },
     academic: {
         label: 'Academics',
-        color: 'hsla(var(--primary), 1)'
+        color: 'hsla(var(--primary)/ 1)'
     },
     casual: {
         label: 'Casuals',
-        color: 'hsla(var(--primary), 0.7)'
+        color: 'hsla(var(--primary)/ 0.7)'
     },
     organization: {
         label: 'Organizations',
-        color: 'hsla(var(--primary), 0.4)'
+        color: 'hsla(var(--primary)/ 0.4)'
     },
 
 } satisfies ChartConfig;
@@ -69,7 +69,7 @@ export default function UsersRolesPieChart() {
         <Card className='@container/card'>
             <CardHeader>
                 <CardTitle>User Role Distribution</CardTitle>
-                <CardDescription>
+                <CardDescription className='font-retro mt-2'>
                     <span className='hidden @[540px]/card:block'>
                         Total Users by role distribution
                     </span>
@@ -79,7 +79,7 @@ export default function UsersRolesPieChart() {
             <CardContent className='px-2 sm:px-6'>
                 <ChartContainer
                     config={chartConfig}
-                    className='mx-auto aspect-square min-h-[250px] max-h-[300px]'
+                    className='mx-auto aspect-square min-h-[250px] max-h-[300px] font-retro'
                 >
                     <PieChart>
                         <ChartTooltip
