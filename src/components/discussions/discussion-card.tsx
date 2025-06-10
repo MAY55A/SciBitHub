@@ -12,7 +12,7 @@ import { VoteDisplay } from "../votes/vote-display";
 import { BookmarkButton } from "../bookmarks/bookmark-button";
 
 
-export function DiscussionCard({ discussion, editable = false, showBody = true }: { discussion: Discussion, editable?: boolean, showBody?: boolean }) {
+export function DiscussionCard({ discussion, editable = false }: { discussion: Discussion, editable?: boolean }) {
 
     return (
         <Card
@@ -53,12 +53,11 @@ export function DiscussionCard({ discussion, editable = false, showBody = true }
                         <ChevronRight size={18} className="mt-1 pr-1" />
                         {discussion.title}
                     </h2></Link>
-                {showBody &&
-                    <p
-                        className="text-sm text-muted-foreground line-clamp-3 pl-2 font-retro"
-                    >
-                        {discussion.body}
-                    </p>}
+                <p
+                    className="text-sm text-muted-foreground line-clamp-3 pl-2 font-retro"
+                >
+                    {discussion.body}
+                </p>
                 <div className="w-full flex flex-wrap gap-2 mt-2 font-retro">
                     {discussion.tags && discussion.tags?.map((tag) => (
                         <a

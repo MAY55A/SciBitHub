@@ -332,7 +332,7 @@ export async function fetchSimilarDiscussions(
         return [];
     }
 
-    return data;
+    return data?.filter((discussion: any) => discussion.similarity > 0) || [];
 }
 
 export const fetchForumTopics = async (
