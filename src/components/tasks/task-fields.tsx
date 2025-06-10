@@ -77,6 +77,7 @@ export function TaskFields({ task }: { task: Task }) {
         }
         setFormData({});
         setMessage(undefined);
+        setFile(null);
         if (task.type === TaskType.DATALABELLING) {
             fetchRandomFile();
         } else if(task.type === TaskType.SURVEY) {
