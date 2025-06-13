@@ -33,29 +33,33 @@ export const postComment = async (data: any, commentPage: string) => {
         recipient_id: commentData.discussion?.creator ?? commentData?.topic?.creator ?? commentData.parent_comment?.creator,
         user_id: user.data.user.id,
     };
-    let notification = {};
-    if (commentData.discussion) {
-        notification = {
-            discussion_id: comment.discussion,
-            message_template: `{user.username} replied to your discussion: {discussion.title} ↩ .`,
-            action_url: `/discussions/${comment.discussion}#${commentData.id}`,
-        }
-    } else if (commentData.topic) {
-        notification = {
-            topic_id: comment.forum_topic,
-            message_template: `{user.username} replied to your topic: {forum_topic.title} ↩ .`,
-            action_url: `/forum_topics/${comment.topic_id}#${commentData.id}`,
-        }
-    } else if (commentData.parent_comment) {
-        notification = {
-            message_template: `{user.username} replied to your comment ↩ .`,
-            action_url: `${commentPage}#${commentData.id}`,
-        }
-    }
 
-    const { error: notifError } = await supabase.from("notifications").insert({...notification, ...notificationParties});
-    if (notifError) {
-        console.error("Database notification error:", notifError.message);
+    // If the recipient is the same as the user, no notification is sent (user replied to themselves)
+    if (notificationParties.recipient_id !== notificationParties.user_id) {
+        let notification = {};
+        if (commentData.discussion) {
+            notification = {
+                discussion_id: comment.discussion,
+                message_template: `{user.username} replied to your discussion: {discussion.title} ↩ .`,
+                action_url: `/discussions/${comment.discussion}#${commentData.id}`,
+            }
+        } else if (commentData.topic) {
+            notification = {
+                topic_id: comment.forum_topic,
+                message_template: `{user.username} replied to your topic: {forum_topic.title} ↩ .`,
+                action_url: `/forum_topics/${comment.topic_id}#${commentData.id}`,
+            }
+        } else if (commentData.parent_comment) {
+            notification = {
+                message_template: `{user.username} replied to your comment ↩ .`,
+                action_url: `${commentPage}#${commentData.id}`,
+            }
+        }
+
+        const { error: notifError } = await supabase.from("notifications").insert({ ...notification, ...notificationParties });
+        if (notifError) {
+            console.error("Database notification error:", notifError.message);
+        }
     }
 
     return { success: true, message: "Reply posted successfully." };
