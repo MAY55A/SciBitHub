@@ -30,36 +30,53 @@ export const uploadFileToMinIO = async (file: File, filePath: string) => {
 
 export const deleteFromMinIO = async (filePath: string, isFolder: boolean = false) => {
     if (isFolder) {
-        // List all objects inside the folder
-        const listCommand = new ListObjectsV2Command({
-            Bucket: bucketName,
-            Prefix: filePath.endsWith("/") ? filePath : `${filePath}/`,
-        });
+        const prefix = filePath.endsWith("/") ? filePath : `${filePath}/`;
+        let continuationToken: string | undefined = undefined;
 
-        const listedObjects = await s3Client.send(listCommand);
+        const allObjects: { Key: string }[] = [];
 
-        if (!listedObjects.Contents || listedObjects.Contents.length === 0) {
+        do {
+            const listCommand: ListObjectsV2Command = new ListObjectsV2Command({
+                Bucket: bucketName,
+                Prefix: prefix,
+                ContinuationToken: continuationToken,
+            });
+
+            const response = await s3Client.send(listCommand);
+
+            if (response.Contents) {
+                for (const obj of response.Contents) {
+                    if (obj.Key) {
+                        allObjects.push({ Key: obj.Key });
+                    }
+                }
+            }
+
+            continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
+        } while (continuationToken);
+
+        if (allObjects.length === 0) {
             console.log("No files found in folder.");
             return;
         }
 
-        // Delete all objects inside the folder
-        const deleteCommand = new DeleteObjectsCommand({
-            Bucket: bucketName,
-            Delete: {
-                Objects: listedObjects.Contents.map((obj) => ({ Key: obj.Key! })),
-            },
-        });
+        // Delete in chunks of 1000 (S3 limit per delete batch)
+        const chunkSize = 1000;
+        for (let i = 0; i < allObjects.length; i += chunkSize) {
+            const chunk = allObjects.slice(i, i + chunkSize);
+            const deleteCommand = new DeleteObjectsCommand({
+                Bucket: bucketName,
+                Delete: { Objects: chunk },
+            });
+            await s3Client.send(deleteCommand);
+        }
 
-        await s3Client.send(deleteCommand);
-        console.log(`Deleted folder: ${filePath}`);
+        console.log(`Deleted folder recursively: ${filePath}`);
     } else {
-        // Delete a single file
         const deleteCommand = new DeleteObjectCommand({
             Bucket: bucketName,
             Key: filePath,
         });
-
         await s3Client.send(deleteCommand);
         console.log(`Deleted file: ${filePath}`);
     }
