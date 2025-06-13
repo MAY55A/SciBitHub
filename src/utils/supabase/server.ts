@@ -1,15 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
-import { SupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
-let supabaseClient: SupabaseClient | null = null;
-
 export const createClient = async () => {
-  if (supabaseClient) return supabaseClient;
-
   const cookieStore = await cookies();
 
-  supabaseClient = createServerClient(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -29,6 +24,4 @@ export const createClient = async () => {
       },
     }
   );
-
-  return supabaseClient;
 };
