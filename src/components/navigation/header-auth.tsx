@@ -8,7 +8,8 @@ import { NavUser } from "./nav-user";
 export default function AuthButtons() {
   const { user, loading } = useAuth();
 
-  if (!loading)
+  if (loading) return null;
+  
   return user ? (
       <NavUser user={{
         name: user.username,

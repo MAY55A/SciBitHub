@@ -1,8 +1,9 @@
 "use client";
 
-import { User } from "@/src/types/models";
-import useSupabaseClient from "@/src/utils/supabase/client";
 import { createContext, useContext, useEffect, useState } from "react";
+import useSupabaseClient from "@/src/utils/supabase/client";
+import { User } from "@/src/types/models";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
     user: User | null;
@@ -16,49 +17,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const supabase = useSupabaseClient();
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
-    // Load user from local storage on initial render
-    useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-            setLoading(false);
-        } else {
-            fetchUser();
-        }
-    }, []);
-
-    // Fetch user from Supabase
     const fetchUser = async () => {
         setLoading(true);
-        const { data: session } = await supabase.auth.getSession();
+        try {
+            const { data: sessionData } = await supabase.auth.getSession();
+            const supaUser = sessionData?.session?.user;
 
-        if (session?.session?.user) {
-            const { data: userData, error } = await supabase
-                .from("users")
-                .select("*")
-                .eq("id", session.session.user.id)
-                .single();
+            if (supaUser) {
+                const { data: userData, error } = await supabase
+                    .from("users")
+                    .select("*")
+                    .eq("id", supaUser.id)
+                    .single();
 
-            if (!error) {
-                setUser({...userData, email: session.session.user.email});
-                localStorage.setItem("user", JSON.stringify(userData));
+                if (!error && userData) {
+                    setUser({ ...userData, email: supaUser.email });
+                } else {
+                    setUser(null);
+                }
+            } else {
+                setUser(null);
             }
-        } else {
+        } catch (error) {
+            console.error("Error fetching user:", error);
             setUser(null);
-            localStorage.removeItem("user");
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     useEffect(() => {
-        const { data: authListener } = supabase.auth.onAuthStateChange((event) => {
-            if (event === "SIGNED_OUT") {
-                setUser(null);
-                localStorage.removeItem("user");
-            } else {
-                fetchUser();
-            }
+        fetchUser();
+
+        const { data: authListener } = supabase.auth.onAuthStateChange((_event, _session) => {
+            fetchUser();
         });
 
         return () => {
