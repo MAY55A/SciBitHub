@@ -53,25 +53,30 @@ export function NotificationItem({ notification, markAsRead }: { notification: N
 export function parseNotification(
     notification: Notification,
 ) {
-    const parts = notification.message_template.split(" "); 
+    const parts = notification.message_template.split(" ");
     return parts.map((part, i) => {
-        if (part.startsWith('{') && part.endsWith('}')) { // if it is at the end of a phrase, make sure there is no dot exactly after } ({user.username} is valid, {user.username}. is not)
-            const keys = part.slice(1, -1).split('.'); // ex: 'user.username' => ['user', 'username']
-            const entity = notification[keys[0] as keyof Notification]; // ex: user object
-            if (!entity) return part;
-            const text = entity[keys[1]] as String; // ex: => user.username = 'John Doe'
-            if (!text) return part;
+        if (part.startsWith('{') && part.endsWith('}')) {
+            try { // if it is at the end of a phrase, make sure there is no dot exactly after } ({user.username} is valid, {user.username}. is not)
+                const keys = part.slice(1, -1).split('.'); // ex: 'user.username' => ['user', 'username']
+                const entity = notification[keys[0] as keyof Notification]; // ex: user object
+                if (!entity) return "";
+                const text = entity[keys[1]] as String; // ex: => user.username = 'John Doe'
+                if (!text) return "";
 
-            return (
-                <Link
-                    key={i}
-                    href={`/${keys[0]}s/${entity.id}`} // ex: '/users/123'
-                    className={cn('hover:underline font-medium', keys[0] === 'user' ? 'text-primary' : 'text-green')}
-                    onClick={(e) => e.stopPropagation()} // Prevent parent link triggering
-                >
-                    {text.length > 50 ? text.slice(0, 50) + "... " : text + " "}
-                </Link>
-            );
+                return (
+                    <Link
+                        key={i}
+                        href={`/${keys[0]}s/${entity.id}`} // ex: '/users/123'
+                        className={cn('hover:underline font-medium', keys[0] === 'user' ? 'text-primary' : 'text-green')}
+                        onClick={(e) => e.stopPropagation()} // Prevent parent link triggering
+                    >
+                        {text.length > 50 ? text.slice(0, 50) + "... " : text + " "}
+                    </Link>
+                );
+            } catch (error) {
+                console.log("Error parsing notification part:", part, error);
+                return "";
+            }
         }
         return part + " "; // Add space after each part
     });
