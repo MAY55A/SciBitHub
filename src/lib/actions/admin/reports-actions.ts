@@ -15,7 +15,7 @@ export const updateReportStatus = async (id: string, status: ReportStatus) => {
 
     const notification = {
         recipient_id: report.reporter,
-        message_template: `Your report to this ${report.reported_type} has been ${status} .`,
+        message_template: `Your report to this ${report.reported_type} has been ${status}.`,
         action_url: report.reported_link,
     };
 

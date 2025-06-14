@@ -116,7 +116,11 @@ export const reportsTableColumns: ColumnDef<Report>[] = [
             const tableMeta = table.options.meta;
             const report = row.original;
             return (
-                <ReportOptionsMenu report={report} rowIndex={row.index} updateRow={tableMeta?.updateData} removeRow={tableMeta?.removeRow} />
+                <ReportOptionsMenu
+                    report={report}
+                    updateRow={(column, value) => tableMeta?.updateData([row.index], column, value)}
+                    removeRow={() => tableMeta?.removeRow(row.index)}
+                />
             )
         },
     },

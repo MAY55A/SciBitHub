@@ -1,10 +1,9 @@
 "use client"
 
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, TriangleAlert } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
 import { Report } from "@/src/types/models";
-import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { useState } from "react";
@@ -13,12 +12,11 @@ import ReportDetailsDialog from "./report-details-dialog";
 import { deleteReport, updateReportStatus } from "@/src/lib/actions/admin/reports-actions";
 
 export function ReportOptionsMenu({
-    report, rowIndex, updateRow, removeRow
+    report, updateRow, removeRow
 }: {
-    report: Report, rowIndex: number, updateRow: (rowIndex: number, field: string, data: any) => void, removeRow: (rowIndex: number) => void
+    report: Report, updateRow: (field: string, data: any) => void, removeRow: () => void
 }) {
     const [showDialog, setShowDialog] = useState("");
-    const router = useRouter();
     const { toast } = useToast();
 
     const handleDelete = async () => {
@@ -30,7 +28,7 @@ export function ReportOptionsMenu({
         });
 
         if (res.success) {
-            removeRow(rowIndex);
+            removeRow();
         }
     }
 
@@ -43,7 +41,7 @@ export function ReportOptionsMenu({
         });
 
         if (res.success) {
-            updateRow(rowIndex, "status", status)
+            updateRow("status", status)
         }
     }
 
@@ -66,7 +64,8 @@ export function ReportOptionsMenu({
                                 onClick={() => handleUpdateStatus(ReportStatus.REVIEWED)}>
                                 Mark as Reviewed
                             </DropdownMenuItem>
-                        }                        {report.status !== ReportStatus.RESOLVED &&
+                        }
+                        {report.status !== ReportStatus.RESOLVED &&
                             <DropdownMenuItem
                                 className="px-4 hover:text-green"
                                 onClick={() => handleUpdateStatus(ReportStatus.RESOLVED)}>
@@ -90,13 +89,14 @@ export function ReportOptionsMenu({
                         className="hover:text-destructive">
                         <CustomAlertDialog
                             triggerText="Delete Report"
+                            buttonIcon={TriangleAlert}
                             buttonVariant="ghost"
                             confirmButtonVariant="destructive"
-                            title="Are you Sure ?"
-                            description="This action cannot be undone."
+                            title="This action CANNOT be undone !"
+                            description="The report will be deleted permanently and all traces of it will be lost."
                             confirmText="Delete Report"
                             onConfirm={handleDelete}
-                            buttonClass="h-full hover:text-destructive pl-0"
+                            buttonClass="h-full text-destructive pl-0"
                         />
                     </DropdownMenuItem>
                 </DropdownMenuContent>
