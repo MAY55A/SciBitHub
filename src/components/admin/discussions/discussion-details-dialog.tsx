@@ -1,18 +1,41 @@
-"use client"
+'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/components/ui/dialog";
-import { Discussion } from "@/src/types/models";
+import { Badge } from "@/src/components/ui/badge";
 import { MarkdownViewer } from "@/src/components/custom/markdown-viewer";
-import { format } from "date-fns";
+import { FilesDisplay } from "@/src/components/custom/files-display";
 import { UserHoverCard } from "@/src/components/custom/user-hover-card";
-import { Badge } from "../../ui/badge";
+import { Discussion } from "@/src/types/models";
 import { DiscussionStatus } from "@/src/types/enums";
-import { DiscussionFiles } from "../../discussions/discussion-files";
-import { VoteDisplay } from "../../votes/vote-display";
+import { format } from "date-fns";
+
 
 export default function DiscussionDetailsDialog({ discussion, onClose }: { discussion: Discussion, onClose: () => void }) {
     const [open, setOpen] = useState(true);
+    const [files, setFiles] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (discussion.files && discussion.files.length > 0) {
+            const fetchFiles = async () => {
+                try {
+                    const url = `/api/get-files-with-metadata?${discussion.files!.map((p) => `paths=${encodeURIComponent(p)}`).join("&")}`;
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    setFiles(data);
+                } catch (err) {
+                    console.error("Failed to load files", err);
+                    setFiles([]);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchFiles();
+        } else {
+            setLoading(false);
+        }
+    }, [discussion.files]);
 
     return (
         <Dialog
@@ -55,7 +78,7 @@ export default function DiscussionDetailsDialog({ discussion, onClose }: { discu
                     </div>
                     {discussion.files && discussion.files.length > 0 &&
                         <div><strong>Files: </strong>
-                            <DiscussionFiles paths={discussion.files} />
+                            {loading ? "loading..." : files.length === 0 ? "not available now" : <FilesDisplay files={files} />}
                         </div>
                     }
                     <div className="flex gap-2">
