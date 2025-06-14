@@ -1,8 +1,8 @@
 import { DataTable } from "@/src/components/data-table/data-table";
 import { fetchAllDiscussions } from "@/src/lib/services/admin-service";
-import { deleteProjectRequests } from "@/src/lib/actions/request-actions";
 import { discussionsTableColumns } from "./discussions-table-columns";
 import { discussionFilters } from "./discussions-table-filters";
+import { DiscussionsGroupActions } from "./discussions-table-group-actions";
 
 
 export default async function DiscussionsTable() {
@@ -15,8 +15,8 @@ export default async function DiscussionsTable() {
                 data={discussions}
                 searchColumn="title"
                 filters={discussionFilters}
-                onRemoveSelected={deleteProjectRequests}
             >
+                <DiscussionsGroupActions />
             </DataTable>
         </div>
     );

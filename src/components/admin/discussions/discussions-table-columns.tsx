@@ -106,7 +106,11 @@ export const discussionsTableColumns: ColumnDef<Discussion>[] = [
             const tableMeta = table.options.meta;
             const discussion = row.original;
             return (
-                <DiscussionOptionsMenu discussion={discussion} rowIndex={row.index} updateRow={tableMeta?.updateData} />
+                <DiscussionOptionsMenu
+                    discussion={discussion}
+                    updateRow={(column, value) => tableMeta?.updateData([row.index], column, value)}
+                    removeRow={() => tableMeta?.removeRow(row.index)}
+                />
             )
         },
     },

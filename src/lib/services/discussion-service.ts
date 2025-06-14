@@ -67,7 +67,7 @@ export const createDiscussion = async (data: DiscussionInputData, files: File[])
     // notify admins
     const notification = {
         type: NotificationType.TO_ALL_ADMINS,
-        message_template: `{user.username} created a new discussion {discussion.title} `,
+        message_template: `{user.username} created a new discussion {discussion.title} .`,
         discussion_id: discussion.id,
         user_id: userId,
         action_url: `/discussions/${discussion.id}`,
