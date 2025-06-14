@@ -2,8 +2,7 @@ import { DataTable } from "@/src/components/data-table/data-table";
 import { fetchAllForumTopics } from "@/src/lib/services/admin-service";
 import { topicsTableColumns } from "./topics-table-columns";
 import { topicFilters } from "./topics-table-filters";
-import { deleteTopics } from "@/src/lib/actions/admin/topics-actions";
-
+import { TopicsGroupActions } from "./topics-table-group-actions";
 
 export default async function TopicsTable() {
     const topics = await fetchAllForumTopics();
@@ -15,8 +14,8 @@ export default async function TopicsTable() {
                 data={topics}
                 searchColumn="title"
                 filters={topicFilters}
-                onRemoveSelected={deleteTopics}
             >
+                <TopicsGroupActions/>
             </DataTable>
         </div>
     );

@@ -1,20 +1,20 @@
 "use client"
 
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, TriangleAlert } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
 import { ForumTopic } from "@/src/types/models";
 import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { useState } from "react";
-import { toggleDeleteTopic, updateTopicIsFeatured } from "@/src/lib/actions/admin/topics-actions";
+import { deleteTopics, toggleDeleteTopic, updateTopicIsFeatured } from "@/src/lib/actions/admin/topics-actions";
 import TopicDetailsDialog from "./topic-details-dialog";
 import { useRouter } from "next/navigation";
 
 export function TopicOptionsMenu({
-    topic, rowIndex, updateRow
+    topic, updateRow, removeRow
 }: {
-    topic: ForumTopic, rowIndex: number, updateRow: (rowIndex: number, field: string, data: any) => void
+    topic: ForumTopic, updateRow: (field: string, data: any) => void, removeRow: () => void
 }) {
     const [showDialog, setShowDialog] = useState("");
     const { toast } = useToast();
@@ -29,7 +29,7 @@ export function TopicOptionsMenu({
         });
 
         if (res.success) {
-            updateRow(rowIndex, "deleted_at", deleted_at)
+            updateRow("deleted_at", deleted_at)
         }
     }
 
@@ -42,7 +42,20 @@ export function TopicOptionsMenu({
         });
 
         if (res.success) {
-            updateRow(rowIndex, "is_featured", isFeatured)
+            updateRow("is_featured", isFeatured)
+        }
+    }
+
+    const permanentDelete = async () => {
+        const res = await deleteTopics([topic.id!], "hard");
+        toast({
+            title: res.success ? "Success !" : "Error !",
+            description: res.message,
+            variant: res.success ? "default" : "destructive",
+        });
+
+        if (res.success) {
+            removeRow();
         }
     }
 
@@ -112,6 +125,23 @@ export function TopicOptionsMenu({
                             />
                         </DropdownMenuItem>
                     }
+                    <DropdownMenuItem
+                        onSelect={(event) => {
+                            event.preventDefault(); // Prevent dialog from closing immediately when opened
+                        }}
+                        className="hover:text-destructive">
+                        <CustomAlertDialog
+                            triggerText="Permanently Delete"
+                            buttonIcon={TriangleAlert}
+                            buttonVariant="ghost"
+                            confirmButtonVariant="destructive"
+                            title="This action CANNOT be undone !"
+                            description="When deleted permanently, the topic and all its comments will be lost forever."
+                            confirmText="Permanently Delete Topic"
+                            onConfirm={permanentDelete}
+                            buttonClass="h-full text-destructive pl-0"
+                        />
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu >
             {showDialog === "topic-details" &&

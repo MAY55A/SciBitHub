@@ -86,9 +86,7 @@ export async function deleteTopic(id: string) {
     if (!count) {
         const { error } = await supabase.from("forum_topics").delete().eq("id", id);
         if (error) {
-            console.error("Database error:", error.message);
             console.log("Database error:", error.message);
-
             return { success: false, message: "Failed to delete topic." };
         }
 
