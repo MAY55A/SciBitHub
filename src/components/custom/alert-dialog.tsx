@@ -55,10 +55,10 @@ export const CustomAlertDialog = ({
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>
-                    <AlertDialogDescription>{description}</AlertDialogDescription>
+                    <AlertDialogDescription className='font-retro'>{description}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className='w-full flex sm:justify-between justify-between'>
-                    <AlertDialogCancel onClick={onCancel}>{cancelText}</AlertDialogCancel>
+                    <AlertDialogCancel className='text-muted-foreground hover:border-muted-foreground' onClick={onCancel}>{cancelText}</AlertDialogCancel>
                     <AlertDialogAction onClick={onConfirm} variant={confirmButtonVariant}>{confirmText}</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
