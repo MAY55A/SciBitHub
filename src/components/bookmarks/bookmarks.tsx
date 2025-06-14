@@ -40,7 +40,7 @@ export default function Bookmarks({ initialProjectBookmarks, initialDiscussionBo
                                 itemId={pb.project.id!}
                                 type="project"
                                 title={pb.project.name}
-                                description={pb.project.short_description}
+                                description={pb.project.deleted_at ? "This project has been deleted !" : pb.project.short_description }
                                 date={pb.created_at}
                                 onRemove={() => handleRemoveBookmark(pb.id, 'project')}
                             />
@@ -67,7 +67,7 @@ export default function Bookmarks({ initialProjectBookmarks, initialDiscussionBo
                                 itemId={db.discussion.id!}
                                 type="discussion"
                                 title={db.discussion.title}
-                                description={db.discussion.body}
+                                description={db.discussion.deleted_at ? "This discussion has been deleted !" : db.discussion.body}
                                 date={db.created_at}
                                 onRemove={() => handleRemoveBookmark(db.id, 'discussion')}
                             />
