@@ -115,7 +115,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
         cell: ({ row }) => {
             const status = row.getValue("status") as ProjectStatus;
             const activity = row.getValue("activity") as ActivityStatus;
-            if( status !== ProjectStatus.PUBLISHED ){
+            if (status !== ProjectStatus.PUBLISHED) {
                 return <div className="text-muted-foreground">--</div>
             }
             if (activity === ActivityStatus.COMPLETED) {
@@ -130,7 +130,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
             return <div className="text-muted-foreground">{activity}</div>
         },
         filterFn: (row, columnId, filterValue) => {
-            if( row.getValue("status") !== ProjectStatus.PUBLISHED ){
+            if (row.getValue("status") !== ProjectStatus.PUBLISHED) {
                 return false
             }
             // If multiple values are selected, check if the row's value matches any of them
@@ -154,7 +154,10 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
             const tableMeta = table.options.meta;
             const project = row.original;
             return (
-                <ProjectOptionsMenu project={project} rowIndex={row.index} updateRow={tableMeta?.updateData} />
+                <ProjectOptionsMenu
+                    project={project}
+                    updateRow={(column, value) => tableMeta?.updateData([row.index], column, value)}
+                    removeRow={() => tableMeta?.removeRow(row.index)} />
             )
         },
     },

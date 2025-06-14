@@ -1,8 +1,8 @@
 import { DataTable } from "@/src/components/data-table/data-table";
 import { fetchAllProjects } from "@/src/lib/services/admin-service";
-import { deleteProjectRequests } from "@/src/lib/actions/request-actions";
 import { projectsTableColumns } from "./projects-table-columns";
 import { projectFilters } from "./projects-table-filters";
+import { ProjectsGroupActions } from "./projects-table-group-actions";
 
 
 export default async function ProjectsTable() {
@@ -15,8 +15,8 @@ export default async function ProjectsTable() {
                 data={projects}
                 searchColumn="name"
                 filters={projectFilters}
-                onRemoveSelected={deleteProjectRequests}
             >
+                <ProjectsGroupActions />
             </DataTable>
         </div>
     );

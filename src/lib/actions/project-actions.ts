@@ -5,6 +5,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { ActivityStatus, NotificationType, ProjectStatus, RequestType } from "@/src/types/enums";
 import { deleteFromMinIO } from "@/src/utils/minio/client";
 
+/*
 const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: any, oldParticipants: any, projectId: string, status: string) => {
     if (participants.length > 0) {
         const existingInvitationIds = new Set(oldParticipants?.map(p => p.user_id) ?? []);
@@ -46,9 +47,11 @@ const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, 
     }
     return { success: true, message: "Participants updated successfully!" };
 }
+*/
 
-export async function softDeleteProject(projectId: string, projectName: string) {
-    const supabase = await createClient();
+// For published projects
+export async function softDeleteProject(projectId: string, projectName: string, client?: SupabaseClient<any, "public", any>) {
+    const supabase = client ?? await createClient();
     const currentDate = new Date().toISOString();
     try {
         const { error: projectError, data: project } = await supabase.from("projects")
@@ -64,6 +67,7 @@ export async function softDeleteProject(projectId: string, projectName: string) 
             throw projectError;
         }
 
+        /*
         const { error: tasksError } = await supabase.from("tasks")
             .update({
                 deleted_at: currentDate,
@@ -73,13 +77,6 @@ export async function softDeleteProject(projectId: string, projectName: string) 
             throw tasksError;
         }
 
-        const { error: requestsError } = await supabase.from("participation_requests")
-            .delete()
-            .eq("project_id", projectId);
-        if (requestsError) {
-            throw requestsError;
-        }
-
         const { error: storageError } = await supabase.storage
             .from("projects")
             .remove([`cover_images/${projectId}`]);
@@ -87,12 +84,18 @@ export async function softDeleteProject(projectId: string, projectName: string) 
             throw storageError;
         }
 
-        // only notify admins if the project is already published
-        const notification = {
-            type: NotificationType.TO_ALL_ADMINS,
-            message_template: `{user.username} deleted their project "${projectName.length > 50 ? projectName.slice(0, 50) + "..." : projectName}".`,
-            user_id: project.creator
-        }
+        */
+
+        const notification = client ? // notify creator if an admin deleted the project else notify admins
+            {
+                message_template: `Your project "${projectName.length > 50 ? projectName.slice(0, 47) + "..." : projectName}" has been deleted.`,
+                recipient_id: project.creator,
+            }
+            : {
+                type: NotificationType.TO_ALL_ADMINS,
+                message_template: `{user.username} deleted their project "${projectName.length > 50 ? projectName.slice(0, 47) + "..." : projectName}".`,
+                user_id: project.creator
+            }
 
         const { error: notifError } = await supabase.from("notifications").insert(notification);
         if (notifError) {
@@ -108,17 +111,12 @@ export async function softDeleteProject(projectId: string, projectName: string) 
 }
 
 // No notification for admins for deleting unpublished projects
-export async function hardDeleteProject(projectId: string) {
-    const supabase = await createClient();
+export async function hardDeleteProject(projectId: string, client?: SupabaseClient<any, "public", any>) {
+    const supabase = client ?? await createClient();
     try {
-        const { error: deleteError } = await supabase.from("projects").delete().eq("id", projectId);
+        const { error: deleteError, data: project } = await supabase.from("projects").delete().eq("id", projectId).select("name, creator").single();
         if (deleteError) {
             throw deleteError;
-        }
-
-        const { error: deleteLikesError } = await supabase.from("project_likes").delete().eq("project_id", projectId);
-        if (deleteLikesError) {
-            throw deleteLikesError;
         }
 
         const { error: storageError } = await supabase.storage
@@ -130,6 +128,18 @@ export async function hardDeleteProject(projectId: string) {
 
         // Remove all associated task files from MinIO
         await deleteFromMinIO(`/projects/${projectId}`, true);
+
+        // notify creator if an admin deleted the project
+        if (client) {
+            const notification = {
+                message_template: `Your project "${project.name > 50 ? project.name.slice(0, 47) + "..." : project.name}" has been deleted.`,
+                recipient_id: project.creator,
+            }
+            const { error: notifError } = await supabase.from("notifications").insert(notification);
+            if (notifError) {
+                console.log("Database notification error:", notifError.message);
+            }
+        }
 
         return { success: true, message: "Project deleted successfully." };
 

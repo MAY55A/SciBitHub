@@ -1,6 +1,6 @@
 "use client"
 
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, TriangleAlert } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
 import { Project } from "@/src/types/models";
@@ -8,22 +8,21 @@ import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { useState } from "react";
-import { softDeleteProject } from "@/src/lib/actions/project-actions";
-import { updateProjectStatus } from "@/src/lib/actions/admin/projects-actions";
+import { hardDeleteProject, updateProjectStatus } from "@/src/lib/actions/admin/projects-actions";
 import ProjectDetailsDialog from "./project-details-dialog";
 import { ProjectStatus } from "@/src/types/enums";
 
 export function ProjectOptionsMenu({
-    project, rowIndex, updateRow
+    project, updateRow, removeRow
 }: {
-    project: Project, rowIndex: number, updateRow: (rowIndex: number, field: string, data: any) => void
+    project: Project, updateRow: (field: string, data: any) => void, removeRow: () => void
 }) {
     const [showDialog, setShowDialog] = useState("");
     const router = useRouter();
     const { toast } = useToast();
 
-    const handleDelete = async () => {
-        const res = await softDeleteProject(project.id!, project.name!);
+    const deletePermanently = async () => {
+        const res = await hardDeleteProject(project.id!);
         toast({
             title: res.success ? "Success !" : "Error !",
             description: res.message,
@@ -31,12 +30,12 @@ export function ProjectOptionsMenu({
         });
 
         if (res.success) {
-            updateRow(rowIndex, "status", ProjectStatus.DELETED)
+            removeRow();
         }
     }
 
     const handleUpdateStatus = async (status: ProjectStatus) => {
-        const res = await updateProjectStatus(project.id!, status);
+        const res = await updateProjectStatus(project.id!, project.name, status);
         toast({
             title: res.success ? "Success !" : "Error !",
             description: res.message,
@@ -44,7 +43,10 @@ export function ProjectOptionsMenu({
         });
 
         if (res.success) {
-            updateRow(rowIndex, "status", status)
+            updateRow("status", status)
+            if (status === ProjectStatus.DELETED) {
+                project.deleted_at = new Date().toISOString();
+            }
         }
     }
 
@@ -54,7 +56,7 @@ export function ProjectOptionsMenu({
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-6 w-6 p-0"><Ellipsis size={15} /></Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-60">
+                <DropdownMenuContent className="w-68" align="end" sideOffset={10}>
                     <DropdownMenuGroup>
                         {project.status === ProjectStatus.PUBLISHED &&
                             <DropdownMenuItem
@@ -84,8 +86,24 @@ export function ProjectOptionsMenu({
 
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    {!project.deleted_at &&
-                        <DropdownMenuItem
+                    {project.deleted_at
+                        ? <DropdownMenuItem
+                            onSelect={(event) => {
+                                event.preventDefault(); // Prevent dialog from closing immediately when opened
+                            }}
+                            className="hover:text-destructive">
+                            <CustomAlertDialog
+                                triggerText="Restore Project"
+                                buttonVariant="ghost"
+                                confirmButtonVariant="default"
+                                title="Are you Sure ?"
+                                description="When restored, the project will be published and visible to everyone."
+                                confirmText="Restore Project"
+                                onConfirm={() => handleUpdateStatus(ProjectStatus.PUBLISHED)}
+                                buttonClass="h-full hover:text-green pl-0"
+                            />
+                        </DropdownMenuItem>
+                        : <DropdownMenuItem
                             onSelect={(event) => {
                                 event.preventDefault(); // Prevent dialog from closing immediately when opened
                             }}
@@ -95,12 +113,30 @@ export function ProjectOptionsMenu({
                                 buttonVariant="ghost"
                                 confirmButtonVariant="destructive"
                                 title="Are you Sure ?"
-                                description="This action cannot be undone."
+                                description="The project will be deleted, but it still can be restored later."
                                 confirmText="Delete Project"
-                                onConfirm={handleDelete}
+                                onConfirm={() => handleUpdateStatus(ProjectStatus.DELETED)}
                                 buttonClass="h-full hover:text-destructive pl-0"
                             />
-                        </DropdownMenuItem>}
+                        </DropdownMenuItem>
+                    }
+                    <DropdownMenuItem
+                        onSelect={(event) => {
+                            event.preventDefault(); // Prevent dialog from closing immediately when opened
+                        }}
+                        className="hover:text-destructive">
+                        <CustomAlertDialog
+                            triggerText="Permanently Delete"
+                            buttonIcon={TriangleAlert}
+                            buttonVariant="ghost"
+                            confirmButtonVariant="destructive"
+                            title="This action CANNOT be undone !"
+                            description="When deleted permanently, the project and all its associated tasks, forum topics and comments will be lost forever, only contributions will be kept."
+                            confirmText="Permanently Delete Project"
+                            onConfirm={deletePermanently}
+                            buttonClass="h-full text-destructive pl-0"
+                        />
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu >
             {
