@@ -35,10 +35,9 @@ export default function ProjectsActivityStatusPieChart() {
         startTransition(async () => {
             const { data, error } = await supabase.rpc('admin_project_activity_distribution');
             if (!error) {
-                console.log('Data:', data);
                 setData(data);
             } else {
-                console.error(error);
+                console.log(error);
             }
         });
     }, []);

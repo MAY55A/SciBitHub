@@ -12,7 +12,7 @@ import Link from 'next/link';
 
 export async function TopContributors() {
     const contributors = await fetchTopContributors({ time_range: '30d' });
-    console.log("Top Contributors:", contributors);
+
     return (
         <Card className='h-full'>
             <CardHeader>

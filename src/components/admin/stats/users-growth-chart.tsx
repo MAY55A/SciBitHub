@@ -72,7 +72,7 @@ export function UsersGrowthChart() {
                 });
                 setData(filled);
             } else {
-                console.error(error);
+                console.log(error);
             }
         });
     }, [selectedInterval]);

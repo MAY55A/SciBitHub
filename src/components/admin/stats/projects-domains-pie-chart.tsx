@@ -32,7 +32,7 @@ export default function ProjectsDomainsPieChart() {
             if (!error) {
                 setData(data);
             } else {
-                console.error(error);
+                console.log(error);
             }
         });
     }, []);

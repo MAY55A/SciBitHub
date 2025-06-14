@@ -44,7 +44,7 @@ export function ReportsGrowthChart() {
             if (!error) {
                 setData(data);
             } else {
-                console.error(error);
+                console.log(error);
             }
         });
     }, [selectedInterval]);

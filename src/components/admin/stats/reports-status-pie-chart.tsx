@@ -34,10 +34,9 @@ export default function ReportsStatusPieChart() {
         startTransition(async () => {
             const { data, error } = await supabase.rpc('admin_report_status_distribution');
             if (!error) {
-                console.log('Data:', data);
                 setData(data);
             } else {
-                console.error(error);
+                console.log(error);
             }
         });
     }, []);

@@ -42,10 +42,9 @@ export function DiscussionsGrowthChart() {
                 days: selectedInterval,
             });
             if (!error) {
-                console.log(data);
                 setData(data);
             } else {
-                console.error(error);
+                console.log(error);
             }
         });
     }, [selectedInterval]);

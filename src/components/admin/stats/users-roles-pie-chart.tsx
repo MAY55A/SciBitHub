@@ -53,7 +53,7 @@ export default function UsersRolesPieChart() {
                 }, [] as { role: string, count: number }[]);
                 setInnerData(inner);
             } else {
-                console.error(error);
+                console.log(error);
             }
         });
     }, []);

@@ -65,7 +65,7 @@ export function DiscussionsEngagementBarGraph() {
             if (!error) {
                 setData(data);
             } else {
-                console.error(error);
+                console.log(error);
             }
         });
     }, [activeChart]);

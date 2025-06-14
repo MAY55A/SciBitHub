@@ -56,7 +56,7 @@ export function ForumsInteractionsChart() {
             if (!error) {
                 setData(data);
             } else {
-                console.error(error);
+                console.log(error);
             }
         });
     }, [selectedInterval]);
