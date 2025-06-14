@@ -20,14 +20,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/src/components/ui/table"
-import { useState } from "react"
+import { useState, ReactNode } from "react"
 import { DataTableToolbar } from "@/src/components/data-table/table-toolbar"
 import { DataTablePagination } from "./table-pagination"
-import { useToast } from "@/src/hooks/use-toast"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[],
     data: TData[],
+    children?: ReactNode,
     searchColumn: string,
     filters?: {
         column: string, values: {
@@ -35,21 +35,19 @@ interface DataTableProps<TData, TValue> {
             value: any
         }[]
     }[],
-    onRemoveSelected: (ids: string[]) => Promise<{ success: boolean; message: string; }>
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data: initialData,
+    children,
     searchColumn,
     filters,
-    onRemoveSelected,
 }: DataTableProps<TData, TValue>) {
     const [data, setData] = useState<TData[]>(initialData);
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState({});
-    const { toast } = useToast();
 
     const table = useReactTable({
         data,
@@ -61,25 +59,29 @@ export function DataTable<TData, TValue>({
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         onRowSelectionChange: setRowSelection,
+        enableRowSelection: (row) => {
+            const o = row.original;
+            return typeof o === "object" && o !== null &&
+                (!("deleted_at" in o) || o.deleted_at == null);
+        },
         state: {
             sorting,
             columnFilters,
             rowSelection,
         },
         meta: {
-            updateData: (rowIndex: number, column: string, values: any) => {
-                console.log("updateData", rowIndex, column, values);
+            updateData: (rowIndex: number[], column: string, values: any) => {
                 setData((old) =>
                     old.map((row, index) => {
-                        if (index === rowIndex) {
+                        if (rowIndex.includes(index)) {
                             if (column === "") { // if columnId is empty, it means more than one column is being updated
                                 return {
                                     ...row,
                                     ...values
                                 };
                             }
-                            if (column.includes(".")) { // if columnId is a nested object, we need to update the nested object (only 2 levels deep)
-                                // e.g. columnId = "metadata.isVerified" => metadata: { isVerified: values }
+                            if (column.includes(".")) { // if column is a nested object, we need to update the nested object (only 2 levels deep)
+                                // e.g. column = "metadata.isVerified" => metadata: { isVerified: values }
                                 const columns = column.split(".");
                                 const outerColumn = columns[0];
                                 const outerColumnValue = row[outerColumn as keyof TData];
@@ -103,22 +105,11 @@ export function DataTable<TData, TValue>({
                     old.filter((_row: any, index: number) => index !== rowIndex);
                 setData(setFilterFunc);
             },
-            removeSelectedRows: async () => {
-                const selectedRows = table.getSelectedRowModel().rows;
-                const selectedIndexes = selectedRows.map((row) => row.index);
-
+            removeRows: async (rows: number[]) => {
                 const setFilterFunc = (old: any[]) =>
-                    old.filter((_row, index) => !selectedIndexes.includes(index));
-                const res = await onRemoveSelected(selectedRows.map((row) => row.original.id));
-                toast({
-                    description: res.message,
-                    variant: res.success ? "default" : "destructive"
-                });
-                if (res.success) {
-                    setData(setFilterFunc);
-                    table.resetRowSelection();
-                }
-
+                    old.filter((_row, index) => !rows.includes(index));
+                setData(setFilterFunc);
+                table.resetRowSelection();
             }
         }
     })
@@ -170,7 +161,9 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <DataTablePagination table={table} />
+            <DataTablePagination table={table} >
+                {children}
+            </DataTablePagination>
         </div>
     );
 }
