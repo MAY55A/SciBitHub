@@ -1,5 +1,5 @@
 import { DiscussionInputData } from "@/src/types/discussion-form-data";
-import { NotificationType } from "@/src/types/enums";
+import { NotificationTarget } from "@/src/types/enums";
 import { deleteFromMinIO, uploadFileToMinIO } from "@/src/utils/minio/client";
 import { createClient } from "@/src/utils/supabase/client";
 
@@ -66,7 +66,7 @@ export const createDiscussion = async (data: DiscussionInputData, files: File[])
 
     // notify admins
     const notification = {
-        type: NotificationType.TO_ALL_ADMINS,
+        target: NotificationTarget.TO_ALL_ADMINS,
         message_template: `{user.username} created a new discussion {discussion.title} .`,
         discussion_id: discussion.id,
         user_id: userId,

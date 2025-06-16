@@ -4,7 +4,8 @@ import {
     ValidationStatus, DiscussionCategory, DiscussionStatus, ChartType, VisualizationType,
     AggregationFunction, ReportReason,
     ReportStatus,
-    NotificationType
+    NotificationType,
+    NotificationTarget
 } from "./enums";
 
 interface Metadata {
@@ -209,7 +210,8 @@ export interface Report {
 export interface Notification {
     id: string;
     recipient: PublicUser;
-    type: NotificationType;
+    target: NotificationTarget;
+    type?: NotificationType;
     message_template: string;
     user: PublicUser;
     project: Project;

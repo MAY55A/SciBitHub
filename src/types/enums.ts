@@ -176,7 +176,7 @@ export enum ChartType {
     BAR = 'bar',
     PIE = 'pie',
     // SCATTER = 'scatter',
-    HISTOGRAM = 'histogram',
+    //HISTOGRAM = 'histogram',
     // AREA = 'area',
     // RADAR = 'radar',
     // HEATMAP = 'heatmap',
@@ -207,10 +207,17 @@ export enum ReportStatus {
     DISMISSED = 'dismissed'
 }
 
-export enum NotificationType {
+export enum NotificationTarget {
     TO_SPECIFIC_USER = 'to_specific_user',
     TO_ALL_ADMINS = 'to_all_admins',
     TO_ALL_CONTRIBUTORS = 'to_all_contributors',
     TO_ALL_RESEARCHERS = 'to_all_researchers',
     TO_ALL_USERS = 'to_all_users',
+}
+
+export enum NotificationType {
+    SYSTEM_UPDATE = 'system_update',
+    WARNING = 'warning',
+    INFO = 'info',
+    REMINDER = 'reminder',
 }

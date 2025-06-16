@@ -2,7 +2,7 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { deleteFromMinIO } from "@/src/utils/minio/client";
-import { DiscussionStatus, NotificationType } from "@/src/types/enums";
+import { DiscussionStatus, NotificationTarget } from "@/src/types/enums";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export async function updateDiscussionStatus(id: string, status: DiscussionStatus, client?: SupabaseClient<any, "public", any>) {
@@ -42,7 +42,7 @@ export async function deleteDiscussion(id: string) {
     discussion = res;
 
     const notification = {
-        type: NotificationType.TO_ALL_ADMINS,
+        target: NotificationTarget.TO_ALL_ADMINS,
         message_template: `{user.username} deleted their discussion "${discussion.title.length > 50 ? discussion.title.slice(0, 47) + "..." : discussion.title}".`,
         user_id: discussion.creator
     }

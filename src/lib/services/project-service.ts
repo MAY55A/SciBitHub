@@ -4,7 +4,7 @@ import { ProjectInputData, TaskInputData } from "@/src/types/project-form-data";
 import { deleteFromMinIO, uploadFileToMinIO } from "@/src/utils/minio/client";
 import { createClient } from "@/src/utils/supabase/client";
 import { base64ToFile } from "@/src/utils/utils";
-import { NotificationType, ParticipationLevel, ProjectStatus, RequestType } from "@/src/types/enums";
+import { NotificationTarget, ParticipationLevel, ProjectStatus, RequestType } from "@/src/types/enums";
 
 
 export const createProject = async (inputData: Partial<ProjectInputData>, status: ProjectStatus, files: TaskFilesMap) => {
@@ -75,7 +75,7 @@ export const createProject = async (inputData: Partial<ProjectInputData>, status
     // notify admins if project is not draft (pending)
     if (status !== ProjectStatus.DRAFT) {
         const notification = {
-            type: NotificationType.TO_ALL_ADMINS,
+            target: NotificationTarget.TO_ALL_ADMINS,
             message_template: `{user.username} created a new project "${inputData.name!.length > 50 ? inputData.name!.slice(0,50): inputData.name}". Review it!`,
             user_id: user.data.user.id,
             action_url: `/admin/projects?id=${projectData.id}`,

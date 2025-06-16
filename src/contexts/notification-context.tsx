@@ -48,7 +48,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
         const { data, count } = await supabase
             .from('notifications')
             .select(selectQuery, { count: 'exact' })
-            .or(`recipient_id.eq.${user?.id},type.eq.to_all_${user?.role}s,type.eq.to_all_users`)
+            .or(`recipient_id.eq.${user?.id},target.eq.to_all_${user?.role}s,target.eq.to_all_users`)
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1); // Correct range calculation
         setIsLoading(false);
@@ -87,7 +87,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
                 event: 'INSERT',
                 schema: 'public',
                 table: 'notifications',
-                filter: `or(recipient_id.eq.${user?.id},type.eq.to_all_${user?.role}s,type.eq.to_all_users)`
+                filter: `or(recipient_id.eq.${user?.id},target.eq.to_all_${user?.role}s,target.eq.to_all_users)`
             }, async (payload) => {
                 // Fetch the full joined notification
                 const { data: notification } = await supabase

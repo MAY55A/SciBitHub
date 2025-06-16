@@ -5,7 +5,7 @@ import { createClient } from "@/src/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { UserInputData } from "@/src/types/user-form-data";
-import { NotificationType } from "@/src/types/enums";
+import { NotificationTarget } from "@/src/types/enums";
 
 export const signUpAction = async (inputData: UserInputData) => {
   const supabase = await createClient();
@@ -53,7 +53,7 @@ export const signUpAction = async (inputData: UserInputData) => {
   }
 
   const adminNotification = {
-    type: NotificationType.TO_ALL_ADMINS,
+    target: NotificationTarget.TO_ALL_ADMINS,
     message_template: "{user.username} just joined the community!",
     user_id: inputData.id,
     action_url: `/users/${inputData.id}`

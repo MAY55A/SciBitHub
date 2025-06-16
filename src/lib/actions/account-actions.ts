@@ -2,6 +2,7 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { UserInputData } from "@/src/types/user-form-data";
+import { NotificationTarget } from "@/src/types/enums";
 import { createAdminClient } from "@/src/utils/supabase/admin";
 
 export const updateEmail = async (newEmail: string) => {
@@ -215,10 +216,9 @@ export const softDeleteAccount = async (userId: string, userName: string) => {
             .from('avatars')
             .remove([userId]);
 
-
         const adminNotification = {
-            message_template: `${userName} just left the community :( `,
-            type: NotificationType.TO_ALL_ADMINS
+            message_template: `${userName} just left the community :( .`,
+            target: NotificationTarget.TO_ALL_ADMINS
         };
         const { error: notifError } = await supabase.from("notifications").insert(adminNotification);
         if (notifError) {

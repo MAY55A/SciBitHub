@@ -17,7 +17,7 @@ export function NotificationItem({ notification, markAsRead }: { notification: N
 
     return (
         <div
-            className={cn('z-60 flex items-start gap-3 p-3 rounded-lg', !notification.is_read && 'bg-muted/50')}
+            className={cn('z-60 flex items-start gap-3 p-3 rounded-lg', !notification.is_read && 'bg-muted/50', notification.type === 'warning' && "bg-destructive/30")}
             onClick={handleClick}
         >
             {notification.user && (

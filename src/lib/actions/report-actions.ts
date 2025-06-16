@@ -2,7 +2,7 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { ReportInputData } from "@/src/types/report-form-data";
-import { NotificationType } from "@/src/types/enums";
+import { NotificationTarget } from "@/src/types/enums";
 
 export const createReport = async (data: ReportInputData) => {
     const supabase = await createClient();
@@ -29,7 +29,7 @@ export const createReport = async (data: ReportInputData) => {
     
     // Send notification to all admins
     const notification = {
-        type: NotificationType.TO_ALL_ADMINS,
+        target: NotificationTarget.TO_ALL_ADMINS,
         message_template: `{user.username} submitted a new reported on a ${data.reported_type} ⚠ .`,
         user_id: user.data.user.id,
         action_url: `/admin/reports?id=${reportData.id}`
