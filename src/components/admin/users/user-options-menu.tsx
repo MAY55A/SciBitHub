@@ -1,6 +1,6 @@
 "use client"
 
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, TriangleAlert } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
 import { User } from "@/src/types/models";
@@ -8,24 +8,24 @@ import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { UserRole } from "@/src/types/enums";
-import { deleteUser, updateBanStatus, updateVerified } from "@/src/lib/actions/admin/users-actions";
+import { deleteUsers, updateBanStatus, updateVerified } from "@/src/lib/actions/admin/users-actions";
 import { BanUserDialog } from "./ban-user-dialog";
 import UserFormDialog from "./user-form-dialog";
 import UserDetailsDialog from "./user-details-dialog";
 import { useState } from "react";
 
 export function UserOptionsMenu({
-    user, rowIndex, updateRow
+    user, updateRow, removeRow
 }: {
-    user: User, rowIndex: number, updateRow: (rowIndex: number, field: string, data: any) => void
+    user: User, updateRow: (field: string, data: any) => void, removeRow: () => void
 }) {
     const [showDialog, setShowDialog] = useState("");
     const router = useRouter();
     const { toast } = useToast();
     const isBanned = user.banned_until && new Date(user.banned_until) > new Date();
 
-    const handleDelete = async () => {
-        const res = await deleteUser(user.id);
+    const handleDelete = async (deletionType: "soft" | "hard") => {
+        const res = await deleteUsers([user.id], [user.username], deletionType);
         toast({
             title: res.success ? "Success !" : "Error !",
             description: res.message,
@@ -33,7 +33,11 @@ export function UserOptionsMenu({
         });
 
         if (res.success) {
-            updateRow(rowIndex, "deleted_at", new Date().toISOString());
+            if (deletionType === "hard") {
+                removeRow();
+            } else {
+                updateRow("deleted_at", new Date().toISOString());
+            }
         }
     }
 
@@ -59,7 +63,7 @@ export function UserOptionsMenu({
         });
 
         if (res.success) {
-            updateRow(rowIndex, "metadata.isVerified", isVerified);
+            updateRow("metadata.isVerified", isVerified);
         }
     }
 
@@ -73,14 +77,15 @@ export function UserOptionsMenu({
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             className="px-4"
-                            disabled={!!user.deleted_at}
-                            onClick={() => router.push(`/users/${user.id}`)}>
-                            Visit Profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            className="px-4"
                             onClick={() => setShowDialog("user-details")}>
                             View Account Details
+                        </DropdownMenuItem>
+                        {!user.deleted_at && <>
+                            <DropdownMenuItem
+                                className="px-4"
+                                disabled={!!user.deleted_at}
+                                onClick={() => router.push(`/users/${user.id}`)}>
+                                Visit Profile
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="px-4"
@@ -101,7 +106,7 @@ export function UserOptionsMenu({
                                 Mark as Verified
                             </DropdownMenuItem>
                         }
-
+                        </>}
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
 
@@ -141,20 +146,38 @@ export function UserOptionsMenu({
                                 triggerText="Delete User"
                                 buttonVariant="ghost"
                                 confirmButtonVariant="destructive"
-                                title="Are you Sure ?"
-                                description="This action cannot be undone."
-                                confirmText="Delete Project"
-                                onConfirm={handleDelete}
+                                title="This action CANNOT be undone !"
+                                description="The user's authentication account will be permanently deleted. Their data in the system will remain for auditing or record-keeping purposes, but they will no longer be able to log in."
+                                confirmText="Delete User"
+                                onConfirm={() => handleDelete("soft")}
                                 buttonClass="h-full hover:text-destructive pl-0"
                             />
-                        </DropdownMenuItem>}
+                        </DropdownMenuItem>
+                    }
+                    <DropdownMenuItem
+                        onSelect={(event) => {
+                            event.preventDefault(); // Prevent dialog from closing immediately when opened
+                        }}
+                        className="hover:text-destructive">
+                        <CustomAlertDialog
+                            triggerText="Permanently Delete"
+                            buttonIcon={TriangleAlert}
+                            buttonVariant="ghost"
+                            confirmButtonVariant="destructive"
+                            title="This action CANNOT be undone !"
+                            description="The user's authentication account and all their associated data will be permanently deleted from the system."
+                            confirmText="Permanently Delete User"
+                            onConfirm={() => handleDelete("hard")}
+                            buttonClass="h-full text-destructive pl-0"
+                        />
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu >
             {
                 showDialog === "edit-account" &&
                 <UserFormDialog
                     data={{ ...user, researcherType: user.metadata?.researcherType }}
-                    onUpdate={(data: any) => updateRow(rowIndex, "", data)} // Update the entire row with the new data
+                    onUpdate={(data: any) => updateRow("", data)} // Update the entire row with the new data
                     onClose={() => setShowDialog("")} />
             }
             {

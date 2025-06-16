@@ -2,7 +2,7 @@ import { usersTableColumns } from "@/src/components/admin/users/users-table-colu
 import { usersFilters } from "@/src/components/admin/users/users-table-filters";
 import { DataTable } from "@/src/components/data-table/data-table";
 import { fetchAllUsers } from "@/src/lib/services/admin-service";
-import { deleteProjectRequests } from "@/src/lib/actions/request-actions";
+import { UsersGroupActions } from "./users-table-group-actions";
 
 
 export default async function UsersTable() {
@@ -15,9 +15,9 @@ export default async function UsersTable() {
                 data={users}
                 searchColumn="username"
                 filters={usersFilters}
-                onRemoveSelected={deleteProjectRequests}
             >
+                <UsersGroupActions />
             </DataTable>
-        </div>
+        </div >
     );
 }

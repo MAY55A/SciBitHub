@@ -2,7 +2,7 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { UserInputData } from "@/src/types/user-form-data";
-import { NotificationType } from "@/src/types/enums";
+import { createAdminClient } from "@/src/utils/supabase/admin";
 
 export const updateEmail = async (newEmail: string) => {
     const supabase = await createClient();
@@ -182,7 +182,7 @@ export const removeProfilePicture = async (userId: string) => {
 
 // soft delete user account
 export const softDeleteAccount = async (userId: string, userName: string) => {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     if (userId !== (await supabase.auth.getUser()).data.user?.id) {
         return { success: false, message: 'You are not authorized to delete this account.' };
     }
@@ -206,7 +206,7 @@ export const softDeleteAccount = async (userId: string, userName: string) => {
         const { error: AuthError } = await supabase.auth.admin.deleteUser(userId);
 
         if (AuthError) {
-            console.error('Error deleting Supabase Auth account:', AuthError);
+            console.log('Error deleting Supabase Auth account:', AuthError);
             throw AuthError;
         }
 

@@ -151,19 +151,39 @@ export const updateVerified = async (userId: string, isVerified: boolean, metada
     return { success: true, message: `Researcher ${action} successfully.` };
 };
 
-export const deleteUser = async (id: string) => {
+export const deleteUsers = async (ids: string[], usernames?: string[], deletionType: "soft" | "hard" = "soft") => {
+
     const supabase = createAdminClient();
-    const { error } = await supabase.from('users').update({ deleted_at: new Date().toISOString() }).eq('id', id);
-    if (error) {
-        console.log("Error updating deleted_at:", error.message);
-        return { success: false, message: "Failed to delete user." };
-    }
+    let deleted = 0;
+    let failed = 0;
 
-    const { error: authError } = await supabase.auth.admin.deleteUser(id, true);
+    for (let i = 0; i < ids.length; i++) {
+        // Update deleted_at in database
+        const { error: dbError } = deletionType === "soft" 
+        ? await supabase.from('users').update({
+            deleted_at: new Date().toISOString(),
+            username: `${usernames![i]} (deleted)`, // mark the username as deleted to allow reusing it
+            profile_picture: null
+        }).eq('id', ids[i])
+        : await supabase.from('users').delete().eq('id', ids[i]);
+
+        if (dbError) {
+            console.log('Error deleting user from db:', dbError);
+            failed++;
+            continue;
+        }
+
+        // Delete the Supabase Auth account
+        const { error: authError } = await supabase.auth.admin.deleteUser(ids[i]);
     if (authError) {
-        console.log("Error deleting account:", authError.message);
-        return { success: false, message: "Failed to delete account." };
+            console.log('Error deleting Supabase Auth account:', authError);
+            failed++;
+            continue;
+        }
+
+        // Remove profile picture in Supabase Storage to save space since it is not needed for auditing
+        await supabase.storage.from('avatars').remove([ids[i]]);
     }
 
-    return { success: true, message: "User deleted successfully." };
+    return { success: failed === 0, message: failed === 0 ? "User(s) deleted successfully." : `Deleted ${deleted} user(s), failed to delete ${failed} user(s).` };
 };
