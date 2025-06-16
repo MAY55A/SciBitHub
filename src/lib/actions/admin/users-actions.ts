@@ -2,6 +2,7 @@
 
 import { createAdminClient } from "@/src/utils/supabase/admin";
 import { BasicUserInputData } from "@/src/types/user-form-data";
+import { NotificationType } from "@/src/types/enums";
 
 export const adminResetPassword = async (userId: string, newPassword: string) => {
     const supabase = createAdminClient();
@@ -151,6 +152,24 @@ export const updateVerified = async (userId: string, isVerified: boolean, metada
     return { success: true, message: `Researcher ${action} successfully.` };
 };
 
+export const alertUser  = async (userId: string, message: string) => {
+    const supabase = createAdminClient();
+
+    const notification = {
+        recipient_id: userId,
+        message_template: "You have a new alert from an admin: " + message,
+        type: NotificationType.WARNING
+    };
+
+    const { error: notifError } = await supabase.from("notifications").insert(notification);
+    if (notifError) {
+        console.log("Database notification error:", notifError.message);
+        return { success: false, message: "Failed to alert user." };
+    }
+
+    return { success: true, message: `User alerted successfully.` };
+};
+
 export const deleteUsers = async (ids: string[], usernames?: string[], deletionType: "soft" | "hard" = "soft") => {
 
     const supabase = createAdminClient();
@@ -175,7 +194,7 @@ export const deleteUsers = async (ids: string[], usernames?: string[], deletionT
 
         // Delete the Supabase Auth account
         const { error: authError } = await supabase.auth.admin.deleteUser(ids[i]);
-    if (authError) {
+        if (authError) {
             console.log('Error deleting Supabase Auth account:', authError);
             failed++;
             continue;

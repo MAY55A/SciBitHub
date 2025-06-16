@@ -8,11 +8,12 @@ import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { UserRole } from "@/src/types/enums";
-import { deleteUsers, updateBanStatus, updateVerified } from "@/src/lib/actions/admin/users-actions";
+import { alertUser, deleteUsers, updateBanStatus, updateVerified } from "@/src/lib/actions/admin/users-actions";
 import { BanUserDialog } from "./ban-user-dialog";
 import UserFormDialog from "./user-form-dialog";
 import UserDetailsDialog from "./user-details-dialog";
 import { useState } from "react";
+import { AlertUserDialog } from "./alert-user-dialog";
 
 export function UserOptionsMenu({
     user, updateRow, removeRow
@@ -50,8 +51,20 @@ export function UserOptionsMenu({
         });
 
         if (res.success) {
-            updateRow(rowIndex, "banned_until", res.banned_until)
+            updateRow("banned_until", res.banned_until)
+            setShowDialog("");
         }
+    }
+
+
+    const handleAlert = async (message: string) => {
+        const res = await alertUser(user.id, message);
+        toast({
+            title: res.success ? "Success !" : "Error !",
+            description: res.message,
+            variant: res.success ? "default" : "destructive",
+        });
+        setShowDialog("");
     }
 
     const toggleVerifiedStatus = async (isVerified: boolean) => {
@@ -86,30 +99,36 @@ export function UserOptionsMenu({
                                 disabled={!!user.deleted_at}
                                 onClick={() => router.push(`/users/${user.id}`)}>
                                 Visit Profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            className="px-4"
-                            onClick={() => setShowDialog("edit-account")}>
-                            Edit Account
-                        </DropdownMenuItem>
-                        {user.role === UserRole.RESEARCHER && user.metadata?.isVerified &&
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                                 className="px-4"
-                                onClick={() => toggleVerifiedStatus(false)}>
-                                Unmark as Verified
+                                onClick={() => setShowDialog("edit-account")}>
+                                Edit Account
                             </DropdownMenuItem>
-                        }
-                        {user.role === UserRole.RESEARCHER && !user.metadata?.isVerified &&
-                            <DropdownMenuItem
-                                className="px-4"
-                                onClick={() => toggleVerifiedStatus(true)}>
-                                Mark as Verified
-                            </DropdownMenuItem>
-                        }
+                            {user.role === UserRole.RESEARCHER && user.metadata?.isVerified &&
+                                <DropdownMenuItem
+                                    className="px-4"
+                                    onClick={() => toggleVerifiedStatus(false)}>
+                                    Unmark as Verified
+                                </DropdownMenuItem>
+                            }
+                            {user.role === UserRole.RESEARCHER && !user.metadata?.isVerified &&
+                                <DropdownMenuItem
+                                    className="px-4"
+                                    onClick={() => toggleVerifiedStatus(true)}>
+                                    Mark as Verified
+                                </DropdownMenuItem>
+                            }
                         </>}
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-
+                    {!user.deleted_at &&
+                        <DropdownMenuItem
+                            className="px-4 hover:text-yellow-600"
+                            onClick={() => setShowDialog("alert-user")}>
+                            Alert User
+                        </DropdownMenuItem>
+                    }
                     {!user.deleted_at && (
                         isBanned
                             ? <DropdownMenuItem
@@ -128,11 +147,9 @@ export function UserOptionsMenu({
                                 />
                             </DropdownMenuItem>
                             : <DropdownMenuItem
-                                onSelect={(event) => {
-                                    event.preventDefault(); // Prevent dialog from closing immediately when opened
-                                }}
-                                className="hover:text-destructive">
-                                <BanUserDialog onConfirm={toggleBanStatus} />
+                                className="px-4 hover:text-destructive"
+                                onClick={() => setShowDialog("ban-user")}>
+                                Ban User
                             </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator />
@@ -185,6 +202,14 @@ export function UserOptionsMenu({
                 <UserDetailsDialog
                     user={user}
                     onClose={() => setShowDialog("")} />
+            }
+            {
+                showDialog === "alert-user" &&
+                <AlertUserDialog onConfirm={handleAlert} onClose={() => setShowDialog("")}/>
+            }
+            {
+                showDialog === "ban-user" &&
+                <BanUserDialog onConfirm={toggleBanStatus} onClose={() => setShowDialog("")}/>
             }
         </div >
     )
