@@ -8,6 +8,7 @@ import { DomainsCarousel } from "@/src/components/projects/domains-carousel";
 import { SortByDropdown } from "@/src/components/projects/sort-by-dropdown";
 import { TagsFilter } from "@/src/components/custom/tags-filter";
 import { CreateProjectButton } from "@/src/components/projects/create-project-button";
+import { ActivityStatusSelection } from "@/src/components/projects/activity-status-selection";
 
 export default async function Page(props: {
     searchParams?: Promise<{
@@ -42,8 +43,9 @@ export default async function Page(props: {
                 <h2 className="text-lg font-semibold">Filter by Research Domain</h2>
                 <DomainsCarousel />
                 <TagsFilter for="projects" />
-                <div className="w-full flex justify-between gap-8 border-b border-muted-foreground/30 py-8 rounded-t-lg">
+                <div className="w-full flex justify-right gap-8 border-b border-muted-foreground/30 py-8 rounded-t-lg">
                     <Search placeholder="Search projects..." />
+                    <ActivityStatusSelection/>
                     <SortByDropdown />
                 </div>
                 <Suspense key={query || '' + currentPage} fallback={<ProjectsSkeleton />}>
