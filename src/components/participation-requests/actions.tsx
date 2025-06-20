@@ -12,6 +12,7 @@ import ReportFormDialog from "../reports/report-form-dialog";
 export function Actions({ status, requests, user, onUpdate, onDelete, canAcceptOrReject }: { status: ValidationStatus, requests: string[], user: string, onUpdate: (status: ValidationStatus) => void, onDelete: () => void, canAcceptOrReject: boolean }) {
     const [pending, setPending] = useState(false);
     const { toast } = useToast()
+    const canBeDeletedPermanently = !(canAcceptOrReject || status === ValidationStatus.APPROVED); // hard delete if the user deleting is the creator of the request and the request is not approved
 
     const handleUpdateStatus = async (newStatus: ValidationStatus) => {
         setPending(true);
@@ -29,10 +30,10 @@ export function Actions({ status, requests, user, onUpdate, onDelete, canAcceptO
     const handleDelete = async () => {
         setPending(true);
         let res;
-        if (canAcceptOrReject) {
-            res = await softDeleteRequests(requests) // soft delete if the user deleting is not the creator of the request
+        if (canBeDeletedPermanently) {
+            res = await hardDeleteRequests(requests)
         } else {
-            res = await hardDeleteRequests(requests) // hard delete if the user deleting is the creator of the request
+            res = await softDeleteRequests(requests)
         }
         setPending(false);
         if (res.success) {
@@ -79,8 +80,8 @@ export function Actions({ status, requests, user, onUpdate, onDelete, canAcceptO
                 buttonIcon={Trash2}
                 buttonVariant="outline"
                 confirmButtonVariant="destructive"
-                title="Are you Sure ?"
-                description="This request will be deleted for both the creator and the receiver."
+                title="This action CANNOT be undone ?"
+                description={canBeDeletedPermanently ? "This request will be permanently deleted for both the sender and the receiver." : "This request will be marked as deleted for both the sender and the receiver."}
                 confirmText="Delete Request"
                 onConfirm={() => handleDelete()}
                 buttonClass="text-destructive hover:border-destructive"

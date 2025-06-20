@@ -46,19 +46,23 @@ export const columnsWithUser: ColumnDef<ParticipationRequest>[] = [
         ),
         cell: ({ row }) => {
             const user = row.original.user;
-            return (
-                <div className="flex items-center gap-2" title={user.username}>
-                    <Avatar className="relative flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg">
-                        <AvatarImage src={user.profile_picture ?? undefined} alt={user.username} />
-                        <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
-                            {user.username.slice(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                    </Avatar>
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">{user.username}</span>
+            return user.deleted_at ?
+                (<div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">**Deleted User**</span>
+                </div>)
+                : (
+                    <div className="flex items-center gap-2" title={user.username}>
+                        <Avatar className="relative flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg">
+                            <AvatarImage src={user.profile_picture ?? undefined} alt={user.username} />
+                            <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
+                                {user.username.slice(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="grid flex-1 text-left text-sm leading-tight">
+                            <span className="truncate font-semibold">{user.username}</span>
+                        </div>
                     </div>
-                </div>
-            );
+                );
         },
     },
     {
@@ -119,7 +123,7 @@ export const columnsWithUser: ColumnDef<ParticipationRequest>[] = [
             if (row.original.deleted_at) {
                 return <div className="text-muted-foreground">---</div>
             }
-            return <ValidationStatusUI status={status} />
+            return <ValidationStatusUI status={status} withBorder />
         },
         filterFn: (row, columnId, filterValue) => {
             console.log("filterValue", filterValue)
@@ -153,8 +157,8 @@ export const columnsWithUser: ColumnDef<ParticipationRequest>[] = [
                             canAcceptOrReject={isIncomingInvitation || isIncomingApplication}
                             requests={[request.id!]}
                             status={request.status}
-                            user={isProjectRequestsTable ? request.project.creator.id : request.user.id }
-                            onUpdate={(newStatus) => { tableMeta?.updateData(row.index, "status", newStatus) }}
+                            user={isProjectRequestsTable ? request.project.creator.id : request.user.id}
+                            onUpdate={(newStatus) => { tableMeta?.updateData([row.index], "status", newStatus) }}
                             onDelete={() => tableMeta?.removeRow(row.index)} />}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>

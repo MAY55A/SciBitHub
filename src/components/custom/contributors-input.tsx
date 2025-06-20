@@ -2,15 +2,22 @@ import { useState } from "react"
 import UserSearch from "./user-search";
 import { PublicUser } from "@/src/types/models";
 
-export default function ContributorsInput({ value, onChange }: { value?: PublicUser[], onChange: (contributors: PublicUser[]) => void }) {
+export default function ContributorsInput({ value, onChange, existingUsers = [], showMessage }: { value?: PublicUser[], onChange: (contributors: PublicUser[]) => void, existingUsers?: PublicUser[], showMessage?: (message: string) => void }) {
     const [contributors, setContributors] = useState<PublicUser[]>(value ?? []);
 
     function handleSelection(user: PublicUser) {
-        if (!contributors.find(u => u.id === user.id)) {
-            const newContributors = [...contributors, user];
-            setContributors(newContributors);
-            onChange(newContributors);
+        if (existingUsers.find(u => u.id === user.id)) {
+            showMessage?.("A request for this user was already made.");
+            return;
         }
+        if (contributors.find(u => u.id === user.id)) {
+            showMessage?.("User already added to the invited list.");
+            return;
+        }
+        const newContributors = [...contributors, user];
+        setContributors(newContributors);
+        onChange(newContributors);
+        showMessage?.("");
     }
 
     function removeContributor(index: number) {
@@ -21,7 +28,7 @@ export default function ContributorsInput({ value, onChange }: { value?: PublicU
 
     return (
         <div className="relative flex justify-between border border-input rounded-md p-1 gap-2">
-            <div className="relative flex flex-wrap gap-2">
+            <div className="relative flex flex-wrap gap-2 font-retro">
                 {contributors.map((user, index) => (
                     <div className="bg-muted rounded-3xl py-2 px-3" key={index}>
                         <span className="text-sm">{user.username}</span>

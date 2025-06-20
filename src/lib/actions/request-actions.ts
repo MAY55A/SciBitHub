@@ -2,7 +2,6 @@
 
 import { createClient } from "@/src/utils/supabase/server";
 import { RequestType, ValidationStatus } from "@/src/types/enums";
-import { ParticipationRequest } from "@/src/types/models";
 
 export const createRequests = async (projectId: string, users: string[], type: RequestType) => {
     const supabase = await createClient();
@@ -117,23 +116,19 @@ export async function deleteRequests(ids: string[], isProjectPage: boolean = fal
     console.log("Deleting requests with IDs:", ids);
 
     const supabase = await createClient();
-    // hard delete the requests that are of the createdRequestType (created by the current user)
-    const { error: deleteError } = await supabase.from("participation_requests").delete().in("id", ids).eq("type", createdRequestType);
+    // hard delete the requests that are of the createdRequestType (created by the current user) and are not approved
+    const { error: deleteError } = await supabase.from("participation_requests").delete().in("id", ids).eq("type", createdRequestType).neq("status", ValidationStatus.APPROVED);
     if (deleteError) {
         console.error("Database error:", deleteError.message);
         return { success: false, message: "Failed to delete request(s)" };
     }
 
-    // soft delete the requests that are not of the createdRequestType (created by other users)
+    // soft delete the requests that are not of the createdRequestType (created by other users): the rest of the requests
     const currentDate = new Date().toISOString();
-    const { error: updateError } = await supabase.from("participation_requests").update({ deleted_at: currentDate }).in("id", ids).neq("type", createdRequestType);
+    const { error: updateError } = await supabase.from("participation_requests").update({ deleted_at: currentDate }).in("id", ids);
     if (updateError) {
         console.error("Database error:", updateError.message);
         return { success: false, message: "Failed to delete request(s)" };
     }
     return { success: true, message: "Request(s) deleted successfully!" };
-}
-
-export async function deleteProjectRequests(ids: string[]) {
-    return deleteRequests(ids, true);
 }

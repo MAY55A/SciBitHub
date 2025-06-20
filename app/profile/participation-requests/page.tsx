@@ -1,8 +1,8 @@
 import { DataTable } from "@/src/components/data-table/data-table";
 import { columnsWithProject } from "@/src/components/participation-requests/columns";
 import { requestsFilters } from "@/src/components/participation-requests/filters";
+import { RequestsGroupActions } from "@/src/components/participation-requests/group-actions";
 import { fetchParticipationRequests } from "@/src/lib/fetch-data";
-import { deleteRequests } from "@/src/lib/actions/request-actions";
 import { createClient } from "@/src/utils/supabase/server";
 
 export default async function Page() {
@@ -22,8 +22,8 @@ export default async function Page() {
                 data={requests}
                 searchColumn="project"
                 filters={requestsFilters}
-                onRemoveSelected={deleteRequests}
             >
+                <RequestsGroupActions />
             </DataTable>
         </div>
     );

@@ -8,13 +8,15 @@ import { useRouter } from "next/navigation";
 import { RequestType } from "@/src/types/enums";
 import { createRequests } from "@/src/lib/actions/request-actions";
 import ContributorsInput from "../custom/contributors-input";
-import { PublicUser } from "@/src/types/models";
+import { ParticipationRequest, PublicUser } from "@/src/types/models";
+import { FormMessage } from "../custom/form-message";
 
 
-export default function RequestFormDialog({ projectId }: { projectId: string }) {
+export default function RequestFormDialog({ projectId, requests }: { projectId: string, requests: ParticipationRequest[] }) {
     const [open, setOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [invitedUsers, setInvitedUsers] = useState<PublicUser[]>([]);
+    const [message, setMessage] = useState("");
     const { toast } = useToast();
     const router = useRouter();
 
@@ -42,7 +44,7 @@ export default function RequestFormDialog({ projectId }: { projectId: string }) 
         <Dialog open={open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>
             <DialogTrigger asChild>
                 <Button
-                    onClick={() => setOpen(true)}>+ Invite Contributor</Button>
+                    onClick={() => setOpen(true)}>+ Invite Contributors</Button>
             </DialogTrigger>
             <DialogContent className="lg:min-w-[700px] md:min-w-[700px] sm:max-w-[425px]">
                 <form onSubmit={handleSubmit} className="space-y-4 p-4">
@@ -54,7 +56,8 @@ export default function RequestFormDialog({ projectId }: { projectId: string }) 
                             Choose user(s) to invite as contributor(s) to this project.
                         </DialogDescription>
                     </DialogHeader>
-                    <ContributorsInput value={invitedUsers} onChange={setInvitedUsers} />
+                    <ContributorsInput value={invitedUsers} onChange={setInvitedUsers} existingUsers={requests.map(r => r.user)} showMessage={setMessage} />
+                    {message.length > 0 && <FormMessage message={{ message: message }} />}
                     <DialogFooter>
                         <Button
                             type="submit"
