@@ -8,7 +8,7 @@ import { createClient } from "@/src/utils/supabase/server";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-export async function ProjectContribution({ projectId, creator }: { projectId: string, creator: string }) {
+export default async function ProjectContribution({ projectId, creator }: { projectId: string, creator: string }) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     const tasks = await fetchTasks(projectId);

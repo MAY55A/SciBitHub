@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import Visualizations from "../results/visualizations";
 import { CustomCollapsible } from "../custom/collapsible";
 
-export async function ProjectResults({ projectId, canEdit }: { projectId: string, canEdit: boolean }) {
+export default async function ProjectResults({ projectId, canEdit }: { projectId: string, canEdit: boolean }) {
     const dataPerTask = new Map<string, any>();
     const filesPerTask = new Map<string, Map<string, string>>();
     const summary = await fetchProjectResultsSummary(projectId);

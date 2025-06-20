@@ -3,7 +3,7 @@ import { Label } from "../ui/label";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { MarkdownViewer } from "../custom/markdown-viewer";
 
-export function ProjectOverview({ project }: { project: Project }) {
+export default function ProjectOverview({ project }: { project: Project }) {
     return (
         <div className="flex flex-col lg:flex-row mt-8 p-4">
             <div>
