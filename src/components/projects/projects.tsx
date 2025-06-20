@@ -3,6 +3,7 @@ import { fetchProjects } from "@/src/lib/fetch-data";
 import { ProjectStatus, ActivityStatus } from "@/src/types/enums";
 import { Project } from "@/src/types/models";
 import { FileText } from "lucide-react";
+import Pagination from "../custom/pagination";
 
 export default async function Projects({
     editable,
@@ -29,8 +30,7 @@ export default async function Projects({
     activityStatus?: ActivityStatus;
     tags?: string[];
 }) {
-
-    const projects = await fetchProjects(
+    const { data: projects = [], totalPages = 0 } = await fetchProjects(
         creator,
         query,
         domain,
@@ -40,44 +40,34 @@ export default async function Projects({
         currentPage,
         orderBy,
         sort,
-        limit,
+        limit
     );
-    return projects?.data && projects.data.length > 0 ?
-        editable ?
-            <div className="flex flex-wrap justify-center items-center gap-8">
-                {projects.data.map((project: Project) => (
+
+    if (projects.length === 0) {
+        return <EmptyState status={status} activityStatus={activityStatus} />;
+    }
+    return (
+        <div className="w-full flex flex-col gap-16 items-center mt-6">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {projects.map((project: Project) => (
                     <div className="" key={project.id}>
                         <ProjectCard editable={editable} project={project} />
                     </div>
                 ))}
-            </div> :
-            <div className="w-full flex flex-col gap-8 sm:flex-row justify-center items-stretch ">
-                <div className="flex flex-col justify-between items-center gap-8 flex-1">
-                    {projects.data.slice(0, 2).map((project: Project) => (
-                        <div className="h-full" key={project.id}>
-                            <ProjectCard editable={editable} project={project} />
-                        </div>
-                    ))}
-                </div>
-                {projects.data.length > 2 && (
-                    <div className="flex flex-col gap-8 flex-1">
-                        {projects.data.slice(2, 5).map((project: Project) => (
-                            <div className="" key={project.id}>
-                                <ProjectCard editable={editable} project={project} />
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div> :
-        <EmptyState status={status} />
-        ;
+            </div>
+            <div className="mt-5 flex w-full justify-center">
+                <Pagination totalPages={totalPages ?? 0} />
+            </div>
+        </div>
+    );
 }
 
-function EmptyState({ status }: { status?: string }) {
+function EmptyState({ status, activityStatus }: { status?: string, activityStatus?: ActivityStatus }) {
     return (
         <div className="flex flex-col items-center text-center p-10 mt-10">
             <FileText className="w-20 h-20 text-muted-foreground" />
-            <p className="mt-4 text-lg font-semibold text-muted-foreground">No {status} projects found</p>
+            <p className="mt-4 text-lg font-semibold text-muted-foreground">No {activityStatus ?? status} projects found</p>
         </div>
     );
 }

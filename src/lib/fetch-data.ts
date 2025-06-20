@@ -2,8 +2,6 @@ import { createClient } from "@/src/utils/supabase/server";
 import { Bookmark, Contribution, Discussion, ForumTopic, ParticipationRequest, Project, Task, Visualization } from "@/src/types/models";
 import { ActivityStatus, ProjectStatus } from "@/src/types/enums";
 
-
-
 export const fetchProjects = async (
     creator?: string,
     query?: string,
@@ -14,42 +12,35 @@ export const fetchProjects = async (
     currentPage: number = 1,
     orderBy: string = "created_at",
     sort: "asc" | "desc" = "desc",
-    limit: number = 10,
-) => {
+    limit: number = 10
+): Promise<{ data: any[]; totalPages: number }> => {
     const supabase = await createClient();
+
     try {
+        const from = "projects_with_likes";
+        const offset = (currentPage - 1) * limit;
+        const to = offset + limit - 1;
+
         let queryBuilder = supabase
-            .from("projects_with_likes")
-            .select(`*,
-                creator:creator_info`,
-                { count: "exact" })
+            .from(from)
+            .select(
+                `*, creator:creator_info`,
+                { count: "exact" }
+            )
             .is("deleted_at", null);
 
-        // Apply filters
-        if (creator) {
-            queryBuilder = queryBuilder.eq("creator", creator);
-        }
-        if (query) {
-            queryBuilder = queryBuilder.ilike("name", `%${query}%`);
-        }
-        if (domain) {
-            queryBuilder = queryBuilder.ilike("domain", `%${domain}%`);
-        }
-        if (status) {
-            queryBuilder = queryBuilder.eq("status", status);
-        }
-        if (activityStatus) {
-            queryBuilder = queryBuilder.eq("activity_status", activityStatus);
-        }
-        if (tags && tags.length > 0) {
-            queryBuilder = queryBuilder.contains("tags", tags);
-        }
+        // Filters
+        if (creator) queryBuilder = queryBuilder.eq("creator", creator);
+        if (query) queryBuilder = queryBuilder.ilike("name", `%${query}%`);
+        if (domain) queryBuilder = queryBuilder.ilike("domain", `%${domain}%`);
+        if (status) queryBuilder = queryBuilder.eq("status", status);
+        if (activityStatus) queryBuilder = queryBuilder.eq("activity_status", activityStatus);
+        if (tags?.length) queryBuilder = queryBuilder.contains("tags", tags);
 
-        // Apply sorting and pagination
-        const offset = (currentPage - 1) * limit;
+        // Order and paginate
         queryBuilder = queryBuilder
             .order(orderBy, { ascending: sort === "asc" })
-            .range(offset, offset + limit - 1);
+            .range(offset, to);
 
         const { data, count, error } = await queryBuilder;
 
@@ -57,17 +48,18 @@ export const fetchProjects = async (
             throw error;
         }
 
-        const totalPages = Math.ceil((count || 0) / limit);
-
         return {
-            data,
-            totalPages,
+            data: data || [],
+            totalPages: Math.ceil((count || 0) / limit),
         };
-    } catch (error) {
-        console.error("Error fetching projects:", error);
-        return null;
+    } catch (err) {
+        console.log("Error fetching projects:", err);
+        return {
+            data: [],
+            totalPages: 0,
+        };
     }
-}
+};
 
 export const fetchProject = async (
     id: string
@@ -430,10 +422,10 @@ export const fetchForumTopic = async (
         .from("topics_with_replies_and_votes")
         .select("*")
         .eq("id", id)
-        .maybeSingle();
+        .single();
 
     if (error) {
-        console.error("Error fetching topic:", error);
+        console.log("Error fetching topic:", error);
         return null;
     }
     data.project.creator = { id: data.project.creator };
@@ -534,28 +526,6 @@ export async function fetchParticipationRequests(
     const { data, error } = await queryBuilder;
     if (error) {
         console.error("Error fetching participation requests:", error);
-        return [];
-    }
-    return data;
-}
-
-export async function fetchProjectsTags(): Promise<string[]> {
-    const supabase = await createClient();
-
-    const { data, error } = await supabase.rpc("get_all_projects_tags");
-    if (error) {
-        console.error("Error fetching projects tags:", error);
-        return [];
-    }
-    return data;
-}
-
-export async function fetchDiscussionsTags(): Promise<string[]> {
-    const supabase = await createClient();
-
-    const { data, error } = await supabase.rpc("get_all_discussions_tags");
-    if (error) {
-        console.error("Error fetching discussions tags:", error);
         return [];
     }
     return data;
