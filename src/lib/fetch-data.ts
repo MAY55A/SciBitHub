@@ -265,27 +265,18 @@ export const fetchDiscussions = async (
             .is("deleted_at", null);
 
         // Apply filters
-        if (creator) {
-            queryBuilder = queryBuilder.eq("creator", creator);
-        }
-        if (query) {
-            queryBuilder = queryBuilder.ilike("title", `%${query}%`);
-        }
-        if (status) {
-            queryBuilder = queryBuilder.eq("status", status);
-        }
-        if (category) {
-            queryBuilder = queryBuilder.eq("category", category);
-        }
-        if (tags && tags.length > 0) {
-            queryBuilder = queryBuilder.contains("tags", tags);
-        }
+        if (creator) queryBuilder = queryBuilder.eq("creator", creator);
+        if (query) queryBuilder = queryBuilder.ilike("title", `%${query}%`);
+        if (status) queryBuilder = queryBuilder.eq("status", status);
+        if (category) queryBuilder = queryBuilder.eq("category", category);
+        if (tags?.length) queryBuilder = queryBuilder.contains("tags", tags);
 
         // Apply sorting and pagination
         const offset = (currentPage - 1) * limit;
+        const to = offset + limit - 1;
         queryBuilder = queryBuilder
             .order(orderBy, { ascending: sort === "asc" })
-            .range(offset, offset + limit - 1);
+            .range(offset, to);
 
         const { data, count, error } = await queryBuilder;
 
@@ -293,15 +284,16 @@ export const fetchDiscussions = async (
             throw error;
         }
 
-        const totalPages = Math.ceil((count || 0) / limit);
-
         return {
-            data,
-            totalPages,
+            data: data || [],
+            totalPages: Math.ceil((count || 0) / limit),
         };
-    } catch (error) {
-        console.error("Error fetching discussions:", error);
-        return null;
+    } catch (err) {
+        console.log("Error fetching discussions:", err);
+        return {
+            data: [],
+            totalPages: 0,
+        };
     }
 }
 

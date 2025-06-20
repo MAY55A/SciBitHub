@@ -1,22 +1,41 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
 import { Filter, Plus } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { createClient } from "@/src/utils/supabase/client";
 
-export function TagsFilter({ allTags }: { allTags: string[] }) {
+export function TagsFilter({ for: filterType }: { for: 'discussions' | 'projects' }) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
     const params = new URLSearchParams(searchParams);
     const currentTags = params.get('tags')?.split(',') || [];
+    const [allTags, setAllTags] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>(currentTags);
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState("");
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            const supabase = createClient();
+            const functionName = filterType === "discussions" ? "get_all_discussions_tags" : "get_all_projects_tags";
+            const { data, error } = await supabase.rpc(functionName);
+            if (error) {
+                console.error("Error fetching tags:", error);
+                setAllTags([]);
+            } else {
+                setAllTags(data);
+            }
+        };
+
+        fetchTags();
+    }, [filterType]);
+
 
     const applyFilter = (tags: string[]) => {
         params.set('page', '1');
@@ -45,7 +64,7 @@ export function TagsFilter({ allTags }: { allTags: string[] }) {
 
     return (
         <div className="w-full flex flex-wrap items-center justify-between gap-4 border p-8 my-8 rounded-2xl" title="Filter by tags">
-            <Filter className="text-primary" size={18}/>
+            <Filter className="text-primary" size={18} />
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button
@@ -111,15 +130,15 @@ export function TagsFilter({ allTags }: { allTags: string[] }) {
             </div>
 
             <div>
-                    <Button
-                        variant="default"
-                        size="sm"
-                        onClick={() => applyFilter(selectedTags)}
-                        className="text-xs ml-2 rounded-xl"
-                        disabled={!selectedTags.length}
-                    >
-                        Apply Filter
-                    </Button>
+                <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => applyFilter(selectedTags)}
+                    className="text-xs ml-2 rounded-xl"
+                    disabled={!selectedTags.length}
+                >
+                    Apply Filter
+                </Button>
                 <Button
                     variant="secondary"
                     size="sm"
