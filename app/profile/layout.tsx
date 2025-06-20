@@ -4,21 +4,25 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/src/components/
 import { createClient } from "@/src/utils/supabase/server";
 import { Forbidden } from "@/src/components/errors/forbidden";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
     const supabase = await createClient();
-    const {data: {user}} = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
         redirect("/sign-in")
     }
 
-    if(user.app_metadata.role === "admin") {
-        return Forbidden({message: "You are not allowed to access this page with an admin account."})
+    if (user.app_metadata.role === "admin") {
+        return Forbidden({ message: "You are not allowed to access this page with an admin account." })
     }
 
+    const cookieStore = await cookies()
+    const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
+
     return (
-        <SidebarProvider>
+        <SidebarProvider defaultOpen={defaultOpen}>
             <ProfileSidebarWrapper />
             <SidebarInset>
                 <div className="fixed w-full flex h-16 z-20 shrink-0 items-center gap-2 px-4 bg-background/70 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
