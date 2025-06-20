@@ -5,6 +5,7 @@ import { columns } from "@/src/components/contributions/columns";
 import { Contribution } from "@/src/types/models";
 import { notFound } from "next/navigation";
 import { contributionsFilters } from "@/src/components/contributions/filters";
+import { ContributionsGroupActions } from "@/src/components/contributions/group-actions";
 import { softDeleteContributions } from "@/src/lib/actions/contribution-actions";
 
 export default async function Page({
@@ -40,8 +41,8 @@ export default async function Page({
                 data={contributions}
                 searchColumn="contributor"
                 filters={contributionsFilters}
-                onRemoveSelected={softDeleteContributions}
             >
+                        <ContributionsGroupActions />
             </DataTable>
         </TabsContent>
     );
