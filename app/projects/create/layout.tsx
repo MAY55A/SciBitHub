@@ -12,7 +12,7 @@ export default async function Layout({
 
   const userRole = await getCurrentUserRole();
   if(!userRole) {
-    redirect("/login?redirect_to=projects/create")
+    redirect("/sign-in?redirect_to=projects/create")
   }
 
   if(userRole !== UserRole.RESEARCHER) {

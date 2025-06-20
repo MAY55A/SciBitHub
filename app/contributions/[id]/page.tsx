@@ -20,7 +20,7 @@ export default async function Page({
     const supabase = await createClient();
     const user = (await supabase.auth.getUser()).data.user;
     if (!user) {
-        redirect(`/login?redirect_to=contributions/${id}`);
+        redirect(`/sign-in?redirect_to=contributions/${id}`);
     }
 
     const contribution = await fetchContribution(id);
