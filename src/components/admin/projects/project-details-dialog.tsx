@@ -11,6 +11,7 @@ import { UserHoverCard } from "@/src/components/custom/user-hover-card";
 import { Badge } from "../../ui/badge";
 import { ActivityStatus, ProjectStatus, TaskStatus } from "@/src/types/enums";
 import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function ProjectDetailsDialog({ project, onClose }: { project: Project, onClose: () => void }) {
     const [open, setOpen] = useState(true);
@@ -59,7 +60,7 @@ export default function ProjectDetailsDialog({ project, onClose }: { project: Pr
                                 <p><strong>Type:</strong> {selectedTask.type}</p>
                                 {!!selectedTask.data_type &&
                                     <p><strong>Data Type: </strong>{selectedTask.data_type}</p> &&
-                                    <p><strong>Dataset: </strong><a href={selectedTask.data_source} className="text-green hover:underline">open task dataset</a> </p>
+                                    <p><strong>Dataset: </strong><Link href={`/tasks/${selectedTask.id}/dataset`} target="_blank" className="text-green hover:underline">open task dataset</Link> </p>
                                 }
                                 <p><strong>Description:</strong><br />{selectedTask.description}</p>
                                 <div>

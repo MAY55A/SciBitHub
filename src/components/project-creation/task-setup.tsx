@@ -12,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { TaskType, DataType } from "@/src/types/enums";
 import { MarkdownEditor } from "../custom/markdown-editor";
+import Link from "next/link";
 
 export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEditType = true }: { buttonText: string, data?: Partial<TaskInputData>, onSubmit: (data: TaskInputData) => void, onChange: (data: any) => void, canEditType?: boolean }) {
     const form = useForm({
@@ -199,7 +200,7 @@ export default function TaskSetup({ buttonText, data, onSubmit, onChange, canEdi
                     />
                 }
                 {!!data?.datasetPath &&
-                    <a href="" className="text-sm underline">see dataset</a>
+                    <Link href={`/tasks/${data.id}/dataset`} className="text-sm underline" target="_blank">see dataset</Link>
                 }
                 < FormField
                     control={form.control}

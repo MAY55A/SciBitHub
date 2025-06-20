@@ -1,21 +1,25 @@
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { X, File } from "lucide-react";
+import Link from "next/link";
 
-export const FilesPreview = ({ files, onRemove }: { files: FileWithPreview[] | FileFromPath[], onRemove(name: string): void }) => {
+export const FilesPreview = ({ files, onRemove }: { files: FileWithPreview[] | FileFromPath[], onRemove?(name: string, path?: string): void }) => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-retro">
             {files.map((file, i) => (
-                <div key={i} className="relative flex items-center gap-4 border p-4 rounded-lg shadow group">
-                    <Button
+                <Link key={i} className="relative flex items-center gap-4 border p-4 rounded-lg shadow group max-w-96" href={file.preview || "#"} target="_blank" rel="noopener noreferrer">
+                    {onRemove && <Button
                         type="button"
                         variant="secondary"
-                        onClick={() => onRemove(file.name)}
-                        className="p-2 h-8 absolute top-1 right-2 text-sm opacity-0 group-hover:opacity-100"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onRemove(file.name, "path" in file ? file.path : "");
+                        }} className="p-2 h-8 absolute top-1 right-2 text-sm opacity-0 group-hover:opacity-100"
                         title="Remove"
                     >
                         <X size={15} />
-                    </Button>
+                    </Button>}
                     {file.preview ? (
                         <Image
                             src={file.preview}
@@ -36,7 +40,7 @@ export const FilesPreview = ({ files, onRemove }: { files: FileWithPreview[] | F
                             {file.type || "Unknown type"} – {(file.size / 1024).toFixed(1)} KB
                         </p>
                     </div>
-                </div>
+                </Link>
             ))}
         </div>
     );

@@ -169,3 +169,51 @@ export const getRandomFile = async (folderPath: string) => {
         return null;
     }
 };
+export async function listFilesFromPath(
+    prefix: string,
+    filesType: string = "unknown"
+): Promise<FileFromPath[] | null> {
+    const command = new ListObjectsV2Command({
+        Bucket: bucketName,
+        Prefix: prefix.endsWith("/") ? prefix : `${prefix}/`,
+    });
+    try {
+        const response = await s3Client.send(command);
+        const contents = response.Contents ?? [];
+
+        // Filter out folders and empty keys
+        const files = contents.filter(obj => obj.Key && !obj.Key.endsWith("/"));
+
+        // Generate metadata + signed preview URLs concurrently
+        const result = await Promise.all(
+            files.map(async obj => {
+                const key = obj.Key!;
+                const name = key.split("/").pop()!;
+                const path = key;
+                const size = obj.Size ?? 0;
+                const type = filesType;
+
+                // Create a signed URL per object
+                const getObjCommand = new GetObjectCommand({
+                    Bucket: bucketName,
+                    Key: key,
+                });
+
+                const preview = await getSignedUrl(s3Client, getObjCommand, { expiresIn: 3600 });
+
+                return {
+                    name,
+                    path,
+                    size,
+                    type,
+                    preview,
+                };
+            })
+        );
+
+        return result;
+    } catch (error) {
+        console.log("Error listing files from path:", error);
+        return null;
+    }
+}

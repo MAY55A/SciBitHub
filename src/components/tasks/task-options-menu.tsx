@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { CustomAlertDialog } from "../custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { deleteTask, updateStatus } from "@/src/lib/actions/task-actions";
-import { TaskStatus } from "@/src/types/enums";
+import { TaskStatus, TaskType } from "@/src/types/enums";
 import { useAuth } from "@/src/contexts/AuthContext";
 import ReportFormDialog from "../reports/report-form-dialog";
 
@@ -82,6 +82,13 @@ export function TaskDropdownMenu({ task, showVisit = true }: { task: Task, showV
                             className="px-4"
                             onClick={() => handleUpdateStatus(TaskStatus.COMPLETED)}>
                             Mark as Completed
+                        </DropdownMenuItem>
+                    }
+                    {task.type === TaskType.DATALABELLING &&
+                        <DropdownMenuItem
+                            className="px-4"
+                            onClick={() => router.push(`/tasks/${task.id}/dataset`)}>
+                            Manage Dataset
                         </DropdownMenuItem>
                     }
                 </DropdownMenuGroup>
