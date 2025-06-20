@@ -20,7 +20,7 @@ import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
 import Link from "next/link";
 
-export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
+export default function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const form = useForm({
         resolver: zodResolver(projectInputDataSchema.pick({ visibility: true, participationLevel: true, moderationLevel: true, participants: true, scope: true, countries: true, deadline: true })),
         defaultValues: { ...data, countries: data.countries || undefined },

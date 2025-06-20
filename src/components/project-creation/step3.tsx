@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import { ProjectStatus } from "@/src/types/enums";
 
 
-export function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, files, updateFiles, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, files: TaskFilesMap, updateFiles: (files: TaskFilesMap) => void, dataChanged?: boolean }) {
+export default function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, files, updateFiles, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, files: TaskFilesMap, updateFiles: (files: TaskFilesMap) => void, dataChanged?: boolean }) {
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [editForm, setEditForm] = useState(-1);
     const [error, setError] = useState("");
@@ -94,7 +94,7 @@ export function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
                             <TaskSetup
                                 buttonText="Save Task"
                                 data={{ ...task, dataSource: task.dataSource || files[index] }}
-                                onSubmit={(data) => editTask(index, data)} onChange={() => { }}
+                                onSubmit={(data) => editTask(index, {...task, ...data})} onChange={() => { }}
                                 canEditType={!(data.status && data.status === "published")}
                             />
                             <Button

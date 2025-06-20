@@ -1,11 +1,6 @@
 "use client"
 
 import { FormMessage, Message } from "@/src/components/custom/form-message";
-import { Step1 } from "@/src/components/project-creation/step1";
-import { Step2 } from "@/src/components/project-creation/step2";
-import { Step3 } from "@/src/components/project-creation/step3";
-import { Step4 } from "@/src/components/project-creation/step4";
-import { Step5 } from "@/src/components/project-creation/step5";
 import { useProjectEdit } from "@/src/contexts/project-edit-context";
 import useNavigationGuard from "@/src/hooks/use-navigation-guard";
 import { updateProject } from "@/src/lib/services/project-service";
@@ -13,6 +8,13 @@ import { ProjectStatus } from "@/src/types/enums";
 import { ProjectInputData } from "@/src/types/project-form-data";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+
+const Step1 = dynamic(() => import("@/src/components/project-creation/step1"));
+const Step2 = dynamic(() => import("@/src/components/project-creation/step2"));
+const Step3 = dynamic(() => import("@/src/components/project-creation/step3"));
+const Step4 = dynamic(() => import("@/src/components/project-creation/step4"));
+const Step5 = dynamic(() => import("@/src/components/project-creation/step5"));
 
 export default function Page() {
     const { data, currentStep, updateData, setCurrentStep, files, setFiles } = useProjectEdit();

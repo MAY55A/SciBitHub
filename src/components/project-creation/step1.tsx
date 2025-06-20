@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { ProjectStatus, ProjectDomain } from "@/src/types/enums";
 import { MarkdownEditor } from "../custom/markdown-editor";
 
-export function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveProject, dataChanged }: { initialName?: string, data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
+export default function Step1({ initialName, data, onUpdate, onNext, onSaveStep, onSaveProject, dataChanged }: { initialName?: string, data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const [isVerifiying, setIsVerifying] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const form = useForm({

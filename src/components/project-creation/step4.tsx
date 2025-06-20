@@ -13,7 +13,7 @@ import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
 import { ProjectStatus } from "@/src/types/enums";
 
-export function Step4({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
+export default function Step4({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const form = useForm({
         resolver: zodResolver(projectInputDataSchema.pick({ coverImage: true, links: true })),
         defaultValues: data,

@@ -2,17 +2,50 @@
 
 import { FormMessage, Message } from "@/src/components/custom/form-message";
 import Stepper from "@/src/components/custom/stepper";
-import { Step1 } from "@/src/components/project-creation/step1";
-import { Step2 } from "@/src/components/project-creation/step2";
-import { Step3 } from "@/src/components/project-creation/step3";
-import { Step4 } from "@/src/components/project-creation/step4";
-import { Step5 } from "@/src/components/project-creation/step5";
 import { useMultistepProjectForm } from "@/src/contexts/multistep-project-form-context";
 import { createProject } from "@/src/lib/services/project-service";
 import { ProjectStatus } from "@/src/types/enums";
 import { ProjectInputData } from "@/src/types/project-form-data";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+import { SquareLoader } from "@/src/components/custom/loader";
+
+const Step1 = dynamic(() => import("@/src/components/project-creation/step1"), {
+    ssr: false,
+    loading: () =>
+        <div className="h-96 w-full flex items-center justify-center">
+            <SquareLoader size="lg" speed="slow" />
+        </div>
+});
+const Step2 = dynamic(() => import("@/src/components/project-creation/step2"), {
+    ssr: false,
+    loading: () =>
+        <div className="h-96 w-full flex items-center justify-center">
+            <SquareLoader size="lg" speed="slow" />
+        </div>
+});
+const Step3 = dynamic(() => import("@/src/components/project-creation/step3"), {
+    ssr: false,
+    loading: () =>
+        <div className="h-96 w-full flex items-center justify-center">
+            <SquareLoader size="lg" speed="slow" />
+        </div>
+});
+const Step4 = dynamic(() => import("@/src/components/project-creation/step4"), {
+    ssr: false,
+    loading: () =>
+        <div className="h-96 w-full flex items-center justify-center">
+            <SquareLoader size="lg" speed="slow" />
+        </div>
+});
+const Step5 = dynamic(() => import("@/src/components/project-creation/step5"), {
+    ssr: false,
+    loading: () =>
+        <div className="h-96 w-full flex items-center justify-center">
+            <SquareLoader size="lg" speed="slow" />
+        </div>
+});
 
 export default function ProjectCreationWizard() {
     const { data, updateData, currentStep, setCurrentStep, completedSteps, setCompletedSteps, resetForm, files, setFiles } = useMultistepProjectForm();

@@ -10,7 +10,7 @@ import { CancelAlertDialog } from "./cancel-alert-dialog";
 import { ProjectInputData } from "@/src/types/project-form-data";
 import { ProjectStatus } from "@/src/types/enums";
 
-export function Step5({ data, onBack, onEdit, onSaveProject, dataChanged }: { data: ProjectInputData, onBack: () => void, onEdit: (step: number) => void, onSaveProject: (data: ProjectInputData, status?: ProjectStatus) => void, dataChanged?: boolean }) {
+export default function Step5({ data, onBack, onEdit, onSaveProject, dataChanged }: { data: ProjectInputData, onBack: () => void, onEdit: (step: number) => void, onSaveProject: (data: ProjectInputData, status?: ProjectStatus) => void, dataChanged?: boolean }) {
 
     return (
         <form

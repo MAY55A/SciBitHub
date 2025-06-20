@@ -148,7 +148,58 @@
 }
 
 textarea {
-  background-color: hsl(var(--muted));
+}
+
+@keyframes loader-line {
+
+  0%,
+  100% {
+    transform: scaleX(0) rotate(0deg);
+  }
+
+  50% {
+    transform: scaleX(1) rotate(0deg);
+  }
+}
+
+.animate-loader-line {
+  animation: loader-line 1.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-pulse {
+
+  0%,
+  100% {
+    transform: scaleY(0);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
 }
 
 @layer base {
