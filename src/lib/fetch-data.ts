@@ -183,37 +183,6 @@ export const fetchContributions = async (
     return { contributions: data, totalPages };
 };
 
-export const fetchFirstTaskContributions = async (
-    project: string
-): Promise<{ contributions: Contribution[], task: string } | null> => {
-    const supabase = await createClient();
-    const { data: task } = await supabase
-        .from("tasks")
-        .select(`id`)
-        .eq("project", project)
-        .is("deleted_at", null)
-        .order("created_at")
-        .limit(1)
-        .single();
-    const { data, error } = await supabase
-        .from("contributions")
-        .select(
-            `
-            *,
-            user:users(id, username, deleted_at)
-            `
-        )
-        .eq("task", task?.id)
-        .is("deleted_at", null);
-
-    if (error) {
-        console.error("Error fetching contributions:", error);
-        return null;
-    }
-
-    return { contributions: data, task: task?.id };
-};
-
 export const fetchContribution = async (
     id: string
 ): Promise<Contribution | null> => {
