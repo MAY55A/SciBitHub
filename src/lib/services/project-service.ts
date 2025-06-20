@@ -5,6 +5,7 @@ import { deleteFromMinIO, uploadFileToMinIO } from "@/src/utils/minio/client";
 import { createClient } from "@/src/utils/supabase/client";
 import { base64ToFile } from "@/src/utils/utils";
 import { NotificationTarget, ParticipationLevel, ProjectStatus, RequestType } from "@/src/types/enums";
+import { PublicUser } from "@/src/types/models";
 
 
 export const createProject = async (inputData: Partial<ProjectInputData>, status: ProjectStatus, files: TaskFilesMap) => {
@@ -62,7 +63,7 @@ export const createProject = async (inputData: Partial<ProjectInputData>, status
             user_id: p.id,
             project_id: projectId,
             type: RequestType.INVITATION,
-            requested_at: status === "published" ? new Date().toISOString() : undefined,
+            requested_at: status === "published" ? new Date() : undefined,
         }));
 
         const { error: invitationsError } = await supabase.from("participation_requests").insert(invitations);
@@ -76,7 +77,7 @@ export const createProject = async (inputData: Partial<ProjectInputData>, status
     if (status !== ProjectStatus.DRAFT) {
         const notification = {
             target: NotificationTarget.TO_ALL_ADMINS,
-            message_template: `{user.username} created a new project "${inputData.name!.length > 50 ? inputData.name!.slice(0,50): inputData.name}". Review it!`,
+            message_template: `{user.username} created a new project "${inputData.name!.length > 50 ? inputData.name!.slice(0, 50) : inputData.name}". Review it!`,
             user_id: user.data.user.id,
             action_url: `/admin/projects?id=${projectData.id}`,
         }
@@ -158,7 +159,7 @@ export const insertTasks = async (
 };
 
 export const updateProject = async (initialData: Partial<ProjectInputData>, newData: Partial<ProjectInputData>, files: TaskFilesMap) => {
-    const supabase = await createClient();
+    const supabase = createClient();
     const user = await supabase.auth.getUser();
     if (!user.data.user) {
         return { success: false, message: "You are not authenticated." };
@@ -193,7 +194,7 @@ export const updateProject = async (initialData: Partial<ProjectInputData>, newD
     }
     if (JSON.stringify(initialData.participants) !== JSON.stringify(participants)) {
         console.log("updating participants");
-        const res = await updateParticipants(supabase, participants, initialData.participants, initialData.id!, newData.status!);
+        const res = await updateParticipants(supabase, participants ?? [], initialData.participants ?? [], initialData.id!, newData.status!, initialData.creator);
         if (!res.success) {
             return res;
         }
@@ -353,20 +354,29 @@ const deleteCoverImage = async (supabase: SupabaseClient<any, "public", any>, pr
     return { success: true, message: "Cover image deleted successfully!" };
 }
 
-const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: any, oldParticipants: any, projectId: string, status: string) => {
+const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, participants: PublicUser[], oldParticipants: PublicUser[], projectId: string, status: string, creator: string) => {
     if (participants.length > 0) {
-        const existingInvitationIds = new Set(oldParticipants?.map((p: any) => p.user_id) ?? []);
+        const existingInvitationsIds = new Set(oldParticipants.map((p) => p.id));
         const newInvitations: any[] = [];
         const invitationsToKeep = new Set();
+        const notifications: any[] = [];
 
-        participants.forEach((p: any) => {
-            if (!existingInvitationIds.has(p.id)) {
+        participants.forEach((p) => {
+            if (!existingInvitationsIds.has(p.id)) {
                 newInvitations.push({
                     user_id: p.id,
                     project_id: projectId,
                     type: RequestType.INVITATION,
-                    requested_at: status === "published" ? new Date().toISOString() : undefined,
+                    requested_at: status === "published" ? new Date() : undefined,
                 });
+                if (status === "published") {
+                    notifications.push({
+                        recipient_id: p.id,
+                        message_template: `{user.username} has invited you to join their project {project.name}.`,
+                        project_id: projectId,
+                        user_id: creator,
+                    });
+                }
             } else {
                 invitationsToKeep.add(p.id);
             }
@@ -376,18 +386,23 @@ const updateParticipants = async (supabase: SupabaseClient<any, "public", any>, 
         if (newInvitations.length > 0) {
             const { error: insertError } = await supabase.from("participation_requests").insert(newInvitations);
             if (insertError) {
-                console.error("Database error:", insertError.message);
+                console.log("Database error:", insertError.message);
                 return { success: false, message: "Failed to save participation requests" };
+            }
+            // Insert notifications for new invitations
+            const { error: notifError } = await supabase.from("notifications").insert(notifications);
+            if (notifError) {
+                console.log("Database notification error:", notifError.message);
             }
         }
 
         // Remove invitations that are no longer in the participants list
-        const invitationsToDelete = Array.from(existingInvitationIds.difference(invitationsToKeep));
+        const invitationsToDelete = Array.from(existingInvitationsIds.difference(invitationsToKeep));
 
         if (invitationsToDelete.length > 0) {
             const { error: deleteError } = await supabase.from("participation_requests").delete().in("user_id", invitationsToDelete);
             if (deleteError) {
-                console.error("Database error:", deleteError.message);
+                console.log("Database error:", deleteError.message);
                 return { success: false, message: "Failed to remove old invitations" };
             }
         }

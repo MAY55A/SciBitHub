@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import CountrySelector from "../custom/countries-selector";
 import { areEqualArrays } from "@/src/utils/utils";
 import { CancelAlertDialog } from "./cancel-alert-dialog";
+import Link from "next/link";
 
 export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProject, dataChanged }: { data: ProjectInputData, onUpdate: (data: Partial<ProjectInputData>) => void, onNext: () => void, onBack: () => void, onSaveStep: () => void, onSaveProject: (data: Partial<ProjectInputData>, status: ProjectStatus) => void, dataChanged?: boolean }) {
     const form = useForm({
@@ -27,7 +28,7 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
     const [isSaved, setIsSaved] = useState(false);
 
     const saveData = (data: Partial<ProjectInputData>) => {
-        if (data.participationLevel === ParticipationLevel.RESTRICTED && (!data.participants || data.participants.length < 2)) {
+        if (!data.status && data.participationLevel === ParticipationLevel.RESTRICTED && (!data.participants || data.participants.length < 2)) { // Ensure at least two contributors are selected for restricted participation for new projects only !
             form.setError("participants", { message: "You must choose at least two contributors." });
             return;
         }
@@ -47,7 +48,6 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
     };
 
     const regionValue = form.watch("scope");
-
     const watchedFields = form.watch();
     useEffect(() => {
         const same = watchedFields.visibility === data.visibility &&
@@ -55,7 +55,7 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
             watchedFields.moderationLevel === data.moderationLevel &&
             watchedFields.scope === data.scope && watchedFields.deadline?.toISOString() === data.deadline?.toISOString() &&
             areEqualArrays(watchedFields.countries, data.countries) &&
-            areEqualArrays(watchedFields.participants, data.participants);
+            areEqualArrays(watchedFields.participants?.map(p=>p.username), data.participants?.map(p=>p.username));
         setIsSaved(same);
     }, [JSON.stringify(watchedFields)]);
 
@@ -142,20 +142,25 @@ export function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSaveProjec
                     );
                 })()}
                 {form.getValues("participationLevel") === ParticipationLevel.RESTRICTED &&
-                    <FormField
-                        control={form.control}
-                        name="participants"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-primary">Invite allowed contributors</FormLabel>
-                                <FormControl>
-                                    <ContributorsInput value={field.value} onChange={field.onChange} />
-                                </FormControl>
-                                <FormMessage></FormMessage>
-                            </FormItem>
-                        )}
-                    />
-                }
+                    (data.status === ProjectStatus.PUBLISHED && data.participationLevel === ParticipationLevel.RESTRICTED
+                        ? <div className="text-sm font-retro">
+                            You can manage participation requests {" "}
+                            <Link href={`/projects/${data.id}/participation-requests`} target="_blank" className="underline hover:text-green">here</Link>
+                        </div>
+                        : <FormField
+                            control={form.control}
+                            name="participants"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-primary">Invite allowed contributors</FormLabel>
+                                    <FormControl>
+                                        <ContributorsInput value={field.value} onChange={field.onChange} />
+                                    </FormControl>
+                                    <FormMessage></FormMessage>
+                                </FormItem>
+                            )}
+                        />
+                    )}
                 <FormField
                     control={form.control}
                     name="scope"

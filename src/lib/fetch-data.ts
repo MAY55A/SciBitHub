@@ -75,7 +75,7 @@ export const fetchProject = async (
     const supabase = await createClient();
     const { data, error } = await supabase
         .from("projects_with_likes")
-        .select(`*, creator:creator_info`)
+        .select("*")
         .eq("id", id)
         .maybeSingle();
 
@@ -83,8 +83,26 @@ export const fetchProject = async (
         console.error("Error fetching project:", error);
         return null;
     }
+    const { creator_info, ...projectData } = data;
+    return { ...projectData, creator: creator_info, };
+}
 
-    return data;
+
+export const fetchProjectForEditing = async (
+    id: string
+): Promise<Project | null> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Error fetching project:", error);
+        return null;
+    }
+    return { ...data, creator: { id: data.creator } };
 }
 
 export const fetchTask = async (
