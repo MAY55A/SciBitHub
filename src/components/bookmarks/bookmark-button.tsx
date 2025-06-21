@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useToast } from "@/src/hooks/use-toast";
 import { addBookmark, removeBookmark } from "@/src/lib/actions/bookmark-actions";
+import { UserRole } from "@/src/types/enums";
 
 export const BookmarkButton = ({ projectId, discussionId }: { projectId?: string, discussionId?: string }) => {
     const [existingBookmark, setExistingBookmark] = useState<{ id: string } | null>(null);
@@ -58,7 +59,7 @@ export const BookmarkButton = ({ projectId, discussionId }: { projectId?: string
         }
     }
 
-    if (!user) {
+    if (!user || user.role === UserRole.ADMIN) {
         return null;
     }
 

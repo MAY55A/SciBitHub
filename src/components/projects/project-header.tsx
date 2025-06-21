@@ -72,8 +72,7 @@ export function ProjectHeader({ project }: { project: Project }) {
                 </div>
             </div>
             <div className="absolute bottom-4 right-4 space-x-2">
-                <LikeButton projectId={project.id!} likes={project.likes ?? 0} creatorId={project.creator.id} />
-                <BookmarkButton projectId={project.id} />
+                <LikeButton projectId={project.id!} likes={project.likes ?? 0} creatorId={project.creator?.id} />
                 <Suspense fallback={null}>
                     <ProjectActions creatorId={project.creator.id} project={project} />
                 </Suspense>
@@ -90,12 +89,17 @@ async function ProjectActions({ creatorId, project }: { creatorId: string, proje
     if (!user) {
         return null;
     }
+    if (user.app_metadata.role === "admin")
+        return null;
     if (user.id === creatorId) {
         return (
             <ProjectDropdownMenu project={project} showVisit={false} />
         );
     };
     return (
+        <>
+            <BookmarkButton projectId={project.id} />
         <ReportFormDialog user={user.id} id={project.id!} type="project" />
+        </>
     );
 }

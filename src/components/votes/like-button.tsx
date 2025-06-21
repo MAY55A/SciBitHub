@@ -66,7 +66,7 @@ export const LikeButton = ({ projectId, likes, creatorId }: { projectId: string,
         <Button
             variant="ghost"
             className="text-pink-700 hover:text-pink-500 h-8 px-2 space-x-2"
-            disabled={!user}
+            disabled={!user || user.role === "admin"}
             title={existingLike ? "unlike" : "like"}
             onClick={() => like()}
         >

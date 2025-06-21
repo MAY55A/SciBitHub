@@ -4,7 +4,6 @@ import { TopicDropdownMenu } from "./topic-options-menu";
 import { formatDate } from "@/src/utils/utils";
 import { Suspense } from "react";
 import { MarkdownViewer } from "../custom/markdown-viewer";
-import Link from "next/link";
 import { createClient } from "@/src/utils/supabase/server";
 import { UserAvatar } from "../custom/user-avatar";
 import { Pin } from "lucide-react";
@@ -79,10 +78,11 @@ async function TopicActions({ topic }: { topic: ForumTopic }) {
 
     const isCreator = user?.id === topic.creator.id;
     const isProjectCreator = user?.id === topic.project.creator.id;
+    const isAdmin = user.app_metadata.role === "admin";
 
-    if (!isCreator && !isProjectCreator) {
+    if (!isCreator && !isProjectCreator && !isAdmin) {
         return <ReportFormDialog user={user.id} id={topic.id!} type="topic" />
     }
 
-    return <TopicDropdownMenu topic={topic} canSetAsFeatured={isProjectCreator} canEdit={isCreator} />
+    return <TopicDropdownMenu topic={topic} canSetAsFeatured={isProjectCreator || isAdmin} canEdit={isCreator} />
 }
