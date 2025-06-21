@@ -18,7 +18,7 @@ export function HeroSection({ image, title, subtitle, children }: { image: strin
             <div className="relative flex flex-col justify-between w-full h-full text-foreground p-8">
                 <div className="mt-16 max-w-3xl">
                     <h1 className="text-4xl font-bold text-primary mb-4">{title}</h1>
-                    <p className="text-muted-foreground/80 text-lg font-medium">{subtitle}</p>
+                    <p className="text-muted-foreground/80 text-lg font-semibold font-retro">{subtitle}</p>
                 </div>
                 {children}
             </div>

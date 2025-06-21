@@ -38,13 +38,11 @@
     --sidebar-accent-foreground: 76 71% 53%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    --canvas-default: #fcfcfc;
-    --canvas-subtle: #e9ebee;
   }
 
   .dark {
     --green: 76 71% 53%;
-    --background: 0  5%  8%;
+    --background: 0 5% 8%;
     --foreground: 0 0% 98%;
     --card: 0, 7%, 8%;
     --card-foreground: 0 0% 98%;
@@ -76,14 +74,19 @@
     --sidebar-accent-foreground: 76 71% 53%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    --canvas-default: #0d1117;
-    --canvas-subtle: #161b22;
+    --canvas-default: 0 6% 10%;
+    --canvas-subtle: 0 3% 12%;
   }
+
 }
 
 .wmde-markdown,
 .wmde-markdown-var {
-    font-family: 'Courier New', monospace !important;
+  --color-canvas-default: hsl(var(--canvas-default)) !important;
+  --color-canvas-subtle: hsl(var(--canvas-subtle)) !important;
+
+  font-family: 'Courier New', monospace !important;
+
   ol,
   ul {
     list-style: auto !important;
@@ -148,6 +151,7 @@
 }
 
 textarea {
+  background-color: hsla(var(--muted) / 0.5);
 }
 
 @keyframes loader-line {

@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import useSupabaseClient from "@/src/utils/supabase/client";
 import { User } from "@/src/types/models";
-import { useRouter } from "next/navigation";
 
 interface AuthContextType {
     user: User | null;
@@ -17,7 +16,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const supabase = useSupabaseClient();
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    const router = useRouter();
 
     const fetchUser = async () => {
         setLoading(true);
