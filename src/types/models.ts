@@ -16,9 +16,9 @@ interface Metadata {
     contacts?: string[];
     researcherType?: ResearcherType;
     organizationName?: string;
+    organizationLocation?: string;
     institutionName?: string;
     academicDegree?: string;
-    location?: string;
     isVerified?: boolean;
 }
 

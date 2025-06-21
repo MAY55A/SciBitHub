@@ -50,7 +50,7 @@ export function ResearcherProfile({ user }: { user: User }) {
                     <p className="flex items-center gap-2 text-sm ">
                         <MapPin size={"15"} />
                         Location :
-                        <span className="text-muted-foreground">{user.metadata.location || "- not specified -"}</span>
+                        <span className="text-muted-foreground">{user.metadata.organizationLocation || "- not specified -"}</span>
                     </p>
                     <p className="flex flex-wrap items-center gap-2 text-sm ">
                         <TestTube2 size={"15"} />
