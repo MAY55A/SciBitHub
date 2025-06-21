@@ -16,7 +16,7 @@ export const CancelAlertDialog = ({ projectStatus, saveProject }: { projectStatu
     const router = useRouter();
 
     const handleExit = () => {
-        router.back(); // Navigates to the previous page
+        router.push("/profile/projects");
     };
 
     return (
