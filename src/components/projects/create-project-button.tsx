@@ -7,10 +7,10 @@ import { UserRole } from "@/src/types/enums";
 export const CreateProjectButton = async () => {
     const userRole = await getCurrentUserRole();
 
-    return userRole === UserRole.RESEARCHER ?
+    return !userRole || userRole === UserRole.RESEARCHER ?
         <Button className="max-w-44 flex gap-2 font-bold">
             <Link href={'/projects/create'}>
-                start a project
+                Start a Project
             </Link>
             <ChevronRight size={14} />
         </Button>
