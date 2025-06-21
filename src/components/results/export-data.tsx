@@ -58,7 +58,7 @@ export function ExportData({ task, data, files }: { task: string, data: any, fil
     }
 
     return (
-        <Button variant="outline" onClick={exportTaskData} key={task} disabled={isLoading} title={`Download ${task} data`}>
+        <Button variant="outline" onClick={exportTaskData} key={task} disabled={isLoading || data.length < 5} title={`Download ${task} data`}>
             <span className="truncate overflow-hidden whitespace-nowrap">{isLoading ? "Exporting data..." : `Download '${task}' data`}</span>
         </Button>
     );
