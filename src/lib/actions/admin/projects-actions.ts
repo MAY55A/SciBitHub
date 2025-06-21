@@ -11,7 +11,7 @@ export const updateProjectStatus = async (projectId: string, projectName: string
         status,
         published_at: status === ProjectStatus.PUBLISHED ? new Date() : undefined,
         deleted_at: status === ProjectStatus.DELETED ? new Date() : null,
-        name: status === ProjectStatus.DELETED ? projectName.replace(/ \(deleted\)$/, "") : `${projectName} (deleted)`
+        name: status === ProjectStatus.DELETED ? `${projectName} (deleted)` : projectName.replace(/ \(deleted\)$/, "")
     }
     const { error, data: project } = await supabase.from('projects').update(data).eq('id', projectId).select('creator').single();
 
