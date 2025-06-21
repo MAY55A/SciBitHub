@@ -73,7 +73,7 @@ export function TopicDropdownMenu({ topic, canEdit = false, canSetAsFeatured = f
                                 document.body.style.overflow = ""; // Restore scroll manually (when form dialog is closed focus is locked)
                             }}
                         >
-                            <TopicFormDialog projectId={topic.project.id!} data={{ ...topic, creator: topic.creator.id, project: topic.project.id }} />
+                            <TopicFormDialog projectId={topic.project.id!} data={{ ...topic, creator: topic.creator?.id, project: topic.project.id }} />
                         </DropdownMenuItem>
                     }
                 </DropdownMenuGroup>

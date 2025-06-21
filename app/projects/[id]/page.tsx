@@ -39,7 +39,7 @@ export default async function ProjectPage({ ...props }: {
 
     const searchParams = await props.searchParams;
     const currentTab = (await searchParams).tab || "overview";
-    const { canViewContribution, canSendRequest, canViewResults, canEditResults } = await getProjectPermissions(project.id!, project.creator.id, project.visibility, project.participation_level);
+    const { canViewContribution, canSendRequest, canViewResults, canEditResults } = await getProjectPermissions(project.id!, project.visibility, project.participation_level, project.creator?.id);
 
     const TabLink = ({ tab, children }: { tab: string, children: React.ReactNode }) => (
         <Link
@@ -67,7 +67,7 @@ export default async function ProjectPage({ ...props }: {
                 {currentTab === "contribution" && (
                     project.activity_status === ActivityStatus.ONGOING ? (
                         canViewContribution ? (
-                            <ProjectContribution projectId={project.id!} creator={project.creator.id} />
+                            <ProjectContribution projectId={project.id!} creator={project.creator?.id} />
                         ) : (
                             <RestrictedProjectMessage projectId={project.id!} canSendRequest={canSendRequest} />
                         )

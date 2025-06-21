@@ -8,7 +8,7 @@ import { useAuth } from "@/src/contexts/AuthContext";
 import { cn } from "@/src/lib/utils";
 import { usePathname } from "next/navigation";
 
-export const VoteButtons = ({ voted_id, voted_type, upvotes, downvotes, creatorId }: { voted_id: string, voted_type: string, upvotes: number, downvotes: number, creatorId: string }) => {
+export const VoteButtons = ({ voted_id, voted_type, upvotes, downvotes, creatorId }: { voted_id: string, voted_type: string, upvotes: number, downvotes: number, creatorId?: string }) => {
     const [existingVote, setExistingVote] = useState<{ id: String, vote: number } | null>(null);
     const [currentUpvotes, setCurrentUpvotes] = useState(upvotes);
     const [currentDownvotes, setCurrentDownvotes] = useState(downvotes);
@@ -69,7 +69,7 @@ export const VoteButtons = ({ voted_id, voted_type, upvotes, downvotes, creatorI
         }
 
         // notify creator about other users if the vote is new or has changed
-        if (creatorId !== user!.id && (!existingVote || existingVote.vote !== vote_value)) {
+        if (creatorId && creatorId !== user!.id && (!existingVote || existingVote.vote !== vote_value)) {
             const notification = {
                 recipient_id: creatorId,
                 message_template: `{user.username} ${vote_value === 1 ? "upvoted ▲" : "downvoted ▼"} your ${voted_type}.`,

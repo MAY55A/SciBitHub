@@ -34,8 +34,8 @@ export const postComment = async (data: any, commentPage: string) => {
         user_id: user.data.user.id,
     };
 
-    // If the recipient is the same as the user, no notification is sent (user replied to themselves)
-    if (notificationParties.recipient_id !== notificationParties.user_id) {
+    // If the recipient is deleted or is the same as the user, no notification is sent (user replied to themselves)
+    if (!!notificationParties.recipient_id && notificationParties.recipient_id !== notificationParties.user_id) {
         let notification = {};
         if (commentData.discussion) {
             notification = {

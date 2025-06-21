@@ -18,7 +18,7 @@ const fetchTask = async (id: string) => {
         console.log("Error fetching task:", error);
         return null;
     }
-    return { data, canEdit: (data.project as unknown as { creator: string }).creator === user.data.user?.id };
+    return { data, canEdit: !!user.data.user && (data.project as unknown as { creator: string | null }).creator === user.data.user.id };
 }
 
 export default async function Page(props: { params: { id: string } }) {

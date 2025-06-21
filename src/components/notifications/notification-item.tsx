@@ -59,7 +59,7 @@ export function parseNotification(
             try { // if it is at the end of a phrase, make sure there is no dot exactly after } ({user.username} is valid, {user.username}. is not)
                 const keys = part.slice(1, -1).split('.'); // ex: 'user.username' => ['user', 'username']
                 const entity = notification[keys[0] as keyof Notification]; // ex: user object
-                if (!entity) return "";
+                if (!entity) { if (keys[0] === "user") return "**Deleted User** "; return ""; } // If user is null, return empty string or a placeholder;
                 const text = entity[keys[1]] as String; // ex: => user.username = 'John Doe'
                 if (!text) return "";
 

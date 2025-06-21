@@ -22,16 +22,18 @@ export const restoreDiscussion = async (id: string) => {
         return { success: false, message: "Failed to restore discussion." };
     }
 
-    const notification = {
-        recipient_id: project.creator,
-        message_template: `Your discussion {discussion.title} has been restored.`,
-        discussion_id: id,
-        action_url: `/discussions/${id}`,
-    };
+    if (project.creator) {
+        const notification = {
+            recipient_id: project.creator,
+            message_template: `Your discussion {discussion.title} has been restored.`,
+            discussion_id: id,
+            action_url: `/discussions/${id}`,
+        };
 
-    const { error: notifError } = await supabase.from("notifications").insert(notification);
-    if (notifError) {
-        console.log("Database notification error:", notifError.message);
+        const { error: notifError } = await supabase.from("notifications").insert(notification);
+        if (notifError) {
+            console.log("Database notification error:", notifError.message);
+        }
     }
 
     return { success: true, message: `Discussion restored successfully.` };
@@ -48,7 +50,7 @@ export const deleteDiscussions = async (ids: string[], deletionType: "soft" | "h
     const notifications: { recipient_id: string; message_template: string }[] = [];
 
     for (const id of ids) {
-        let discussion: { creator: string; title: string } | null = null;
+        let discussion: { creator: string | null; title: string } | null = null;
 
         const res = deletionType === "soft"
             ? await softDeleteDiscussion(id, supabase)
@@ -63,10 +65,12 @@ export const deleteDiscussions = async (ids: string[], deletionType: "soft" | "h
         deleted.push(id);
 
         const message = `Your discussion "${discussion.title.length > 50 ? discussion.title.slice(0, 47) + "..." : discussion.title}" has been deleted.`;
-        notifications.push({
-            recipient_id: discussion.creator,
-            message_template: message,
-        });
+        if (discussion.creator) {
+            notifications.push({
+                recipient_id: discussion.creator,
+                message_template: message,
+            });
+        }
     }
 
     if (notifications.length > 0) {

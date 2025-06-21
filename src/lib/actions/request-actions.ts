@@ -22,12 +22,12 @@ export const createRequests = async (projectId: string, users: string[], type: R
         notifications.push(type === RequestType.INVITATION
             ? {
                 recipient_id: userId,
-                message_template: `{user.username} has invited you to join their project {project.name}.`,
+                message_template: `{user.username} has invited you to join their project {project.name} .`,
                 project_id: projectId,
                 user_id: project.creator,
             } : {
                 recipient_id: project.creator,
-                message_template: `{user.username} has requested to join your project {project.name}.`,
+                message_template: `{user.username} has requested to join your project {project.name} .`,
                 project_id: projectId,
                 user_id: userId,
             });
@@ -65,7 +65,7 @@ export const updateRequestsStatus = async (ids: string[], status: ValidationStat
     const notifications = requests.map((request: any) => {
         return {
             recipient_id: areInvitations ? request.project.creator : request.user_id,
-            message_template: `{user.username} has ${action} your ${type} to join {project.name}.`,
+            message_template: `{user.username} has ${action} your ${type} to join {project.name} .`,
             project_id: request.project.id,
             user_id: areInvitations ? request.user_id : request.project.creator,
         };

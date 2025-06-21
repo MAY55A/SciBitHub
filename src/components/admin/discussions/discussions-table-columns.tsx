@@ -54,9 +54,12 @@ export const discussionsTableColumns: ColumnDef<Discussion>[] = [
         ),
         cell: ({ row }) => {
             const user = row.original.creator;
+            if (!user) {
+                return <div className="text-muted-foreground">Unknown</div>;
+            }
             return (
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                    <a href={`/admin/users?id=${user.id}`} className="truncate font-semibold hover:underline">{user.username}</a>
+                    <a href={`/admin/users?id=${user.id}`} className="truncate font-semibold hover:underline">{user.deleted_at ? "Deleted user" : user.username}</a>
                 </div>
             );
         },

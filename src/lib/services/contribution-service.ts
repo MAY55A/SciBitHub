@@ -54,17 +54,19 @@ export const createContribution = async (data: any, taskId: string, moderation: 
         return { success: false, message: "Failed to save contribution" };
     }
     const contribution = inserted as unknown as Contribution;
-    const notification = {
-        recipient_id: contribution.task.project.creator,
-        message_template: `{user.username} submitted a new contribution to {task.title} .`,
-        task_id: taskId,
-        user_id: userId,
-        action_url: `/contributions/${contribution.id}`,
-    };
+    if (contribution.task.project.creator){
+        const notification = {
+            recipient_id: contribution.task.project.creator,
+            message_template: `{user.username} submitted a new contribution to {task.title} .`,
+            task_id: taskId,
+            user_id: userId,
+            action_url: `/contributions/${contribution.id}`,
+        };
 
-    const { error: notifError } = await supabase.from("notifications").insert(notification);
-    if (notifError) {
-        console.log("Database notification error:", notifError.message);
+        const { error: notifError } = await supabase.from("notifications").insert(notification);
+        if (notifError) {
+            console.log("Database notification error:", notifError.message);
+        }
     }
 
     return { success: true, message: "Contribution saved successfully" };

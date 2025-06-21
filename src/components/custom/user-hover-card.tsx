@@ -5,7 +5,11 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card"
 import { PublicUser } from "@/src/types/models";
 import { ResearcherIcon } from "./researcher-icon";
 
-export function UserHoverCard({ user }: { user: PublicUser }) {
+export function UserHoverCard({ user }: { user: PublicUser | null }) {
+    if (!user?.username) {
+        return <span className="text-primary/70 truncate pl-1 text-sm">**Deleted User**</span>;
+    }
+
     const username = user.deleted_at ? "**Deleted User**" : user.username;
     return (
         <HoverCard>

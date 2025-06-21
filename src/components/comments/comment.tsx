@@ -60,18 +60,18 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
         });
     }
 
-    const creator = {
+    const creator = comment.creator?.username ? {
         ...comment.creator,
         username: comment.creator.deleted_at ? "**Deleted User**" : comment.creator.username,
-    }
+    } : null
 
     return (
         <div>
             <div className="w-full flex gap-2" id={comment.id} tabIndex={-1}>
                 <Avatar className="flex shrink-0 overflow-hidden h-8 w-8 rounded-lg hover:shadow-lg hover:bg-muted">
-                    {!!creator.profile_picture && <AvatarImage src={creator.profile_picture} alt={creator.username} />}
+                    {!!creator?.profile_picture && <AvatarImage src={creator.profile_picture} alt={creator.username} />}
                     <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
-                        {creator.username.slice(0, 2).toUpperCase()}
+                        {creator ? creator.username.slice(0, 2).toUpperCase() : "**"}
                     </AvatarFallback>
                 </Avatar>
                 <Card className="w-full px-2 bg-muted/50">
@@ -119,27 +119,27 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
                                 Reply
                             </Button>
                             {creator && currentUser?.id === creator.id && (
-                                    <Button variant="ghost" size="sm" className="flex gap-1 items-center text-xs h-8 px-1" disabled={isSubmitting} onClick={toggleEdit}>
-                                        {isEditing ?
-                                            <span className="text-green">Cancel</span> :
-                                            <>
-                                                <Edit2 size={14} />
-                                                Edit
-                                            </>}
-                                    </Button>
+                                <Button variant="ghost" size="sm" className="flex gap-1 items-center text-xs h-8 px-1" disabled={isSubmitting} onClick={toggleEdit}>
+                                    {isEditing ?
+                                        <span className="text-green">Cancel</span> :
+                                        <>
+                                            <Edit2 size={14} />
+                                            Edit
+                                        </>}
+                                </Button>
                             )}
                             {(creator && currentUser?.id === creator.id) || currentUser?.role === "admin" &&
-                                    <CustomAlertDialog
-                                        buttonClass="flex gap-1 items-center text-xs h-8 px-1"
-                                        buttonIcon={Trash2}
-                                        buttonVariant="ghost"
-                                        triggerText="Delete"
-                                        buttonSize="sm"
-                                        buttonDisabled={isSubmitting || isEditing}
-                                        title="Delete Reply"
-                                        description="All associated replies will also be deleted."
-                                        confirmText="Confirm"
-                                        onConfirm={handleDelete} />
+                                <CustomAlertDialog
+                                    buttonClass="flex gap-1 items-center text-xs h-8 px-1"
+                                    buttonIcon={Trash2}
+                                    buttonVariant="ghost"
+                                    triggerText="Delete"
+                                    buttonSize="sm"
+                                    buttonDisabled={isSubmitting || isEditing}
+                                    title="Delete Reply"
+                                    description="All associated replies will also be deleted."
+                                    confirmText="Confirm"
+                                    onConfirm={handleDelete} />
                             }
                         </div>
                         <div className="flex items-center gap-1">
@@ -153,7 +153,7 @@ export function CommentCard({ comment, currentUser, replyingTo, onDelete }: { co
             </div>
             {showReplies &&
                 <div className="ml-4">
-                    <CommentsList commentedOn={{ parent_comment: comment.id }} replyingTo={{ comment: comment.id, user: creator.username }} />
+                    <CommentsList commentedOn={{ parent_comment: comment.id }} replyingTo={{ comment: comment.id, user: creator?.username ?? "**Deleted User**" }} />
                 </div>
             }
         </div>

@@ -12,7 +12,7 @@ export async function updateDiscussionStatus(id: string, status: DiscussionStatu
         console.log("Database error:", error.message);
         return { success: false, message: "Failed to update discussion status." };
     }
-    if (client) { // If a client is provided, then it is an admin action (client with service role)
+    if (client && !!discussion.creator) { // If a client is provided, then it is an admin action (client with service role), and if the creator of the discussion exists, we send a notification
         const notification = {
             recipient_id: discussion.creator,
             message_template: `An admin has ${status === DiscussionStatus.OPEN ? "reopened" : status} your discussion {discussion.title} .`,

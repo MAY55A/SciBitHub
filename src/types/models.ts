@@ -63,7 +63,7 @@ export interface Project {
     published_at?: string;
     updated_at?: string;
     deleted_at?: string;
-    creator: PublicUser;
+    creator: PublicUser | null;
     participants?: PublicUser[];
     tasks: Task[];
     status: ProjectStatus;
@@ -124,7 +124,7 @@ export interface ParticipationRequest {
 export interface Contribution {
     id?: string;
     task: Task;
-    user: PublicUser;
+    user: PublicUser | null;
     data: Map<string, any>;
     status: ValidationStatus;
     created_at?: string;
@@ -143,7 +143,7 @@ export interface Discussion {
     created_at?: string;
     updated_at?: string;
     deleted_at?: string;
-    creator: PublicUser;
+    creator: PublicUser | null;
     replies?: number;
     upvotes?: number;
     downvotes?: number;
@@ -160,7 +160,7 @@ export interface ForumTopic {
     updated_at: string;
     deleted_at?: string;
     project: Project;
-    creator: PublicUser;
+    creator: PublicUser | null;
     replies?: number;
     upvotes?: number;
     downvotes?: number;
@@ -171,7 +171,7 @@ export interface Comment {
     content: string;
     created_at: string;
     updated_at?: string;
-    creator: PublicUser;
+    creator: PublicUser | null;
     discussion?: Discussion;
     forum_topic?: ForumTopic;
     parent_comment?: Comment;
@@ -198,7 +198,7 @@ export interface Visualization {
 
 export interface Report {
     id?: string;
-    reporter: PublicUser;
+    reporter: PublicUser | null;
     reported_link: string;
     reported_type: string;
     reason: ReportReason;
@@ -213,7 +213,7 @@ export interface Notification {
     target: NotificationTarget;
     type?: NotificationType;
     message_template: string;
-    user: PublicUser;
+    user: PublicUser | null;
     project: Project;
     discussion: Discussion;
     forum_topic: ForumTopic;

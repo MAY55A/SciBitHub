@@ -67,7 +67,7 @@ export function DiscussionDropdownMenu({ discussion, showVisit = true }: { discu
                             document.body.style.overflow = ""; // Restore scroll manually (when form dialog is closed focus is locked)
                         }}
                     >
-                        <DiscussionFormDialog data={{ ...discussion, creator: discussion.creator.id }} />
+                        <DiscussionFormDialog data={{ ...discussion, creator: discussion.creator?.id }} />
                     </DropdownMenuItem>
                     {discussion.status === DiscussionStatus.OPEN ?
                         <DropdownMenuItem

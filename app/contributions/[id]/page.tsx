@@ -32,8 +32,8 @@ export default async function Page({
         return NotAvailable({ type: "contribution" });
     }
 
-    const isContributor = contribution.user.id === user.id;
-    const isCreator = contribution.task.project.creator.id === user.id;
+    const isContributor = contribution.user?.id === user.id;
+    const isCreator = contribution.task.project.creator?.id === user.id;
     if (!isContributor && !isCreator) {
         return <Forbidden message="You do not have the permission to view this contribution" />;
     }

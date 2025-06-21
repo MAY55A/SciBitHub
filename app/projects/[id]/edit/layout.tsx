@@ -35,7 +35,7 @@ export default async function Layout({
         redirect(`/sign-in?redirect_to=projects/${id}/edit`);
     }
 
-    if (project.creator.id !== user.id) {
+    if (project.creator?.id !== user.id) {
         return <Forbidden message="You do not have the permission to edit this project." />;
     }
 
@@ -55,7 +55,7 @@ export default async function Layout({
 
     return (
         <ProjectEditProvider initialData={projectData}>
-            <ProjectEditWrapper projectId={projectData.id!} projectStatus={projectData.status!} projectParticipationLevel={projectData.participationLevel!} projectModerationLevel={projectData.moderationLevel!}>
+            <ProjectEditWrapper projectId={projectData.id!} projectStatus={projectData.status!} projectParticipationLevel={projectData.participationLevel!}>
                 {children}
             </ProjectEditWrapper>
         </ProjectEditProvider>

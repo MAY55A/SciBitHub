@@ -25,18 +25,20 @@ export const createTopic = async (data: TopicInputData) => {
         console.error("Database error:", topicError.message);
         return { success: false, message: "Failed to post topic." };
     }
-
+    const projectCreator = (topicData as unknown as ForumTopic).project.creator;
     // notify project creator
-    const notification = {
-        recipient_id: (topicData as unknown as ForumTopic).project.creator,
-        message_template: "{user.username} created a new topic {forum_topic.title} in {project.name} forum.",
-        user_id: user.data.user.id,
-        topic_id: topicData.id,
-        action_url: `/forum_topics/${topicData.id}`
-    };
-    const { error: notifError } = await supabase.from("notifications").insert(notification);
-    if (notifError) {
-        console.error("Database notification error:", notifError.message);
+    if (projectCreator) {
+        const notification = {
+            recipient_id: projectCreator,
+            message_template: "{user.username} created a new topic {forum_topic.title} in {project.name} forum.",
+            user_id: user.data.user.id,
+            topic_id: topicData.id,
+            action_url: `/forum_topics/${topicData.id}`
+        };
+        const { error: notifError } = await supabase.from("notifications").insert(notification);
+        if (notifError) {
+            console.log("Database notification error:", notifError.message);
+        }
     }
 
     return { success: true, message: "Topic created successfully." };
@@ -65,15 +67,17 @@ export async function toggleIsFeatured(is_featured: boolean, id: string, client:
     }
 
     // notify topic creator
-    const notification = {
-        recipient_id: topic.creator,
-        message_template: `Your forum topic {forum_topic.title} has been ${action}ed as featured.`,
-        topic_id: id,
-        action_url: `/forum_topics/${id}`
-    };
-    const { error: notifError } = await supabase.from("notifications").insert(notification);
-    if (notifError) {
-        console.error("Database notification error:", notifError.message);
+    if (topic.creator) {
+        const notification = {
+            recipient_id: topic.creator,
+            message_template: `Your forum topic {forum_topic.title} has been ${action}ed as featured.`,
+            topic_id: id,
+            action_url: `/forum_topics/${id}`
+        };
+        const { error: notifError } = await supabase.from("notifications").insert(notification);
+        if (notifError) {
+            console.log("Database notification error:", notifError.message);
+        }
     }
 
     return { success: true, message: is_featured ? "Topic marked as featured." : "Topic unmarked as featured." };
@@ -100,15 +104,17 @@ export async function deleteTopic(id: string) {
 
         const topic = data as unknown as ForumTopic;
         // notify project creator
-        const notification = {
-            recipient_id: topic.project.creator,
-            message_template: "{user.username} deleted a topic in {project.name} forum.",
-            user_id: topic.creator,
-            project_id: topic.project.id,
-        };
-        const { error: notifError } = await supabase.from("notifications").insert(notification);
-        if (notifError) {
-            console.error("Database notification error:", notifError.message);
+        if (topic.project.creator) {
+            const notification = {
+                recipient_id: topic.project.creator,
+                message_template: "{user.username} deleted a topic in {project.name} forum.",
+                user_id: topic.creator,
+                project_id: topic.project.id,
+            };
+            const { error: notifError } = await supabase.from("notifications").insert(notification);
+            if (notifError) {
+                console.log("Database notification error:", notifError.message);
+            }
         }
 
     }

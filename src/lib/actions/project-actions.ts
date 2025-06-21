@@ -66,8 +66,8 @@ export async function hardDeleteProject(projectId: string, client?: SupabaseClie
         // Remove all associated task files from MinIO
         await deleteFromMinIO(`/projects/${projectId}`, true);
 
-        // notify creator if an admin deleted the project
-        if (client) {
+        // notify creator if an admin deleted the project and the creator of the project still exists
+        if (client && !!project.creator) {
             const notification = {
                 message_template: `Your project "${project.name > 50 ? project.name.slice(0, 47) + "..." : project.name}" has been deleted.`,
                 recipient_id: project.creator,

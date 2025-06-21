@@ -58,7 +58,7 @@ export function TopicContent({ topic }: { topic: ForumTopic }) {
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="text-xs text-muted-foreground m-4">{topic.views} views</span>
-                    <VoteButtons voted_id={topic.id} voted_type={"forum topic"} upvotes={topic.upvotes ?? 0} downvotes={topic.downvotes ?? 0} creatorId={topic.creator.id} />
+                    <VoteButtons voted_id={topic.id} voted_type={"forum topic"} upvotes={topic.upvotes ?? 0} downvotes={topic.downvotes ?? 0} creatorId={topic.creator?.id} />
                     <Suspense fallback={null}>
                         <TopicActions topic={topic} />
                     </Suspense>
@@ -76,8 +76,8 @@ async function TopicActions({ topic }: { topic: ForumTopic }) {
         return null;
     }
 
-    const isCreator = user?.id === topic.creator.id;
-    const isProjectCreator = user?.id === topic.project.creator.id;
+    const isCreator = !!topic.creator && user?.id === topic.creator.id;
+    const isProjectCreator = !!topic.project.creator && user?.id === topic.project.creator.id;
     const isAdmin = user.app_metadata.role === "admin";
 
     if (!isCreator && !isProjectCreator && !isAdmin) {

@@ -8,7 +8,7 @@ import { createClient } from "@/src/utils/supabase/server";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-export default async function ProjectContribution({ projectId, creator }: { projectId: string, creator: string }) {
+export default async function ProjectContribution({ projectId, creator }: { projectId: string, creator?: string }) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     const tasks = await fetchTasks(projectId);
@@ -38,7 +38,7 @@ export default async function ProjectContribution({ projectId, creator }: { proj
             </div>
             <div className="w-full flex flex-col items-center">
                 <LatestContributions tasks={tasks.map((task) => task.id!)} />
-                {user?.id === creator &&
+                {creator && user?.id === creator &&
                     <Link href={`/projects/${projectId}/contributions`} className="flex items-center text-sm text-green gap-1 hover:underline">
                         See all contributions
                         <ChevronRight size={16} />

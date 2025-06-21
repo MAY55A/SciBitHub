@@ -17,15 +17,17 @@ export const toggleDeleteTopic = async (id: string, deleted_at: string | null) =
         return { success: false, message: `Failed to ${verb} topic.` };
     }
 
-    const notification = {
-        recipient_id: topic.creator,
-        message_template: `Your forum topic {forum_topic.title} has been ${verb}d.`,
-        topic_id: id,
-        action_url: `/forum-topics/${id}`,
-    };
-    const { error: notifError } = await supabase.from("notifications").insert(notification);
-    if (notifError) {
-        console.log("Database notification error:", notifError.message);
+    if (topic.creator) {
+        const notification = {
+            recipient_id: topic.creator,
+            message_template: `Your forum topic {forum_topic.title} has been ${verb}d.`,
+            topic_id: id,
+            action_url: `/forum-topics/${id}`,
+        };
+        const { error: notifError } = await supabase.from("notifications").insert(notification);
+        if (notifError) {
+            console.log("Database notification error:", notifError.message);
+        }
     }
 
     return { success: true, message: `Topic ${verb}d successfully.` };
@@ -39,9 +41,9 @@ export const deleteTopics = async (ids: string[], deletionType: "soft" | "hard" 
         console.log("Database error:", error.message);
         return { success: false, message: "Failed to delete topic(s)." };
     }
-    const notifications = topics.map(topic => ({
+    const notifications = topics.filter(t => !!t.creator).map(topic => ({
         recipient_id: topic.creator,
-        message_template: `Your topic ${topic.title.length > 50 ? topic.title.slice(0, 47) + "..." : topic.title} in project {project.name} forum has been deleted .`,
+        message_template: `Your topic ${topic.title.length > 50 ? topic.title.slice(0, 47) + "..." : topic.title} in project {project.name} forum has been deleted.`,
         project_id: topic.project,
         action_url: `/projects/${topic.project}?tab=forum`,
     }));

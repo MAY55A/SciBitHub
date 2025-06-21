@@ -20,16 +20,18 @@ export const updateProjectStatus = async (projectId: string, projectName: string
         return { success: false, message: "Failed to update project status." };
     }
 
-    const notification = {
-        recipient_id: project.creator,
-        message_template: `Your project {project.name} has been ${status}.`,
-        project_id: projectId,
-        action_url: `/profile/projects`,
-    };
+    if (project.creator) {
+        const notification = {
+            recipient_id: project.creator,
+            message_template: `Your project {project.name} has been ${status}.`,
+            project_id: projectId,
+            action_url: `/profile/projects`,
+        };
 
-    const { error: notifError } = await supabase.from("notifications").insert(notification);
-    if (notifError) {
-        console.log("Database notification error:", notifError.message);
+        const { error: notifError } = await supabase.from("notifications").insert(notification);
+        if (notifError) {
+            console.log("Database notification error:", notifError.message);
+        }
     }
 
     return { success: true, message: `Project ${status} successfully.` };

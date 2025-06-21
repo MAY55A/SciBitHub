@@ -17,9 +17,9 @@ export async function getCurrentUserRole(): Promise<UserRole | null> {
 
 export async function getProjectPermissions(
     projectId: string,
-    creatorId: string,
     projectVisibility: ProjectVisibility,
-    participationLevel: ParticipationLevel
+    participationLevel: ParticipationLevel,
+    creatorId?: string
 ): Promise<{ canViewContribution: boolean, canSendRequest: boolean, canViewResults: boolean, canEditResults: boolean }> {
 
     const supabase = await createClient();
@@ -31,7 +31,7 @@ export async function getProjectPermissions(
         canSendRequest: false,
     }
 
-    if (user?.id === creatorId) {
+    if (user && user.id === creatorId) {
         return permissions;
     } else {
         permissions.canEditResults = false;

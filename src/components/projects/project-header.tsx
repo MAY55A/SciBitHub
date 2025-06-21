@@ -14,10 +14,6 @@ import { BookmarkButton } from "../bookmarks/bookmark-button";
 import { format } from "date-fns";
 
 export function ProjectHeader({ project }: { project: Project }) {
-    const creator = {
-        ...project.creator,
-        username: project.creator.deleted_at ? "**Deleted User**" : project.creator.username
-    };
     return (
         <div className="relative w-full min-h-[50vh] p-4 rounded-lg">
             {project.cover_image ?
@@ -38,13 +34,13 @@ export function ProjectHeader({ project }: { project: Project }) {
 
             <div className="relative w-full flex justify-between gap-4 font-retro">
                 <div className="flex gap-2 px-2 py-1.5 text-left text-sm hover:bg-muted/20 rounded-lg">
-                    <Avatar className="flex shrink-0 overflow-hidden h-10 w-10 rounded-lg hover:shadow-lg hover:bg-muted">
-                        {!!creator.profile_picture && <AvatarImage src={creator.profile_picture} alt={creator.username} />}
+                    {!!project.creator?.username && <Avatar className="flex shrink-0 overflow-hidden h-10 w-10 rounded-lg hover:shadow-lg hover:bg-muted">
+                        {!!project.creator?.profile_picture && <AvatarImage src={project.creator.profile_picture} alt={project.creator.username} />}
                         <AvatarFallback className="text-primary opacity-80 text-sm rounded-lg border border-primary">
-                            {creator.username.slice(0, 2).toUpperCase()}
+                            {project.creator.deleted_at ? "**Deleted User**" : project.creator.username.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
-                    </Avatar>
-                    <UserHoverCard user={creator} />
+                    </Avatar>}
+                    <UserHoverCard user={project.creator} />
                 </div>
                 <div className="flex flex-col">
                     <span className="text-muted-foreground text-xs mb-4 text-end">Published {formatDate(project.created_at)}</span>
@@ -74,7 +70,7 @@ export function ProjectHeader({ project }: { project: Project }) {
             <div className="absolute bottom-4 right-4 space-x-2">
                 <LikeButton projectId={project.id!} likes={project.likes ?? 0} creatorId={project.creator?.id} />
                 <Suspense fallback={null}>
-                    <ProjectActions creatorId={project.creator.id} project={project} />
+                    <ProjectActions creatorId={project.creator?.id} project={project} />
                 </Suspense>
             </div>
 
@@ -82,7 +78,7 @@ export function ProjectHeader({ project }: { project: Project }) {
     );
 }
 
-async function ProjectActions({ creatorId, project }: { creatorId: string, project: Project }) {
+async function ProjectActions({ creatorId, project }: { creatorId?: string, project: Project }) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -99,7 +95,7 @@ async function ProjectActions({ creatorId, project }: { creatorId: string, proje
     return (
         <>
             <BookmarkButton projectId={project.id} />
-        <ReportFormDialog user={user.id} id={project.id!} type="project" />
+            <ReportFormDialog user={user.id} id={project.id!} type="project" />
         </>
     );
 }

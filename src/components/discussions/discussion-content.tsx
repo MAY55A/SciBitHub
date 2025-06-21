@@ -75,7 +75,7 @@ export function DiscussionContent({ discussion }: { discussion: Discussion }) {
                     ))}
                 </div>
                 <div className="flex items-center gap-2">
-                    <VoteButtons voted_id={discussion.id!} voted_type="discussion" upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes! ?? 0} creatorId={discussion.creator.id} />
+                    <VoteButtons voted_id={discussion.id!} voted_type="discussion" upvotes={discussion.upvotes ?? 0} downvotes={discussion.downvotes! ?? 0} creatorId={discussion.creator?.id} />
                     <Suspense fallback={null}>
                         <DiscussionActions discussion={discussion} />
                     </Suspense>
@@ -90,7 +90,7 @@ async function DiscussionActions({ discussion }: { discussion: Discussion }) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user || user.app_metadata.role === "admin") return null;
-    if (user.id === discussion.creator.id) {
+    if (user.id === discussion.creator?.id) {
         return <DiscussionDropdownMenu discussion={discussion} showVisit={false} />;
     }
     return <>

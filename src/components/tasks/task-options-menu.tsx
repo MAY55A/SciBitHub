@@ -13,7 +13,7 @@ import { useAuth } from "@/src/contexts/AuthContext";
 import ReportFormDialog from "../reports/report-form-dialog";
 
 export function TaskDropdownMenu({ task, showVisit = true }: { task: Task, showVisit?: boolean }) {
-     // showVisit indicates if the user is on the task page or not (false if he is on the page)
+    // showVisit indicates if the user is on the task page or not (false if he is on the page)
     const router = useRouter();
     const { user } = useAuth();
     const { toast } = useToast();
@@ -50,7 +50,7 @@ export function TaskDropdownMenu({ task, showVisit = true }: { task: Task, showV
     }
     // if the user is not the creator, show report icon if he is on the page of the task,
     //  and show nothing if he is viewing the task card
-    if (user.id !== task.project.creator.id) {
+    if (user.id !== task.project.creator?.id) {
         return showVisit ?
             null :
             <ReportFormDialog user={user.id} id={task.id!} type="task" />

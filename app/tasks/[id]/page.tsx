@@ -36,7 +36,7 @@ export default async function TaskPage({ params }: { params: { id: string } }) {
 
     if (task.project.participation_level === ParticipationLevel.RESTRICTED) {
         const { canViewContribution, canSendRequest } = await getProjectPermissions(
-            task.project.id!, task.project.creator.id, task.project.visibility, task.project.participation_level
+            task.project.id!, task.project.visibility, task.project.participation_level, task.project.creator?.id
         );
         if (!canViewContribution) {
             return (

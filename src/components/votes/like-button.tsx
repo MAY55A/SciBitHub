@@ -6,7 +6,7 @@ import { createClient } from "@/src/utils/supabase/client";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/src/contexts/AuthContext";
 
-export const LikeButton = ({ projectId, likes, creatorId }: { projectId: string, likes: number, creatorId: string }) => {
+export const LikeButton = ({ projectId, likes, creatorId }: { projectId: string, likes: number, creatorId?: string }) => {
     const [existingLike, setExistingLike] = useState<{ id: String } | null>(null);
     const [currentLikes, setCurrentLikes] = useState(likes);
     const supabase = createClient();
@@ -35,7 +35,7 @@ export const LikeButton = ({ projectId, likes, creatorId }: { projectId: string,
                 console.log("Error inserting Like:", error);
             } else {
                 // notify project creator if the user is not the creator
-                if (creatorId !== user!.id) {
+                if (creatorId && creatorId !== user!.id) {
                     const notification = {
                         recipient_id: creatorId,
                         message_template: `{user.username} hearted your project {project.name} ❤ .`,
