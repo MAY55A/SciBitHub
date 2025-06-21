@@ -1,7 +1,6 @@
 import { ThemeSwitcher } from '../custom/theme-switcher'
 import HeaderAuth from './header-auth'
 import { Nav } from './nav'
-import { NotificationBell } from '../notifications/notification-bell'
 import Logo from '../custom/logo'
 
 const Header = () => {
@@ -12,7 +11,6 @@ const Header = () => {
       <Logo />
       <Nav />
       <div className="flex items-center space-x-4 leading-5 sm:-mr-6 sm:space-x-6">
-        <NotificationBell />
         <HeaderAuth />
         <ThemeSwitcher />
       </div>
