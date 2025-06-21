@@ -35,6 +35,7 @@ export default function TopicFormDialog({ projectId, data }: { projectId: string
         if (res.success) {
             form.reset();
             startTransition(() => {
+                document.body.style.overflow = "";
                 router.refresh();
                 setOpen(false);
             });
@@ -64,6 +65,7 @@ export default function TopicFormDialog({ projectId, data }: { projectId: string
         });
 
         if (res.success) {
+            document.body.style.overflow = "";
             startTransition(() => {
                 router.refresh();
                 setOpen(false);
@@ -88,7 +90,7 @@ export default function TopicFormDialog({ projectId, data }: { projectId: string
 
     return (
         //fix overflow issue when dialog is closed
-        <Dialog open={open} onOpenChange={(open)=>{setOpen(open); if(!open) document.body.style.overflow = "";}}>
+        <Dialog open={open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>
             <DialogTrigger asChild>
                 {data ?
                     <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :

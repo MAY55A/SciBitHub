@@ -59,10 +59,10 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
         })
 
         if (res.success) {
-            setOpen(false);
+            document.body.style.overflow = "";
             startTransition(() => {
-                router.refresh();
                 setOpen(false);
+                router.refresh();
             });
         }
     }
@@ -88,6 +88,7 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
 
         if (res.success) {
             startTransition(() => {
+                document.body.style.overflow = "";
                 router.refresh();
                 setOpen(false);
             });
