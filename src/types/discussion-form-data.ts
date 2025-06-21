@@ -8,7 +8,7 @@ export const discussionInputDataSchema = z.object({
     category: z.enum(Object.values(DiscussionCategory) as [string, ...string[]], {
         errorMap: () => ({ message: "Please select a category" }),
     }),
-    tags: z.array(z.string()).optional(),
+    tags: z.array(z.string()).nullable().optional(),
     files: z.array(z.string()).optional(),
     creator: z.string().optional(),
 });

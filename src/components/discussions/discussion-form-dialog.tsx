@@ -70,7 +70,7 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
     const handleEdit = async (formData: DiscussionInputData) => {
         setMessage(undefined);
         const hasNotChanged = formData.title === data!.title && formData.body === data!.body &&
-            formData.category === data!.category && areEqualArrays(formData.tags, data!.tags) &&
+            formData.category === data!.category && areEqualArrays(formData.tags ?? [], data!.tags ?? []) &&
             newFiles.length === 0 && existingFiles.length === initialFiles.length;
 
         if (hasNotChanged) {
