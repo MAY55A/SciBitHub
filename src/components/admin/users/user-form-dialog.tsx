@@ -171,7 +171,7 @@ export default function UserFormDialog({ data, onUpdate, onClose }: { data?: Bas
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="text-green">Role</FormLabel>
-                                    <Select onValueChange={field.onChange} value={field.value}>
+                                    <Select onValueChange={field.onChange} value={field.value} disabled={data ? true : false}>
                                         <FormControl>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Choose role" />
