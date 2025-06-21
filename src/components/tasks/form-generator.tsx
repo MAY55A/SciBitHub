@@ -159,10 +159,10 @@ export const FormGenerator = (
                         handleChange({
                             target: {
                                 name: field.label,
-                                value: selectedOption ?? '',
+                                value: selectedOption,
                             },
                         } as React.ChangeEvent<HTMLInputElement>)}
-                    defaultValue={formData[field.label]?.value ?? ''}
+                    value={formData[field.label]?.value}
                 >
                     <SelectTrigger>
                         <SelectValue placeholder="Select an option" />
