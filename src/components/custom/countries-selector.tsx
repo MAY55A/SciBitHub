@@ -20,10 +20,10 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple
     // Fetching countries list (static or API-based)
     useEffect(() => {
         setLoading(true);
-        fetch('https://restcountries.com/v3.1/all')
+        fetch('https://restcountries.com/v3.1/all?fields=name') // new update forces use of fields query
             .then(response => response.json())
             .then(data => {
-                const countryOptions = data.map((country: any) => ({
+                const countryOptions = data?.map((country: any) => ({
                     value: country.name.common,
                     label: country.name.common,
                 }));
@@ -44,7 +44,7 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple
                     <FormLabel className={multiple ? "text-primary" : ""}>{multiple ? "Countries" : "Country"}</FormLabel>
                     <FormControl>
                         {loading ? (
-                            <div>Loading...</div>
+                            <div className="font-retro">Loading...</div>
                         ) : (
                             <Select
                                 isMulti={multiple ?? false}
