@@ -43,7 +43,6 @@ export const signUpAction = async (inputData: UserInputData) => {
     username: inputData.username,
     role: inputData.role,
     country: inputData.country,
-    is_suspended: false,
     metadata: metadata,
   });
 
