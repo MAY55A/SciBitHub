@@ -18,13 +18,13 @@ const components = {
     "projects": [
         {
             title: "Ongoing Projects",
-            href: "/projects?progress=active",
+            href: "/projects?activityStatus=ongoing",
             description:
                 "Explore active projects and make some contributions.",
         },
         {
             title: "Completed Projects",
-            href: "/projects?progress=completed",
+            href: "/projects?activityStatus=completed",
             description:
                 "View completed projects and learn about their outcomes.",
         },
@@ -38,12 +38,12 @@ const components = {
     "discussions": [
         {
             title: "Recent Discussions",
-            href: "/discussions?sort=recent",
+            href: "/discussions?orderBy=created_at&sort=desc",
             description: "See the latest discussions from all topics.",
         },
         {
             title: "Popular Discussions",
-            href: "/discussions?sort=popular",
+            href: "/discussions?orderBy=replies&sort=desc",
             description: "View trending and most active discussions.",
         },
     ]
