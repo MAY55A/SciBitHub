@@ -1,0 +1,14 @@
+CREATE TYPE role AS ENUM ('contributor', 'researcher', 'admin');
+CREATE TYPE activity_status AS ENUM ('ongoing', 'paused', 'completed', 'closed');
+CREATE TYPE scope AS ENUM ('global', 'regional');
+CREATE TYPE moderation_level AS ENUM ('strict', 'moderate', 'none');
+CREATE TYPE project_progress AS ENUM ('active', 'closed', 'published');
+CREATE TYPE project_status AS ENUM ('draft', 'pending', 'published', 'declined', 'deleted');
+CREATE TYPE project_visibility AS ENUM ('public', 'restricted', 'private');
+CREATE TYPE participation_level AS ENUM ('open', 'restricted');
+CREATE TYPE request_type AS ENUM ('invitation', 'application');
+CREATE TYPE task_status AS ENUM ('active', 'completed');
+CREATE TYPE task_type AS ENUM ('survey', 'data collection', 'data labelling');
+CREATE TYPE validation_status AS ENUM ('pending', 'approved', 'rejected');
+CREATE TYPE discussion_status AS ENUM ('open', 'closed', 'deleted');
+CREATE TYPE notification_type AS ENUM ('to_specific_user', 'to_all_admins', 'to_all_contributors', 'to_all_researchers', 'to_all_users');
