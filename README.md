@@ -52,3 +52,44 @@ It connects researchers, contributors, and curious minds to engage in data colle
 #### Discussion page
 
 ![](screenshots/discussion.png)
+
+---
+
+## 🤝 Open Source Contribution
+
+This project will be made open source after initial stabilization.  
+If you're interested in contributing, feel free to star or watch the repository and check back soon!
+
+Planned areas for contribution:
+
+- Data visualization and analytics features  
+- UI/UX improvements and accessibility  
+- Internationalization (i18n support)  
+- Mobile-friendly design and responsive layout  
+- Moderation and admin tooling  
+- Performance and scalability optimizations  
+- File storage and infrastructure support (Supabase, MinIO)  
+- Documentation and project onboarding
+
+---
+
+## 🙋 Help Needed: Hosting & Deployment
+
+Due to the platform's data-heavy nature (file uploads, contributions, datasets), it may exceed the limits of free-tier hosting services.
+
+If you're interested in helping with:
+- Hosting the platform publicly
+- Providing cloud storage or infrastructure
+- Sponsoring a deployment or helping with DevOps setup
+
+Feel free to [open an issue](https://github.com/MAY55A/SciBitHub/issues) or contact me directly!
+
+Every contribution helps make open science more accessible.
+
+---
+
+## ✨ About the Developer
+
+Developed by [MAY55A](https://may55a.github.io/Social-links-profile/), as part of an academic engineering project, with a focus on open science, community participation, and technical learning.
+
+📫 **Contact:** [mayssagnm@gmail.com](mailto:mayssagnm@gmail.com)
