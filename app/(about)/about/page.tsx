@@ -167,7 +167,7 @@ const quotes = [
     }
 ];
 
-export function RotatingQuotesBanner() {
+function RotatingQuotesBanner() {
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
