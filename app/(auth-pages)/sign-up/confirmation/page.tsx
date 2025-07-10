@@ -21,7 +21,7 @@ export default function Signup() {
   const success = searchParams.get("success");
 
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const [areTermsAccepted, setAreTermsAccepted] = useState(false);
   const { formData, clearFormData } = useMultistepSignupFormContext();
 
   const form = useForm({
@@ -38,9 +38,8 @@ export default function Signup() {
   }
 
   const onSubmit = () => {
-    if (isConfirmed && isTermsAccepted) {
+    if (isConfirmed && areTermsAccepted) {
       const finalFormData = { ...formData };
-      //alert(JSON.stringify(finalFormData, null, 2));
       signUpAction(finalFormData);
       clearFormData();
     }
@@ -60,7 +59,11 @@ export default function Signup() {
       </p>
       <div className="items-top flex space-x-2 font-retro">
         <Checkbox id="checkbox1" checked={isConfirmed}
-          onCheckedChange={setIsConfirmed} />
+          onCheckedChange={(checked) => {
+            if (checked !== "indeterminate") {
+              setIsConfirmed(checked)
+            }
+          }} />
         <div className="grid gap-1.5 leading-none">
           <Label
             htmlFor="checkbox1"
@@ -71,8 +74,12 @@ export default function Signup() {
         </div>
       </div>
       <div className="items-top flex space-x-2 font-retro">
-        <Checkbox id="checkbox2" checked={isTermsAccepted}
-          onCheckedChange={setIsTermsAccepted} />
+        <Checkbox id="checkbox2" checked={areTermsAccepted}
+          onCheckedChange={(checked) => {
+            if (checked !== "indeterminate") {
+              setAreTermsAccepted(checked)
+            }
+          }} />
         <div className="grid gap-1.5 leading-none">
           <Label
             htmlFor="checkbox2"
@@ -98,7 +105,7 @@ export default function Signup() {
             </ul>
           </div>
         )}
-        <SubmitButton pendingText="Signing up..." disabled={!isConfirmed || !isTermsAccepted}>
+        <SubmitButton pendingText="Signing up..." disabled={!isConfirmed || !areTermsAccepted}>
           Sign up
         </SubmitButton>
         <Button variant={"secondary"} type="button" className="w-full" onClick={() => router.push("/sign-up/fields-of-interest")}>
