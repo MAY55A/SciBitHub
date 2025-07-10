@@ -21,7 +21,7 @@ const fetchTask = async (id: string) => {
     return { data, canEdit: !!user.data.user && (data.project as unknown as { creator: string | null }).creator === user.data.user.id };
 }
 
-export default async function Page(props: { params: { id: string } }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
     const { id } = await props.params;
     const res = await fetchTask(id);
 

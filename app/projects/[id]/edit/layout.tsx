@@ -23,7 +23,7 @@ export default async function Layout({
     params,
     children,
 }: {
-    params: { id: string }
+    params: Promise<{ id: string }>;
     children: React.ReactNode;
 }) {
     const { id } = await params;

@@ -7,7 +7,7 @@ import CommentsList from "@/src/components/comments/comments-list";
 import { NotAvailable } from "@/src/components/errors/not-available";
 import { ScrollToHashElement } from "@/src/components/custom/scroll-to-hash";
 
-export default async function DiscussionPage({ params }: { params: { id: string } }) {
+export default async function DiscussionPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const discussion = await fetchDiscussion(id);
 

@@ -8,7 +8,7 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default async function TopicPage({ params }: { params: { id: string } }) {
+export default async function TopicPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const topic = await fetchForumTopic(id);
 

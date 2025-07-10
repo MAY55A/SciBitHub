@@ -6,7 +6,7 @@ import LatestProjects from "@/src/components/home/latest-projects";
 import LatestDiscussions from "@/src/components/home/latest-discussions";
 import HowItWorks from "@/src/components/home/how-it-works";
 
-export default async function Home(props: { searchParams?: { error?: string; error_description?: string; message?: string } }) {
+export default async function Home(props: { searchParams?: Promise<{ error?: string; error_description?: string; message?: string }> }) {
   const searchParams = await props.searchParams;
   if (searchParams?.message) {
     return (

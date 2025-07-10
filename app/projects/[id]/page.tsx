@@ -16,15 +16,15 @@ const ProjectForum = dynamic(() => import('@/src/components/projects/project-for
 const ProjectResults = dynamic(() => import('@/src/components/projects/project-results'), { loading: () => <div className="w-full h-80 flex justify-center items-center "><SquareLoader /></div> });
 
 export default async function ProjectPage({ ...props }: {
-    params: { id: string },
-    searchParams: {
+    params: Promise<{ id: string }>,
+    searchParams: Promise<{
         tab?: string,
         page?: string,
         query?: string,
         sort?: "asc" | "desc";
         orderBy?: string;
         creator?: string;
-    }
+    }>
 }) {
     const { id } = await props.params;
     const project = await fetchProject(id);

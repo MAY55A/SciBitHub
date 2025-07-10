@@ -8,7 +8,7 @@ import { NotAvailable } from "@/src/components/errors/not-available";
 import { getProjectPermissions } from "@/src/lib/services/permissions-service";
 import { RestrictedProjectMessage } from "@/src/components/projects/restricted-project-message";
 
-export default async function TaskPage({ params }: { params: { id: string } }) {
+export default async function TaskPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const task = await fetchTask(id);
 

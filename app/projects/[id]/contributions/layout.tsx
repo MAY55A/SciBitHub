@@ -1,14 +1,14 @@
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
-export default function Layout({
+export default async function Layout({
     params,
     children,
 }: {
-    params: { id: string };
+    params: Promise<{ id: string }>;
     children: React.ReactNode;
 }) {
-    const { id } = params;
+    const { id } = await params;
 
     return (
         <div className="w-full p-4">
