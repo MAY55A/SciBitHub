@@ -58,19 +58,25 @@ export function parseNotification(
         if (part.startsWith('{') && part.endsWith('}')) {
             try { // if it is at the end of a phrase, make sure there is no dot exactly after } ({user.username} is valid, {user.username}. is not)
                 const keys = part.slice(1, -1).split('.'); // ex: 'user.username' => ['user', 'username']
-                const entity = notification[keys[0] as keyof Notification]; // ex: user object
-                if (!entity) { if (keys[0] === "user") return "**Deleted User** "; return ""; } // If user is null, return empty string or a placeholder;
-                const text = entity[keys[1]] as String; // ex: => user.username = 'John Doe'
+                const [entityKey, propertyKey] = keys;
+                const entity = notification[entityKey as keyof Notification] as any; // ex: user object
+                                
+                if (!entity || typeof entity !== 'object') { // If entity is null or not an object, return empty string (return "**Deleted User** " for user);
+                    if (entityKey === "user") return "**Deleted User** ";
+                    return "";
+                }
+
+                const text = entity[propertyKey] as String; // ex: => user.username = 'John Doe'
                 if (!text) return "";
 
                 return (
                     <Link
                         key={i}
-                        href={`/${keys[0]}s/${entity.id}`} // ex: '/users/123'
-                        className={cn('hover:underline font-medium', keys[0] === 'user' ? 'text-primary' : 'text-green')}
+                        href={`/${entityKey}s/${entity.id}`} // ex: '/users/123'
+                        className={cn('hover:underline font-medium', entityKey === 'user' ? 'text-primary' : 'text-green')}
                         onClick={(e) => e.stopPropagation()} // Prevent parent link triggering
                     >
-                        {text.length > 50 ? text.slice(0, 50) + "... " : text + " "}
+                        {text.length > 50 ? text.slice(0, 47) + "... " : text + " "}
                     </Link>
                 );
             } catch (error) {
