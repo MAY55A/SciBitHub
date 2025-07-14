@@ -180,7 +180,11 @@ export const usersTableColumns: ColumnDef<User>[] = [
             const tableMeta = table.options.meta;
             const user = row.original;
             return (
-                <UserOptionsMenu user={user} updateRow={(column, value) => tableMeta?.updateData([row.index], column, value)} removeRow={() => tableMeta?.removeRow(row.index)} />
+                <UserOptionsMenu
+                    user={user}
+                    updateRow={(column, value) => tableMeta?.updateData!([row.index], column, value)}
+                    removeRow={() => tableMeta?.removeRow!(row.index)}
+                />
             )
         },
     },

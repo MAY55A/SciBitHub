@@ -5,20 +5,21 @@ import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { deleteUsers } from "@/src/lib/actions/admin/users-actions";
 import { useTable } from "@/src/contexts/table-context";
+import { User } from "@/src/types/models";
 
 export const UsersGroupActions = () => {
-    const table = useTable<TData>();
+    const table = useTable<User>();
     const { toast } = useToast();
 
     const removeSelectedUsers = async () => {
         const selectedRows = table.getSelectedRowModel().rows;
-        const selectedIndexes = [];
-        const selectedIds = [];
-        const selectedNames = [];
+        const selectedIndexes: number[] = [];
+        const selectedIds: string[] = [];
+        const selectedNames: string[] = [];
         for (const row of selectedRows) {
             selectedIndexes.push(row.index);
             selectedIds.push(row.original.id);
-            selectedNames.push(row.original.name);
+            selectedNames.push(row.original.username);
         }
 
         const res = await deleteUsers(selectedIds, selectedNames, "soft");
@@ -28,7 +29,7 @@ export const UsersGroupActions = () => {
         });
         if (res.success) {
             table.resetRowSelection();
-            table.options.meta?.updateData(selectedIndexes, "deleted_at", new Date().toISOString());
+            table.options.meta?.updateData!(selectedIndexes, "deleted_at", new Date().toISOString());
         }
 
     }

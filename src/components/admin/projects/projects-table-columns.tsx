@@ -159,8 +159,8 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
             return (
                 <ProjectOptionsMenu
                     project={project}
-                    updateRow={(column, value) => tableMeta?.updateData([row.index], column, value)}
-                    removeRow={() => tableMeta?.removeRow(row.index)} />
+                    updateRow={(column, value) => tableMeta?.updateData!([row.index], column, value)}
+                    removeRow={() => tableMeta?.removeRow!(row.index)} />
             )
         },
     },

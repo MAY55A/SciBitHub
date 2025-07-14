@@ -5,18 +5,19 @@ import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { deleteDiscussions } from "@/src/lib/actions/admin/discussions-actions";
 import { useTable } from "@/src/contexts/table-context";
+import { Discussion } from "@/src/types/models";
 
 export const DiscussionsGroupActions = () => {
-    const table = useTable<TData>();
+    const table = useTable<Discussion>();
     const { toast } = useToast();
 
     const removeSelectedDiscussions = async () => {
         const selectedRows = table.getSelectedRowModel().rows;
-        const selectedIndexes = [];
-        const selectedIds = [];
+        const selectedIndexes: number[] = [];
+        const selectedIds: string[] = [];
         for (const row of selectedRows) {
             selectedIndexes.push(row.index);
-            selectedIds.push(row.original.id);
+            selectedIds.push(row.original.id!);
         }
 
         const res = await deleteDiscussions(selectedIds, "soft");
@@ -26,7 +27,7 @@ export const DiscussionsGroupActions = () => {
         });
         if (res.success) {
             table.resetRowSelection();
-            table.options.meta?.updateData(selectedIndexes, "status", "deleted");
+            table.options.meta?.updateData!(selectedIndexes, "status", "deleted");
         }
 
     }

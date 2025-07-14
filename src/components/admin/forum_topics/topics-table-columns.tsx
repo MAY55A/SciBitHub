@@ -172,8 +172,8 @@ export const topicsTableColumns: ColumnDef<ForumTopic>[] = [
             return (
                 <TopicOptionsMenu
                     topic={topic}
-                    updateRow={(column, value) => tableMeta?.updateData([row.index], column, value)}
-                    removeRow={() => tableMeta?.removeRow(row.index)}
+                    updateRow={(column, value) => tableMeta?.updateData!([row.index], column, value)}
+                    removeRow={() => tableMeta?.removeRow!(row.index)}
                 />
             )
         },

@@ -5,19 +5,20 @@ import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { softDeleteProjects } from "@/src/lib/actions/admin/projects-actions";
 import { useTable } from "@/src/contexts/table-context";
+import { Project } from "@/src/types/models";
 
 export const ProjectsGroupActions = () => {
-    const table = useTable<TData>();
+    const table = useTable<Project>();
     const { toast } = useToast();
 
     const removeSelectedProjects = async () => {
         const selectedRows = table.getSelectedRowModel().rows;
-        const selectedIndexes = [];
-        const selectedIds = [];
-        const selectedNames = [];
+        const selectedIndexes: number[] = [];
+        const selectedIds: string[] = [];
+        const selectedNames: string[] = [];
         for (const row of selectedRows) {
             selectedIndexes.push(row.index);
-            selectedIds.push(row.original.id);
+            selectedIds.push(row.original.id!);
             selectedNames.push(row.original.name);
         }
 
@@ -28,7 +29,7 @@ export const ProjectsGroupActions = () => {
         });
         if (res.success) {
             table.resetRowSelection();
-            table.options.meta?.updateData(selectedIndexes, "status", "deleted");
+            table.options.meta?.updateData!(selectedIndexes, "status", "deleted");
         }
 
     }

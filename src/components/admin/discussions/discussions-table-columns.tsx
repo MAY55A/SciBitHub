@@ -111,8 +111,8 @@ export const discussionsTableColumns: ColumnDef<Discussion>[] = [
             return (
                 <DiscussionOptionsMenu
                     discussion={discussion}
-                    updateRow={(column, value) => tableMeta?.updateData([row.index], column, value)}
-                    removeRow={() => tableMeta?.removeRow(row.index)}
+                    updateRow={(column, value) => tableMeta?.updateData!([row.index], column, value)}
+                    removeRow={() => tableMeta?.removeRow!(row.index)}
                 />
             )
         },

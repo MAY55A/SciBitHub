@@ -5,18 +5,19 @@ import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { useTable } from "@/src/contexts/table-context";
 import { deleteReports } from "@/src/lib/actions/admin/reports-actions";
+import { Report } from "@/src/types/models";
 
 export const ReportsGroupActions = () => {
-    const table = useTable<TData>();
+    const table = useTable<Report>();
     const { toast } = useToast();
 
     const removeSelectedReports = async () => {
         const selectedRows = table.getSelectedRowModel().rows;
-        const selectedIndexes = [];
-        const selectedIds = [];
+        const selectedIndexes: number[] = [];
+        const selectedIds: string[] = [];
         for (const row of selectedRows) {
             selectedIndexes.push(row.index);
-            selectedIds.push(row.original.id);
+            selectedIds.push(row.original.id!);
         }
 
         const res = await deleteReports(selectedIds);
@@ -25,7 +26,7 @@ export const ReportsGroupActions = () => {
             variant: res.success ? "default" : "destructive"
         });
         if (res.success) {
-            table.options.meta?.removeRows(selectedIndexes);
+            table.options.meta?.removeRows!(selectedIndexes);
         }
 
     }

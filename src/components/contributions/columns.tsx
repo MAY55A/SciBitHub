@@ -94,8 +94,8 @@ export const columns: ColumnDef<Contribution>[] = [
                         showText={false}
                         contributions={[contribution.id!]}
                         status={contribution.status}
-                        onUpdate={(newStatus) => { tableMeta?.updateData([row.index], "status", newStatus) }}
-                        onDelete={() => tableMeta?.removeRow(row.index)} />
+                        onUpdate={(newStatus) => { tableMeta?.updateData!([row.index], "status", newStatus) }}
+                        onDelete={() => tableMeta?.removeRow!(row.index)} />
                 </div>
             )
         },

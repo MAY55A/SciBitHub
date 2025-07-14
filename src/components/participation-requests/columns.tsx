@@ -158,8 +158,8 @@ export const columnsWithUser: ColumnDef<ParticipationRequest>[] = [
                             requests={[request.id!]}
                             status={request.status}
                             user={isProjectRequestsTable ? request.project.creator!.id : request.user.id}
-                            onUpdate={(newStatus) => { tableMeta?.updateData([row.index], "status", newStatus) }}
-                            onDelete={() => tableMeta?.removeRow(row.index)} />}
+                            onUpdate={(newStatus) => { tableMeta?.updateData!([row.index], "status", newStatus) }}
+                            onDelete={() => tableMeta?.removeRow!(row.index)} />}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">

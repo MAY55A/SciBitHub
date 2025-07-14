@@ -5,15 +5,16 @@ import { CustomAlertDialog } from "@/src/components/custom/alert-dialog";
 import { useToast } from "@/src/hooks/use-toast";
 import { useTable } from "@/src/contexts/table-context";
 import { deleteRequests } from "@/src/lib/actions/request-actions";
+import { ParticipationRequest } from "@/src/types/models";
 
 export const RequestsGroupActions = ({isProjectTable = false}: {isProjectTable?: boolean}) => {
-    const table = useTable<TData>();
+    const table = useTable<ParticipationRequest>();
     const { toast } = useToast();
 
     const removeSelectedRequests = async () => {
         const selectedRows = table.getSelectedRowModel().rows;
-        const selectedIndexes = [];
-        const selectedIds = [];
+        const selectedIndexes: number[] = [];
+        const selectedIds: string[] = [];
         for (const row of selectedRows) {
             selectedIndexes.push(row.index);
             selectedIds.push(row.original.id);
@@ -25,7 +26,7 @@ export const RequestsGroupActions = ({isProjectTable = false}: {isProjectTable?:
             variant: res.success ? "default" : "destructive"
         });
         if (res.success) {
-            table.options.meta?.removeRows(selectedIndexes);
+            table.options.meta?.removeRows!(selectedIndexes);
         }
 
     }

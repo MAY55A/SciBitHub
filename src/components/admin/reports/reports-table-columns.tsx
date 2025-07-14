@@ -57,6 +57,9 @@ export const reportsTableColumns: ColumnDef<Report>[] = [
         ),
         cell: ({ row }) => {
             const user = row.original.reporter;
+            if (!user) {
+                return <div className="text-muted-foreground">Unknown</div>;
+            }
             return (
                 <div className="grid flex-1 text-left text-sm leading-tight">
                     <a href={`/admin/users?id=${user.id}`} className="truncate font-semibold hover:underline">{user.username}</a>
@@ -118,8 +121,8 @@ export const reportsTableColumns: ColumnDef<Report>[] = [
             return (
                 <ReportOptionsMenu
                     report={report}
-                    updateRow={(column, value) => tableMeta?.updateData([row.index], column, value)}
-                    removeRow={() => tableMeta?.removeRow(row.index)}
+                    updateRow={(column, value) => tableMeta?.updateData!([row.index], column, value)}
+                    removeRow={() => tableMeta?.removeRow!(row.index)}
                 />
             )
         },
