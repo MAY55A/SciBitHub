@@ -61,7 +61,7 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple
                                         field.onChange(selectedOption.map(option => option.value));
                                     } else if (selectedOption) {
                                         // Handle single-select: return just the value
-                                        field.onChange(selectedOption.value);
+                                        field.onChange((selectedOption as CountryOption).value);
                                     } else {
                                         // In case nothing is selected, pass undefined
                                         field.onChange(undefined);
