@@ -124,7 +124,7 @@ export const updateBanStatus = async (userId: string, duration: string) => {
         console.log("Database notification error:", notifError.message);
     }
 
-    return { success: true, message: `User ${action} successfully.`, banned_until: user?.banned_until };
+    return { success: true, message: `User ${action} successfully.` };
 };
 
 

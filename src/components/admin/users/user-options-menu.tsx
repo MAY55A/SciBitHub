@@ -42,7 +42,7 @@ export function UserOptionsMenu({
         }
     }
 
-    const toggleBanStatus = async (duration: string) => {
+    const toggleBanStatus = async (duration: string, banned_until: string | null) => {
         const res = await updateBanStatus(user.id, duration);
         toast({
             title: res.success ? "Success !" : "Error !",
@@ -51,7 +51,7 @@ export function UserOptionsMenu({
         });
 
         if (res.success) {
-            updateRow("banned_until", res.banned_until)
+            updateRow("banned_until", banned_until);
             setShowDialog("");
         }
     }
@@ -142,7 +142,7 @@ export function UserOptionsMenu({
                                     title="Confirm Unban"
                                     description="Are you sure you want to unban this user ?"
                                     confirmText="Confirm Unban"
-                                    onConfirm={() => toggleBanStatus("none")}
+                                    onConfirm={() => toggleBanStatus("none", null)}
                                     buttonClass="h-full hover:text-destructive pl-0"
                                 />
                             </DropdownMenuItem>

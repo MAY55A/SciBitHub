@@ -8,8 +8,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { banDurationInputSchema } from "@/src/types/ban-duration-form-data";
+import { addDays, addHours, addMinutes } from "date-fns";
 
-export function BanUserDialog({ onConfirm, onClose }: { onConfirm: (durationFormatted: string) => void, onClose: () => void }) {
+export function BanUserDialog({ onConfirm, onClose }: { onConfirm: (durationFormatted: string, banned_until: string) => void, onClose: () => void }) {
     const [open, setOpen] = useState(true);
     const [confirmed, setConfirmed] = useState(false);
 
@@ -36,8 +37,10 @@ export function BanUserDialog({ onConfirm, onClose }: { onConfirm: (durationForm
 
         if (hours) duration += `${hours}h`;
         if (minutes) duration += `${minutes}m`;
-
-        onConfirm(duration);
+        
+        const banned_until = addDays(addHours(addMinutes(new Date(), minutes), hours), days).toISOString();
+        
+        onConfirm(duration, banned_until);
         setOpen(false);
         setConfirmed(false);
         form.reset();
