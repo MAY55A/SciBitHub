@@ -5,6 +5,7 @@ import { AuthProvider } from "@/src/contexts/AuthContext";
 import { ClientThemeProvider } from "@/src/components/wrappers/client-theme-provider";
 import { Toaster } from "@/src/components/ui/toaster";
 import { NotificationProvider } from "@/src/contexts/notification-context";
+import { Analytics } from '@vercel/analytics/next';
 
 const orbitron = Orbitron({
   display: "swap",
@@ -32,6 +33,7 @@ export default function RootLayout({
             </NotificationProvider>
           </AuthProvider>
         </ClientThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
