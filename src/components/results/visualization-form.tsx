@@ -36,12 +36,9 @@ export function VisualizationForm({ buttonText, buttonDisabled, data, tasks, onS
     }, [currentTask]);
 
     useEffect(() => {
-        const subscription = form.watch((values) => {
-            onChange(values);
-        });
-
-        return () => subscription.unsubscribe();
-    }, [form.watch]);
+        const values = form.watch();
+        onChange(values);
+    }, [form.watch(), onChange]);
 
     const handleSubmit = (formData: VisualizationInputData) => {
         if (formData.type === VisualizationType.TABLE) {
@@ -135,23 +132,24 @@ export function VisualizationForm({ buttonText, buttonDisabled, data, tasks, onS
                         render={({ field }) => {
                             const fileFields = fields.filter(f => f.type === FieldType.FILE);
                             return (
-                            <FormItem>
-                                <FormLabel className="text-green">Display Field</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder={fileFields.length ? "Select a field" : "No file fields are available"} />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {fileFields.map((f) => (
-                                            <SelectItem value={f.label} key={f.label}>{f.label}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}}
+                                <FormItem>
+                                    <FormLabel className="text-green">Display Field</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder={fileFields.length ? "Select a field" : "No file fields are available"} />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {fileFields.map((f) => (
+                                                <SelectItem value={f.label} key={f.label}>{f.label}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )
+                        }}
                     />
                 )}
                 {currentType === VisualizationType.TABLE && (

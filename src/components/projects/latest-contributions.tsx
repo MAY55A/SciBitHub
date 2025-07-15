@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { formatDate } from "@/src/utils/utils";
 
 export async function LatestContributions({tasks}: {tasks: string[]}) {
-    const {contributions} = await fetchContributions(tasks);
+    const {contributions} = await fetchContributions(tasks, undefined, 1);
 
     return (
         <div className="w-full max-w-[1000px] flex flex-col items-center gap-4 mb-12">
@@ -19,7 +19,7 @@ export async function LatestContributions({tasks}: {tasks: string[]}) {
                 <TableBody>
                     {contributions && contributions.length ? contributions.map((contribution) => (
                         <TableRow key={contribution.id!}>
-                            <TableCell className="font-medium">{contribution.user.deleted_at ? "**Deleted User**" : contribution.user.username}</TableCell>
+                            <TableCell className="font-medium">{!contribution.user?.username || contribution.user.deleted_at ? "**Deleted User**" : contribution.user.username}</TableCell>
                             <TableCell>{contribution.task.title}</TableCell>
                             <TableCell className="text-right">{formatDate(contribution.created_at!, true)}</TableCell>
                         </TableRow>

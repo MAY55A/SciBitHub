@@ -56,7 +56,7 @@ export async function editTopic(data: TopicInputData) {
     return { success: true, message: "Topic updated successfully." };
 }
 
-export async function toggleIsFeatured(is_featured: boolean, id: string, client: any) {
+export async function toggleIsFeatured(is_featured: boolean, id: string, client?: any) {
     const supabase = client ?? await createClient();
     const action = is_featured ? "mark" : "unmark";
 

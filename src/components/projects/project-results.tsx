@@ -20,9 +20,9 @@ export default async function ProjectResults({ projectId, canEdit }: { projectId
         const allFiles = new Map<string, string>();
         const flattenedData = data?.map((item) => {
             const { flat, files } = flattenData(item.data);
-            for (const [key, value] of files) {
+            files.forEach((value, key) => {
                 allFiles.set(key, value);
-            }
+            });
             return { contribution_id: item.id, ...Object.fromEntries(flat) };
         }) || [];
         dataPerTask.set(task.id, flattenedData);

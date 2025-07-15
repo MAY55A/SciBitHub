@@ -38,12 +38,13 @@ export default function Page() {
                 .eq("project", projectId)
                 .is("deleted_at", null)
                 .order("created_at");
+            const project = tasksData?.[0]?.project as { creator: string, status: ProjectStatus } | undefined;
 
-            if (!tasksData || tasksData.length === 0 || tasksData[0].project.status !== ProjectStatus.PUBLISHED) {
+            if (!tasksData || tasksData.length === 0 || project?.status !== ProjectStatus.PUBLISHED) {
                 setError("notfound");
                 return;
             }
-            if (tasksData[0].project.creator !== user.id) {
+            if (project?.creator !== user.id) {
                 setError("forbidden");
                 return;
             }

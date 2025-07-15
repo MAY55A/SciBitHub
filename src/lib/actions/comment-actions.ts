@@ -29,8 +29,9 @@ export const postComment = async (data: any, commentPage: string) => {
         return { success: false, message: "Failed to post reply." };
     }
 
+    const commented_content = (commentData.discussion || commentData.topic || commentData.parent_comment) as unknown as {creator: any};
     const notificationParties = {
-        recipient_id: commentData.discussion?.creator ?? commentData?.topic?.creator ?? commentData.parent_comment?.creator,
+        recipient_id: commented_content.creator,
         user_id: user.data.user.id,
     };
 
