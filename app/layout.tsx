@@ -6,11 +6,14 @@ import { ClientThemeProvider } from "@/src/components/wrappers/client-theme-prov
 import { Toaster } from "@/src/components/ui/toaster";
 import { NotificationProvider } from "@/src/contexts/notification-context";
 import { Analytics } from '@vercel/analytics/next';
+import { Metadata } from "next";
+import { siteMetadata } from "@/src/data/siteMetadata";
 
 const orbitron = Orbitron({
   display: "swap",
   subsets: ["latin"],
 });
+export const metadata: Metadata = siteMetadata;
 
 export default function RootLayout({
   children,
