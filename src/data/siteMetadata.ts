@@ -6,6 +6,9 @@ export const siteMetadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  verification: {
+    google: "VKAQGan9q_6iEKNQLdrPNHMacZ2_0LzQBs2hB5i88v0",
+  },
   openGraph: {
     title: "SciBitHub",
     description: "Explore and contribute to research projects.",
