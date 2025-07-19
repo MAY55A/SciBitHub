@@ -29,56 +29,60 @@ export const uploadFileToMinIO = async (file: File, filePath: string) => {
 };
 
 export const deleteFromMinIO = async (filePath: string, isFolder: boolean = false) => {
-    if (isFolder) {
-        const prefix = filePath.endsWith("/") ? filePath : `${filePath}/`;
-        let continuationToken: string | undefined = undefined;
+    try {
+        if (isFolder) {
+            const prefix = filePath.endsWith("/") ? filePath : `${filePath}/`;
+            let continuationToken: string | undefined = undefined;
 
-        const allObjects: { Key: string }[] = [];
+            const allObjects: { Key: string }[] = [];
 
-        do {
-            const listCommand: ListObjectsV2Command = new ListObjectsV2Command({
-                Bucket: bucketName,
-                Prefix: prefix,
-                ContinuationToken: continuationToken,
-            });
+            do {
+                const listCommand: ListObjectsV2Command = new ListObjectsV2Command({
+                    Bucket: bucketName,
+                    Prefix: prefix,
+                    ContinuationToken: continuationToken,
+                });
 
-            const response = await s3Client.send(listCommand);
+                const response = await s3Client.send(listCommand);
 
-            if (response.Contents) {
-                for (const obj of response.Contents) {
-                    if (obj.Key) {
-                        allObjects.push({ Key: obj.Key });
+                if (response.Contents) {
+                    for (const obj of response.Contents) {
+                        if (obj.Key) {
+                            allObjects.push({ Key: obj.Key });
+                        }
                     }
                 }
+
+                continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
+            } while (continuationToken);
+
+            if (allObjects.length === 0) {
+                console.log("No files found in folder.");
+                return;
             }
 
-            continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
-        } while (continuationToken);
+            // Delete in chunks of 1000 (S3 limit per delete batch)
+            const chunkSize = 1000;
+            for (let i = 0; i < allObjects.length; i += chunkSize) {
+                const chunk = allObjects.slice(i, i + chunkSize);
+                const deleteCommand = new DeleteObjectsCommand({
+                    Bucket: bucketName,
+                    Delete: { Objects: chunk },
+                });
+                await s3Client.send(deleteCommand);
+            }
 
-        if (allObjects.length === 0) {
-            console.log("No files found in folder.");
-            return;
-        }
-
-        // Delete in chunks of 1000 (S3 limit per delete batch)
-        const chunkSize = 1000;
-        for (let i = 0; i < allObjects.length; i += chunkSize) {
-            const chunk = allObjects.slice(i, i + chunkSize);
-            const deleteCommand = new DeleteObjectsCommand({
+            console.log(`Deleted folder recursively: ${filePath}`);
+        } else {
+            const deleteCommand = new DeleteObjectCommand({
                 Bucket: bucketName,
-                Delete: { Objects: chunk },
+                Key: filePath,
             });
             await s3Client.send(deleteCommand);
+            console.log(`Deleted file: ${filePath}`);
         }
-
-        console.log(`Deleted folder recursively: ${filePath}`);
-    } else {
-        const deleteCommand = new DeleteObjectCommand({
-            Bucket: bucketName,
-            Key: filePath,
-        });
-        await s3Client.send(deleteCommand);
-        console.log(`Deleted file: ${filePath}`);
+    } catch (error) {
+        console.log("Error deleting from MinIO:", error);
     }
 };
 
