@@ -2,6 +2,7 @@ import { ThemeSwitcher } from '../custom/theme-switcher'
 import HeaderAuth from './header-auth'
 import { Nav } from './nav'
 import Logo from '../custom/logo'
+import { Github } from 'lucide-react'
 
 const Header = () => {
   return (
@@ -13,6 +14,7 @@ const Header = () => {
       <div className="flex items-center space-x-4 leading-5 sm:-mr-6 sm:space-x-6">
         <HeaderAuth />
         <ThemeSwitcher />
+        <a href="https://github.com/MAY55A/SciBitHub" target="_blank" rel="noreferrer" className='border p-2 rounded-full text-muted-foreground hover:bg-muted' title='GitHub Repository'><Github className="w-4 h-4" /></a>
       </div>
     </header>
   )

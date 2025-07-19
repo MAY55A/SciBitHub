@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { Github } from "lucide-react";
 
 export function Footer() {
     return (
@@ -11,10 +11,17 @@ export function Footer() {
                     </div>
                 </div>
                 <div>
-                    <h4 className="font-bold mb-2">Company</h4>
+                    <h4 className="font-bold mb-2">Support</h4>
                     <ul className="space-y-1 font-retro">
                         <li><a href="#how-it-works">How It Works</a></li>
-                        <li>Docs</li>
+                        <li className="flex items-center gap-2">
+                            <a href="https://github.com/MAY55A/SciBitHub/issues" target="_blank" rel="noreferrer">Report a Bug</a>
+                            <Github className="w-4 h-4" />
+                        </li>
+                        <li className="flex items-center gap-2">
+                            <a href="https://github.com/MAY55A/SciBitHub#readme" target="_blank" rel="noreferrer">Docs</a>
+                            <Github className="w-4 h-4" />
+                        </li>
                     </ul>
                 </div>
                 <div>
