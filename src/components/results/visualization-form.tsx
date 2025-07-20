@@ -35,10 +35,13 @@ export function VisualizationForm({ buttonText, buttonDisabled, data, tasks, onS
         setIsGalleryDisabled(task?.type !== TaskType.DATACOLLECTION);
     }, [currentTask]);
 
-    useEffect(() => {
-        const values = form.watch();
+useEffect(() => {
+    const subscription = form.watch((values: any) => {
         onChange(values);
-    }, [form.watch(), onChange]);
+    });
+
+    return () => subscription.unsubscribe();
+}, [onChange]);
 
     const handleSubmit = (formData: VisualizationInputData) => {
         if (formData.type === VisualizationType.TABLE) {
