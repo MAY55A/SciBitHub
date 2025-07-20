@@ -4,6 +4,7 @@ import React, { JSX, Ref } from 'react';
 import { FieldConfig } from '@/src/types/models';
 import { cn } from '@/src/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { FieldType } from '@/src/types/enums';
 
 const fileTypeMap: Record<string, string> = {
     image: "image/*",
@@ -60,7 +61,7 @@ export const FormGenerator = (
     const fieldRenderers: {
         [key: string]: (field: FieldConfig) => JSX.Element;
     } = {
-        text: (field) => (
+        [FieldType.TEXT]: (field) => (
             <Input
                 type="text"
                 name={field.label}
@@ -72,7 +73,7 @@ export const FormGenerator = (
                 maxLength={field.params?.maxLength}
             />
         ),
-        number: (field) => (
+        [FieldType.NUMBER]: (field) => (
             <Input
                 type="number"
                 name={field.label}
@@ -84,7 +85,7 @@ export const FormGenerator = (
                 max={field.params?.maxValue}
             />
         ),
-        file: (field) => (
+        [FieldType.FILE]: (field) => (
             <Input
                 type="file"
                 name={field.label}
@@ -97,7 +98,7 @@ export const FormGenerator = (
                 onChange={(e) => handleFileChange(e, field)}
             />
         ),
-        textarea: (field) => (
+        [FieldType.TEXTAREA]: (field) => (
             <textarea
                 name={field.label}
                 placeholder={field.placeholder}
@@ -107,7 +108,7 @@ export const FormGenerator = (
                 className="p-2 border rounded w-full"
             ></textarea>
         ),
-        date: (field) => (
+        [FieldType.DATE]: (field) => (
             <Input
                 type="date"
                 name={field.label}
@@ -117,7 +118,7 @@ export const FormGenerator = (
                 className="p-2 border rounded"
             />
         ),
-        select: (field) =>
+        [FieldType.SELECT]: (field) =>
             !!field.params?.options && field.params.options.length < 6 ?
                 <div role="radiogroup" className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {field.params?.options?.map(option => {

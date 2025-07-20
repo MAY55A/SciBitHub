@@ -151,12 +151,12 @@ export const DiscussionCategoriesDescriptions: Record<DiscussionCategory, string
 };
 
 export enum FieldType {
-    TEXT = 'text',
-    FILE = 'file',
-    SELECT = 'select',
     NUMBER = 'number',
+    TEXT = 'short answer',
+    TEXTAREA = 'long answer',
+    SELECT = 'multiple choice',
     DATE = 'date',
-    TEXTAREA = 'textarea',
+    FILE = 'file upload',
 }
 
 export enum DataType {

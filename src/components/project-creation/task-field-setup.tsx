@@ -129,13 +129,13 @@ export default function TaskFieldSetup({ className, icon: Icon, triggerText, tit
                         {type == "number" &&
                             <NumberFieldParams />
                         }
-                        {(type == "text" || type == "textarea") &&
+                        {(type == "short answer" || type == "long answer") &&
                             <TextFieldParams />
                         }
-                        {type == "file" &&
+                        {type == "file upload" &&
                             <FileFieldParams />
                         }
-                        {type == "select" &&
+                        {type == "multiple choice" &&
                             <SelectFieldParams />
                         }
                         <FormField
