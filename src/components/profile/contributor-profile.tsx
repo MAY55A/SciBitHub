@@ -1,13 +1,14 @@
 import { User } from "@/src/types/models";
 import { Globe2, Link, Mail, Phone, TestTube2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Badge } from "../ui/badge";
 
 export function ContributorProfile({ user }: { user: User }) {
     return (
         <div className="max-w-[1000px] grid grid-rows-2 grid-cols-1 lg:grid-cols-2 gap-8 justify-center">
             <div className="relative col-span-full flex lg:flex-row flex-col gap-x-4 gap-y-8 items-center justify-center rounded-lg border border-green py-8 px-16">
                 <div className="flex gap-4 items-center lg:border-r lg:pr-8 lg:border-b-0 lg:pb-0 border-b border-green pb-8">
-                    <Avatar className="flex shrink-0 overflow-hidden h-32 w-32 rounded-fully hover:shadow-lg hover:bg-muted">
+                    <Avatar className="flex shrink-0 border border-green/50 overflow-hidden h-32 w-32 rounded-fully hover:shadow-lg hover:bg-muted">
                         <AvatarImage src={user.profile_picture} alt={user.username} />
                         <AvatarFallback className="rounded-lg text-3xl text-green font-semibold tracking-[.25em] pl-1">
                             {user.username?.slice(0, 2).toUpperCase()}
@@ -32,7 +33,7 @@ export function ContributorProfile({ user }: { user: User }) {
                     <TestTube2 size={"15"} />
                     Fields of Interest :
                     {user.metadata?.interests?.map((field, index) =>
-                        <span key={index} className="text-muted-foreground border border-green rounded-xl px-4 py-1">{field}</span>
+                        <Badge variant="outline" key={index} className="text-muted-foreground">{field}</Badge>
                     )}
                 </p>
             </div>

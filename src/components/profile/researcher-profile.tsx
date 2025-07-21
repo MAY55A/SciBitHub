@@ -2,6 +2,7 @@ import { User } from "@/src/types/models";
 import { Building, Check, Globe2, GraduationCap, Link, Mail, MapPin, Phone, School, TestTube2, User as UserIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { ResearcherType } from "@/src/types/enums";
+import { Badge } from "../ui/badge";
 
 export function ResearcherProfile({ user }: { user: User }) {
     return (
@@ -56,7 +57,7 @@ export function ResearcherProfile({ user }: { user: User }) {
                         <TestTube2 size={"15"} />
                         Fields of Interest :
                         {user.metadata.interests?.map((field, index) =>
-                            <span key={index} className="text-muted-foreground border border-green rounded-xl px-4 py-1">{field}</span>
+                            <Badge variant="outline" key={index} className="text-muted-foreground">{field}</Badge>
                         )}
                     </p>
                 </div>
@@ -82,7 +83,7 @@ export function ResearcherProfile({ user }: { user: User }) {
                         <TestTube2 size={"15"} />
                         Fields of Interest :
                         {user.metadata.interests?.map((field, index) =>
-                            <span key={index} className="text-muted-foreground border border-green rounded-xl px-4 py-1">{field}</span>
+                            <Badge variant="outline" key={index} className="text-muted-foreground">{field}</Badge>
                         )}
                     </p>
                 </div>
@@ -98,7 +99,7 @@ export function ResearcherProfile({ user }: { user: User }) {
                         <TestTube2 size={"15"} />
                         Fields of Interest :
                         {user.metadata.interests?.map((field, index) =>
-                            <span key={index} className="text-muted-foreground border border-green rounded-xl px-4 py-1">{field}</span>
+                            <Badge variant="outline" key={index} className="text-muted-foreground">{field}</Badge>
                         )}
                     </p>
                 </div>

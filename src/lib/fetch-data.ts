@@ -1,6 +1,23 @@
 import { createClient } from "@/src/utils/supabase/server";
-import { Bookmark, Contribution, Discussion, ForumTopic, ParticipationRequest, Project, Task, Visualization } from "@/src/types/models";
+import { Bookmark, Contribution, Discussion, ForumTopic, ParticipationRequest, Project, Task, User, Visualization } from "@/src/types/models";
 import { ActivityStatus, ProjectStatus } from "@/src/types/enums";
+
+export const fetchUser = async (
+    id: string
+): Promise<User | null> => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+    if (error) {
+        console.log("Error fetching user:", error);
+        return null;
+    }
+    return data;
+}
 
 export const fetchProjects = async (
     creator?: string,
