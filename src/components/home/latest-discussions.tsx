@@ -24,7 +24,7 @@ export default async function LatestDiscussions() {
                   <h3 className="font-bold line-clamp-2 mb-2">{d.title}</h3>
                   <div className="text-sm text-muted-foreground line-clamp-3 pl-2 font-retro">
                     <div>By <UserHoverCard user={d.creator}/></div>
-                    Tags: {d.tags?.join(', ')} sd d qdfsd fdfd dfqdsf sqd f qsdf qsdfqsd fsdf
+                    Tags: {d.tags?.join(', ')}
                   </div>
                 </CardContent>
                 <CardFooter>
