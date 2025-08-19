@@ -3,6 +3,15 @@
 **SciBitHub** is a collaborative web platform for launching, contributing to, and discussing citizen science projects.  
 It connects researchers, contributors, and curious minds to engage in data collection, annotation tasks, and open scientific discussions.
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000?logo=vercel&logoColor=white)
+![Next.js](https://img.shields.io/badge/Built_with-Next.js-000?logo=next.js&logoColor=white)
+![Supabase](https://img.shields.io/badge/Backend-Supabase-3ECF8E?logo=supabase&logoColor=white)
+![shadcn UI](https://img.shields.io/badge/UI-shadcn-4B6EFD?logo=tailwindcss&logoColor=white)
+[![GitHub Stars](https://img.shields.io/github/stars/MAY55A/scibithub?style=social)](https://github.com/MAY55A/scibithub/stargazers)
+[![GitHub Contributors](https://img.shields.io/github/contributors/MAY55A/scibithub)](https://github.com/MAY55A/scibithub/graphs/contributors)
+
+
 ![preview](screenshots/preview.jpeg)
 
 ---
@@ -85,6 +94,10 @@ If you’d like to help with:
 Please consider [opening an issue](https://github.com/MAY55A/SciBitHub/issues) or contacting me directly.
 
 Every bit of help moves open science forward 🌍✨
+
+## 📄 License
+
+SciBitHub is open-source software licensed under the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html).
 
 ## ✨ About the Developer
 
