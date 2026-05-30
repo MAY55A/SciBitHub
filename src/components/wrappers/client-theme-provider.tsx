@@ -17,8 +17,8 @@ export function ClientThemeProvider({ children }: { children: React.ReactNode })
     return (
         <NextThemesProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="dark"
+            enableSystem={false}
             disableTransitionOnChange
         >
             {children}
