@@ -3,16 +3,33 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+
+const cx = 32, cy = 32, step = 9, s = 3.5, dur = 6;
+const ring3 = [
+  [0, -3], [1, -3], [2, -3], [3, -3], [3, -2], [3, -1],
+  [3, 0], [2, 1], [1, 2], [0, 3], [-1, 3], [-2, 3],
+  [-3, 3], [-3, 2], [-3, 1], [-3, 0], [-2, -1], [-1, -2]
+];
+const ring2 = [
+  [0, -2], [1, -2], [2, -2], [2, -1], [2, 0], [1, 1],
+  [0, 2], [-1, 2], [-2, 2], [-2, 1], [-2, 0], [-1, -1]
+];
+const ring1 = [[0, -1], [1, -1], [1, 0], [0, 1], [-1, 1], [-1, 0]];
+const ring0 = [[0, 0]];
+
+const all = [...ring3, ...ring2, ...ring1, ...ring0];
+const stepD = dur / all.length;
+
 export default function Logo() {
   return (
     <Link href="/" className="flex items-center group">
       <motion.div
-        className="flex items-center justify-center gap-2"
+        className="flex items-center justify-center gap-1"
         initial={{ opacity: 0, y: -10, scale: 0.8 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
       >
-        <CircuitIcon />
+        <SciBitHubIcon />
         <motion.div
           className="flex items-baseline"
           initial={{ opacity: 0 }}
@@ -30,121 +47,64 @@ export default function Logo() {
   );
 }
 
-const CircuitIcon = () => {
+export function SciBitHubIcon() {
   return (
     <motion.div
-      className="relative w-7 h-7 bg-background rounded-md border border-primary/30 shadow-sm mr-2"
-      animate={{ rotate: 360, scale: [0.7, 1, 0.7] }}
-      transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+      className="relative w-7 h-7 flex items-center justify-center mr-2"
+      animate={{ rotate: 360 }}
+      transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
     >
-      {/* Circuit lines */}
-      <motion.div
-        className="absolute top-0 left-1/2 w-0.5 h-2 bg-green origin-top"
-        animate={{
-          scaleX: [0.8, 1.2, 0.8],
-          opacity: [0.7, 1, 0.7]
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 1.5,
-          delay: 0.2
-        }}
-      />
-      <motion.div
-        className="absolute top-1/2 left-0 h-0.5 w-2 bg-primary origin-left"
-        animate={{
-          scaleX: [0.8, 1.2, 0.8],
-          opacity: [0.7, 1, 0.7]
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 1.8,
-          delay: 0.4
-        }}
-      />
-      <motion.div
-        className="absolute bottom-0 left-1/2 w-0.5 h-2 bg-green/80 origin-bottom"
-        animate={{
-          scaleX: [0.8, 1.2, 0.8],
-          opacity: [0.7, 1, 0.7]
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 1.7,
-          delay: 0.1
-        }}
-      />
-      <motion.div
-        className="absolute top-1/2 right-0 h-0.5 w-2 bg-primary/80 origin-right"
-        animate={{
-          scaleX: [0.8, 1.2, 0.8],
-          opacity: [0.7, 1, 0.7]
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 1.6,
-          delay: 0.3
-        }}
-      />
-
-      {/* Circuit nodes */}
-      <motion.div
-        className="absolute w-1.5 h-1.5 bg-green rounded-full top-0 left-0"
-        animate={{ scale: [0.8, 1.2, 0.8] }}
-        transition={{
-          repeat: Infinity,
-          duration: 2,
-          delay: 0.5
-        }}
-      />
-      <motion.div
-        className="absolute w-1.5 h-1.5 bg-primary rounded-full bottom-0 left-0"
-        animate={{ scale: [0.8, 1.2, 0.8] }}
-        transition={{
-          repeat: Infinity,
-          duration: 2.2,
-          delay: 0.7
-        }}
-      />
-      <motion.div
-        className="absolute w-1.5 h-1.5 bg-green rounded-full bottom-0 right-0"
-        animate={{ scale: [0.8, 1.2, 0.8] }}
-        transition={{
-          repeat: Infinity,
-          duration: 2.1,
-          delay: 0.6
-        }}
-      />
-      <motion.div
-        className="absolute w-1.5 h-1.5 bg-primary rounded-full top-0 right-0"
-        animate={{ scale: [0.8, 1.2, 0.8] }}
-        transition={{
-          repeat: Infinity,
-          duration: 2.3,
-          delay: 0.4
-        }}
-      />
-
-      {/* Inner dashed border */}
-      <motion.div
-        className="absolute inset-1 border border-dashed border-primary rounded-sm"
-        animate={{
-          rotate: [0, -5, 0, 5, 0],
-          opacity: [0.7, 1, 0.7]
-        }}
-        transition={{
-          rotate: {
-            repeat: Infinity,
-            duration: 5,
-            ease: "easeInOut"
-          },
-          opacity: {
-            repeat: Infinity,
-            duration: 3,
-            ease: "easeInOut"
-          }
-        }}
-      />
+      <svg width="28" height="28" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        {all.map(([q, r], i) => {
+          const [x, y] = ax2px(q, r);
+          const delay = i * stepD;
+          const sz = i === 36 ? s + 1 : s;
+          return (
+            <g key={i}>
+              <motion.polygon
+                className={ringClass(i)}
+                points={diamond(x, y, sz)}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: dur,
+                  delay,
+                  ease: "easeInOut",
+                  times: [0, 0.1, 0.22],
+                }}
+              />
+              {i === 36 && (
+                <motion.polygon
+                  className="fill-green"
+                  points={diamond(x, y, 2)}
+                  animate={{ opacity: [0.2, 1, 0.2] }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: dur,
+                    delay,
+                    ease: "easeInOut",
+                    times: [0, 0.1, 0.22],
+                  }}
+                />
+              )}
+            </g>
+          );
+        })}
+      </svg>
     </motion.div>
   );
-};
+}
+
+function ax2px(q: number, r: number) {
+  return [cx + step * (q + r * 0.5), cy + step * (r * 0.866)];
+}
+
+function diamond(x: number, y: number, size: number) {
+  return `${x},${y - size} ${x + size},${y} ${x},${y + size} ${x - size},${y}`;
+}
+
+const ringClass = (i: number) =>
+  i < 18 ? "fill-green" :
+    i < 30 ? "fill-primary" :
+      i < 36 ? "fill-green" :
+        "fill-primary";

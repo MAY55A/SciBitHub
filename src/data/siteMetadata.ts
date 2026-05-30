@@ -4,7 +4,7 @@ export const siteMetadata: Metadata = {
   title: "SciBitHub",
   description: "A collaborative platform for research and discussions.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.svg",
   },
   verification: {
     google: "VKAQGan9q_6iEKNQLdrPNHMacZ2_0LzQBs2hB5i88v0",
