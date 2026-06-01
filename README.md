@@ -101,6 +101,6 @@ SciBitHub is open-source software licensed under the [GNU Affero General Public 
 
 ## ✨ About the Developer
 
-Developed by [MAY55A](https://may55a.github.io/Social-links-profile/), as part of an academic project, with a focus on open science, community participation, and technical learning.
+Developed by [MAY55A](https://github.com/MAY55A), as part of an academic project, with a focus on open science, community participation, and technical learning.
 
 📫 **Contact:** [mayssagnm@gmail.com](mailto:mayssagnm@gmail.com)

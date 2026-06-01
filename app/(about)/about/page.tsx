@@ -55,7 +55,7 @@ export default function AboutPage() {
                                 SciBitHub was built by a solo developer as part of an engineering thesis — blending technology and curiosity into a collaborative science platform. It's a project born out of passion for learning, sharing, and open access.
                             </p>
                             <a
-                                href="https://may55a.github.io/Social-links-profile/"
+                                href="https://github.com/MAY55A"
                                 target="_blank"
                                 rel="noreferrer"
                                 className="text-center font-semibold text-green hover:underline"

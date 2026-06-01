@@ -37,7 +37,7 @@ export function Footer() {
                 <p>
                     Made by{" "}
                     <a
-                        href="https://may55a.github.io/Social-links-profile/"
+                        href="https://github.com/MAY55A"
                         target="_blank"
                         className="font-bold hover:underline text-green"
                         rel="noreferrer"
