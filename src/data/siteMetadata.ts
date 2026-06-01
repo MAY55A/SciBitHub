@@ -12,7 +12,7 @@ export const siteMetadata: Metadata = {
   openGraph: {
     title: "SciBitHub",
     description: "Explore and contribute to research projects.",
-    url: "https://sci-bit-hub.vercel.app",
+    url: "https://scibithub.tech",
     siteName: "SciBitHub",
     images: [
       {
