@@ -33,7 +33,7 @@ export function Footer() {
                 </div>
             </div>
             <div className="text-center text-xs mt-6">
-                Copyright © 2025 SciBitHub
+                Copyright © 2025 – {new Date().getFullYear()} SciBitHub
                 <p>
                     Made by{" "}
                     <a
