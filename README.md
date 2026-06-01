@@ -16,23 +16,23 @@ It connects researchers, contributors, and curious minds to engage in data colle
 
 ---
 
-## 🌍 Features
+## Features
 
-- 🧪 Create and manage research projects
-- 🔉 Contribute to tasks by submitting annotations or files
-- ✅ Validate task contributions
-- 💬 Participate in open discussions, debates & dedicated project forums
-- 👍 Upvote/downvote content and like projects
-- 📈 Visualize project results with graphs and statistics
-- 👤 Role-based access: visitors, contributors, researchers, admins
-- 🔒 Content moderation and reporting system
-- 📚 Bookmark projects and discussions for quick access
-- 📊 Admin dashboard for monitoring platform activity
-- 📥 Download collected data for research projects
+- Create and manage research projects
+- Contribute to tasks by submitting annotations or files
+- Validate task contributions
+- Participate in open discussions, debates & dedicated project forums
+- Upvote/downvote content and like projects
+- Visualize project results with graphs and statistics
+- Role-based access: visitors, contributors, researchers, admins
+- Content moderation and reporting system
+- Bookmark projects and discussions for quick access
+- Admin dashboard for monitoring platform activity
+- Download collected data for research projects
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Frontend & Backend**: [Next.js 15 (App Router)](https://nextjs.org/)
 - **Database & Auth**: [Supabase](https://supabase.com/)
@@ -48,7 +48,7 @@ It connects researchers, contributors, and curious minds to engage in data colle
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 #### Project overview
 
@@ -64,43 +64,45 @@ It connects researchers, contributors, and curious minds to engage in data colle
 
 ---
 
-## 🤝 Open Source Contribution
+## Open Source Contribution
 
 SciBitHub is now **live and open source**!  
-You can access the deployed version here: [https://sci-bit-hub.vercel.app](https://sci-bit-hub.vercel.app)  
+You can access the deployed version from here: 
+- [https://scibithub.tech](https://scibithub.tech)
+- [https://sci-bit-hub.vercel.app](https://sci-bit-hub.vercel.app)
 
 If you're interested in contributing, feel free to **fork, star, or open issues/PRs**.
 
-🛠️ **Areas where help is especially welcome**:
-- 📊 Data visualization and analytics features  
-- 🎨 UI/UX improvements and accessibility  
-- 🌍 Internationalization (i18n support)  
-- ⚡ Performance and scalability optimization  
-- ☁️ File storage and infrastructure (Supabase, MinIO)  
-- 📚 Documentation & onboarding improvements  
+**Areas where help is especially welcome**:
+- Data visualization and analytics features  
+- UI/UX improvements and accessibility  
+- Internationalization (i18n support)  
+- Performance and scalability optimization  
+- File storage and infrastructure (Supabase, MinIO)  
+- Documentation & onboarding improvements  
 
 ---
 
-## 🙋 Help Wanted: Hosting & Infrastructure
+## Help Wanted: Hosting & Infrastructure
 
-Although SciBitHub is deployed using free-tier services (Vercel, Supabase), some features like **Google Authentication** and **file uploads** are limited or disabled due to resource constraints.
+Although SciBitHub is deployed using free-tier services (Vercel, Supabase), some features like **file uploads** are limited or disabled due to resource constraints.
 
 If you’d like to help with:
-- 🚀 Hosting the platform or offering scalable infrastructure  
-- 🗃️ Providing cloud storage or file handling (MinIO, S3, etc.)  
-- 🤖 Improving deployment, CI/CD, or DevOps  
-- 💸 Sponsoring deployment or storage costs  
+- Hosting the platform or offering scalable infrastructure  
+- Providing cloud storage or file handling (MinIO, S3, etc.)  
+- Improving deployment, CI/CD, or DevOps  
+- Sponsoring deployment or storage costs  
 
 Please consider [opening an issue](https://github.com/MAY55A/SciBitHub/issues) or contacting me directly.
 
 Every bit of help moves open science forward 🌍✨
 
-## 📄 License
+## License
 
 SciBitHub is open-source software licensed under the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html).
 
-## ✨ About the Developer
+## About the Developer
 
 Developed by [MAY55A](https://github.com/MAY55A), as part of an academic project, with a focus on open science, community participation, and technical learning.
 
-📫 **Contact:** [mayssagnm@gmail.com](mailto:mayssagnm@gmail.com)
+**Contact:** [mayssa.ghanmi@scibithub.tech](mailto:mayssa.ghanmi@scibithub.tech)
