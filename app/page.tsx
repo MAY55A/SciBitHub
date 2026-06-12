@@ -1,10 +1,17 @@
 import { FormMessage } from "@/src/components/custom/form-message";
 import { Footer } from "@/src/components/custom/footer";
 import Hero from "@/src/components/home/hero";
+import type { Metadata } from 'next';
 
 import LatestProjects from "@/src/components/home/latest-projects";
 import LatestDiscussions from "@/src/components/home/latest-discussions";
 import HowItWorks from "@/src/components/home/how-it-works";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+};
 
 export default async function Home(props: { searchParams?: Promise<{ error?: string; error_description?: string; message?: string }> }) {
   const searchParams = await props.searchParams;

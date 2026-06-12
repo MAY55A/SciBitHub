@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const siteMetadata: Metadata = {
   title: "SciBitHub",
   description: "A collaborative platform for research and discussions.",
+  metadataBase: new URL('https://scibithub.tech'),
   icons: {
     icon: "/favicon.svg",
   },
