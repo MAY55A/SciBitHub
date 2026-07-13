@@ -2,16 +2,16 @@ import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectsCommand,
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const s3Client = new S3Client({
-    region: "us-east-1",
-    endpoint: "http://localhost:9000",
+    region: process.env.MINIO_REGION ?? "us-east-1",
+    endpoint: process.env.MINIO_ENDPOINT ?? "http://localhost:9000",
     forcePathStyle: true,
     credentials: {
-        accessKeyId: "minioadmin",
-        secretAccessKey: "minioadmin",
+        accessKeyId: process.env.MINIO_ACCESS_KEY ?? "minioadmin",
+        secretAccessKey: process.env.MINIO_SECRET_KEY ?? "minioadmin",
     }
 });
 
-const bucketName = "sci-bit-hub";
+const bucketName = process.env.MINIO_BUCKET_NAME ?? "sci-bit-hub";
 
 export const uploadFileToMinIO = async (file: File, filePath: string) => {
     const arrayBuffer = await file.arrayBuffer(); // Get ArrayBuffer from File
