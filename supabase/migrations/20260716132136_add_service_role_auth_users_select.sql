@@ -1,0 +1,1 @@
+GRANT SELECT ON TABLE "auth"."users" TO "service_role";
