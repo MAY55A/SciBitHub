@@ -20,12 +20,12 @@ const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple
     // Fetching countries list (static or API-based)
     useEffect(() => {
         setLoading(true);
-        fetch('https://restcountries.com/v3.1/all?fields=name') // new update forces use of fields query
+        fetch('https://countries.dev/countries?fields=name')
             .then(response => response.json())
             .then(data => {
                 const countryOptions = data?.map((country: any) => ({
-                    value: country.name.common,
-                    label: country.name.common,
+                    value: country.name,
+                    label: country.name,
                 }));
                 setCountries(countryOptions);
             })
