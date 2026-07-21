@@ -1,0 +1,68 @@
+name: Task / Chore
+description: Track implementation work, refactors, maintenance, or ops tasks
+title: "[Task]: "
+labels: ["task", "needs-triage"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Task summary
+      description: What needs to be done?
+    validations:
+      required: true
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: Why are we doing this task?
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is included and excluded?
+      placeholder: |
+        Included:
+        - ...
+        Excluded:
+        - ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies / blockers (optional)
+      placeholder: "Requires PR #..., waiting on issue #..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: Concrete outputs expected from this task.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Definition of done
+      value: |
+        - [ ] Implementation completed
+        - [ ] Tests/validation completed
+        - [ ] Documentation updated (if applicable)
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Additional context (optional)
+      description: Related issues, PRs, docs, logs.
+    validations:
+      required: false

@@ -1,0 +1,64 @@
+name: Feature request
+description: Propose a new capability or product improvement
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem are we trying to solve?
+      placeholder: "Users cannot ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe your proposed approach.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered (optional)
+      description: Other approaches or why current behavior is insufficient.
+    validations:
+      required: false
+
+  - type: textarea
+    id: users
+    attributes:
+      label: Users / impact
+      description: Who benefits and what value is delivered?
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and constraints (optional)
+      placeholder: "Out of scope, non-goals, dependencies, risks"
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ] Clear user-facing outcome defined
+        - [ ] Technical approach agreed
+        - [ ] Success can be validated in QA/UAT
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Additional context (optional)
+      description: Mockups, links, related issues/PRs.
+    validations:
+      required: false

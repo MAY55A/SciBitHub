@@ -1,0 +1,82 @@
+name: Documentation
+description: Request documentation updates, additions, or clarifications
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: dropdown
+    id: doc_type
+    attributes:
+      label: Documentation type
+      options:
+        - Missing documentation
+        - Incorrect/outdated documentation
+        - Unclear/confusing documentation
+        - New guide/tutorial needed
+        - API/reference update
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What documentation needs to change?
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Current location (if applicable)
+      description: Link/file path to existing docs that need updates.
+      placeholder: "docs/search.md or README.md section"
+    validations:
+      required: false
+
+  - type: textarea
+    id: audience
+    attributes:
+      label: Target audience
+      description: Who is this for?
+      placeholder: "New contributors, frontend devs, end users, API consumers"
+    validations:
+      required: true
+
+  - type: textarea
+    id: gap
+    attributes:
+      label: Problem / gap
+      description: What confusion or missing info are people experiencing?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed content
+      description: What should be added/changed?
+      placeholder: |
+        - Add section on...
+        - Include examples for...
+        - Clarify edge cases...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ] Docs updated in the correct location
+        - [ ] Content reviewed for accuracy
+        - [ ] Examples/steps tested and clear
+    validations:
+      required: true
+
+  - type: input
+    id: references
+    attributes:
+      label: Related links/issues/PRs (optional)
+      placeholder: "https://github.com/MAY55A/SciBitHub/issues/123"
+    validations:
+      required: false
