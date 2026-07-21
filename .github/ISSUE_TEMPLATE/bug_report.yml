@@ -1,7 +1,7 @@
 name: Bug report
 description: Report broken behavior, regressions, or runtime errors
 title: "[Bug]: "
-labels: ["bug", "needs-triage"]
+labels: ["bug"]
 body:
   - type: textarea
     id: summary

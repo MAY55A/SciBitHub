@@ -1,7 +1,7 @@
 name: Task / Chore
 description: Track implementation work, refactors, maintenance, or ops tasks
 title: "[Task]: "
-labels: ["task", "needs-triage"]
+labels: []
 body:
   - type: textarea
     id: summary
