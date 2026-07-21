@@ -1,0 +1,88 @@
+name: Bug report
+description: Report broken behavior, regressions, or runtime errors
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is the bug?
+      placeholder: "When I type in the search bar, the page jumps to the top."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_behavior
+    attributes:
+      label: Current behavior
+      description: What happens now?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected behavior
+      description: What should happen instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to '...'
+        2. Type '...'
+        3. Observe '...'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: Frequency
+      options:
+        - Always
+        - Often
+        - Sometimes
+        - Rarely
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Scope / impact
+      description: Who is affected and how severe is it?
+      placeholder: "Affects all users on search pages; degrades usability."
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment (optional)
+      placeholder: "OS, browser, app version, route"
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ] Bug is reproducible and root cause identified
+        - [ ] Fix prevents issue from recurring
+        - [ ] Related flows are verified for regressions
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Additional context (optional)
+      description: Logs, screenshots, links to related issues/PRs.
+    validations:
+      required: false
