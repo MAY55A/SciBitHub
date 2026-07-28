@@ -157,13 +157,8 @@ export const FormGenerator = (
                 <Select
                     required={field.required}
                     onValueChange={(selectedOption) =>
-                        handleChange({
-                            target: {
-                                name: field.label,
-                                value: selectedOption,
-                            },
-                        } as React.ChangeEvent<HTMLInputElement>)}
-                    value={formData[field.label]?.value}
+                        setFormData((prev: { [key: string]: any }) => ({ ...prev, [field.label]: { value: selectedOption } }))}
+                    value={formData[field.label]?.value ?? ""}
                 >
                     <SelectTrigger>
                         <SelectValue placeholder="Select an option" />
