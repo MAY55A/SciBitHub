@@ -22,7 +22,7 @@ export function SortByDropdown() {
             params.delete('orderBy');
             params.delete('sort');
         }
-        replace(`${pathname}?${params.toString()}`);
+        replace(`${pathname}?${params.toString()}`, { scroll: false });
     };
 
     return (
@@ -35,7 +35,7 @@ export function SortByDropdown() {
                             ? "oldest"
                             : "most recent"
                     }
-                    <ChevronDown size={16}/>
+                    <ChevronDown size={16} />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48">

@@ -18,11 +18,11 @@ export default function Search({ placeholder }: { placeholder: string }) {
         } else {
             params.delete('query');
         }
-        replace(`${pathname}?${params.toString()}`);
+        replace(`${pathname}?${params.toString()}`, { scroll: false });
     }, 300);
 
     return (
-        <div className="relative min-w-60 flex flex-1 flex-shrink-0">
+        <form onSubmit={(e) => e.preventDefault()} className="relative min-w-60 flex flex-1 flex-shrink-0">
             <Label htmlFor="search" className="sr-only">
                 Search
             </Label>
@@ -35,6 +35,6 @@ export default function Search({ placeholder }: { placeholder: string }) {
                 defaultValue={searchParams.get('query')?.toString()}
             />
             <SearchIcon className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
-        </div>
+        </form>
     );
 }

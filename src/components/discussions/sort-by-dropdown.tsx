@@ -22,7 +22,7 @@ export function SortByDropdown() {
             params.delete('orderBy');
             params.delete('sort');
         }
-        replace(`${pathname}?${params.toString()}`);
+        replace(`${pathname}?${params.toString()}`, { scroll: false });
     };
 
     return (

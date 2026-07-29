@@ -19,14 +19,14 @@ export function CategoriesCarousel() {
     const params = new URLSearchParams(searchParams);
     const currentcategory = params.get('category') as DiscussionCategory | null;
 
-    const handleFilter = (category : DiscussionCategory | null) => {
+    const handleFilter = (category: DiscussionCategory | null) => {
         params.set('page', '1');
         if (category) {
             params.set('category', category);
         } else {
             params.delete('category');
         }
-        replace(`${pathname}?${params.toString()}`);
+        replace(`${pathname}?${params.toString()}`, { scroll: false });
     };
 
     return (

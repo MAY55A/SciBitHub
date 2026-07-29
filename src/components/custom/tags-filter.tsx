@@ -44,7 +44,7 @@ export function TagsFilter({ for: filterType }: { for: 'discussions' | 'projects
         } else {
             params.delete('tags');
         }
-        replace(`${pathname}?${params.toString()}`);
+        replace(`${pathname}?${params.toString()}`, { scroll: false });
     };
 
     const onSelectTag = (tag: string) => {
