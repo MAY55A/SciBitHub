@@ -9,7 +9,11 @@ export default function CustomPagination({ totalPages }: { totalPages: number })
     const router = useRouter();
     const currentPage = Number(searchParams.get('page')) || 1;
 
-    const createPageURL = (pageNumber: number | string) => {
+    const isFirstPage = currentPage <= 1;
+    const isLastPage = currentPage >= totalPages;
+
+    const createPageURL = (pageNumber: number) => {
+        if (pageNumber < 1 || pageNumber > totalPages) return;
         const params = new URLSearchParams(searchParams);
         params.set('page', pageNumber.toString());
         router.push(`${pathname}?${params.toString()}`);
@@ -21,8 +25,8 @@ export default function CustomPagination({ totalPages }: { totalPages: number })
                 {/* Previous Button */}
                 <PaginationItem>
                     <PaginationPrevious
-                        aria-disabled={currentPage === 1}
-                        className='text-xs text-foreground aria-disabled:text-muted-foreground aria-disabled:cursor-not-allowed cursor-pointer'
+                        disabled={isFirstPage}
+                        className='text-xs text-foreground aria-disabled:text-muted-foreground cursor-pointer'
                         onClick={() => createPageURL(currentPage - 1)}
                     />
                 </PaginationItem>
@@ -39,8 +43,8 @@ export default function CustomPagination({ totalPages }: { totalPages: number })
                 {/* Next Button */}
                 <PaginationItem>
                     <PaginationNext
-                        aria-disabled={currentPage === totalPages}
-                        className='text-xs text-foreground aria-disabled:text-muted-foreground aria-disabled:cursor-not-allowed cursor-pointer'
+                        disabled={isLastPage}
+                        className='text-xs text-foreground aria-disabled:text-muted-foreground cursor-pointer'
                         onClick={() => createPageURL(currentPage + 1)}
                     />
                 </PaginationItem>
