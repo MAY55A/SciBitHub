@@ -1,8 +1,3 @@
----
-name: Pull request
-about: Summarize changes, testing, and review notes
----
-
 ## Summary
 What does this PR change?
 
