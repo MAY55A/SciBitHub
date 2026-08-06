@@ -162,7 +162,7 @@ export const FormGenerator = (
                                 name: field.label,
                                 value: selectedOption,
                             },
-                        } as React.ChangeEvent<HTMLInputElement>)
+                        } as React.ChangeEvent<HTMLInputElement>)}
                     value={formData[field.label]?.value}
                 >
                     <SelectTrigger>
