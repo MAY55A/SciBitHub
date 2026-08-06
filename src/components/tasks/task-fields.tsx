@@ -26,6 +26,7 @@ export function TaskFields({ task }: { task: Task }) {
     const [isFirstSurvey, setIsFirstSurvey] = useState(true);
     const [accepted, setAccepted] = useState(false);
     const [file, setFile] = useState<{ filePath: string; fileUrl: string } | null>(null);
+    const [formKey, setFormKey] = useState(0);
     const formRef = useRef<HTMLFormElement | null>(null);
     const pathname = usePathname();
     const { toast } = useToast()
@@ -72,12 +73,11 @@ export function TaskFields({ task }: { task: Task }) {
     }, [user]);
 
     const reset = () => {
-        if (formRef.current) {
-            formRef.current.reset();
-        }
         setFormData({});
         setMessage(undefined);
         setFile(null);
+        setAccepted(false);
+        setFormKey((k) => k + 1);
         if (task.type === TaskType.DATALABELLING) {
             fetchRandomFile();
         } else if(task.type === TaskType.SURVEY) {
@@ -104,6 +104,7 @@ export function TaskFields({ task }: { task: Task }) {
             <div className="flex-[0.7] min-w-80 flex flex-col justify-between p-8 pb-2 px-2 rounded-lg">
                 <h3 className="text-center font-semibold text-lg text-primary">Task</h3>
                 <FormGenerator
+                    key={formKey}
                     ref={formRef}
                     fields={task.fields}
                     handleSubmit={handleSubmit}
