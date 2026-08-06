@@ -76,6 +76,7 @@ export function TaskFields({ task }: { task: Task }) {
         setFormData({});
         setMessage(undefined);
         setFile(null);
+        setAccepted(false);
         setFormKey((k) => k + 1);
         if (task.type === TaskType.DATALABELLING) {
             fetchRandomFile();
