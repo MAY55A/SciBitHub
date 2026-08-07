@@ -23,7 +23,12 @@ export async function softDeleteProject(projectId: string, projectName: string, 
             throw projectError;
         }
 
-        const notification = client ? // notify creator if an admin deleted the project else notify admins
+        const notification: {
+            message_template: string;
+            recipient_id?: string | null;
+            target?: NotificationTarget;
+            user_id?: string | null;
+        } = client ? // notify creator if an admin deleted the project else notify admins
             {
                 message_template: `Your project "${projectName.length > 50 ? projectName.slice(0, 47) + "..." : projectName}" has been deleted.`,
                 recipient_id: project.creator,
@@ -69,7 +74,7 @@ export async function hardDeleteProject(projectId: string, client?: SupabaseClie
         // notify creator if an admin deleted the project and the creator of the project still exists
         if (client && !!project.creator) {
             const notification = {
-                message_template: `Your project "${project.name > 50 ? project.name.slice(0, 47) + "..." : project.name}" has been deleted.`,
+                message_template: `Your project "${project.name.length > 50 ? project.name.slice(0, 47) + "..." : project.name}" has been deleted.`,
                 recipient_id: project.creator,
             }
             const { error: notifError } = await supabase.from("notifications").insert(notification);

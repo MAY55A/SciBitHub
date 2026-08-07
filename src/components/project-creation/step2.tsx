@@ -26,6 +26,7 @@ export default function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSa
         defaultValues: { ...data, countries: data.countries || undefined },
     });
     const [isSaved, setIsSaved] = useState(false);
+    const today = new Date();
 
     const saveData = (data: Partial<ProjectInputData>) => {
         if (!data.status && data.participationLevel === ParticipationLevel.RESTRICTED && (!data.participants || data.participants.length < 2)) { // Ensure at least two contributors are selected for restricted participation for new projects only !
@@ -55,7 +56,7 @@ export default function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSa
             watchedFields.moderationLevel === data.moderationLevel &&
             watchedFields.scope === data.scope && watchedFields.deadline?.toISOString() === data.deadline?.toISOString() &&
             areEqualArrays(watchedFields.countries, data.countries) &&
-            areEqualArrays(watchedFields.participants?.map(p=>p.username), data.participants?.map(p=>p.username));
+            areEqualArrays(watchedFields.participants?.map(p => p.username), data.participants?.map(p => p.username));
         setIsSaved(same);
     }, [JSON.stringify(watchedFields)]);
 
@@ -244,9 +245,12 @@ export default function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSa
                                         selected={field.value}
                                         onSelect={field.onChange}
                                         disabled={(date) =>
-                                            date < new Date()
+                                            date < today
                                         }
-                                        initialFocus
+                                        startMonth={today}
+                                        endMonth={new Date(today.getFullYear() + 10, 11)}
+                                        captionLayout="dropdown"
+                                        className="rounded-lg border"
                                     />
                                 </PopoverContent>
                             </Popover>

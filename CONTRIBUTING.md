@@ -39,7 +39,7 @@ Look for issues tagged [`good first issue`](https://github.com/MAY55A/SciBitHub/
 
 Make sure you have the following installed before getting started:
 
-- [Node.js](https://nodejs.org/) v18+
+- [Node.js](https://nodejs.org/) v22+
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) — required for Supabase local dev and MinIO
 - [Supabase CLI](https://supabase.com/docs/guides/cli) — installed automatically via npm
 
@@ -57,10 +57,8 @@ cd SciBitHub
 ### 2. Install dependencies
 
 ```bash
-npm install --legacy-peer-deps
+npm install
 ```
-
-> **Note:** The `--legacy-peer-deps` flag is required due to peer dependency conflicts between some packages. This is a known issue that will be resolved in a future update.
 
 ### 3. Set up environment variables
 
