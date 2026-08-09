@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "setup:storage": "npx tsx scripts/download-assets.ts && npx tsx scripts/seed-storage.ts"
   },
   "dependencies": {
@@ -74,6 +76,8 @@
     "@types/papaparse": "^5.3.15",
     "@types/react": "^19.0.2",
     "@types/react-dom": "19.0.2",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.0",
     "postcss": "8.4.49",
     "supabase": "^2.109.1",
     "tailwind-merge": "^2.5.2",
