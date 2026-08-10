@@ -5,12 +5,15 @@ import { Label } from '@/src/components/ui/label';
 import { debounce } from '@/src/utils/utils';
 import { SearchIcon } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useTransition } from 'react';
 
 export default function Search({ placeholder }: { placeholder: string }) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
-    const handleSearch = debounce((term) => {
+    const [, startTransition] = useTransition();
+
+    const handleSearch = debounce((term: string) => {
         const params = new URLSearchParams(searchParams);
         params.set('page', '1');
         if (term) {
@@ -18,7 +21,9 @@ export default function Search({ placeholder }: { placeholder: string }) {
         } else {
             params.delete('query');
         }
-        replace(`${pathname}?${params.toString()}`, { scroll: false });
+        startTransition(() => {
+            replace(`${pathname}?${params.toString()}`, { scroll: false });
+        });
     }, 300);
 
     return (
@@ -37,4 +42,4 @@ export default function Search({ placeholder }: { placeholder: string }) {
             <SearchIcon className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
         </form>
     );
-}
+}

@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
@@ -13,6 +13,7 @@ export function TagsFilter({ for: filterType }: { for: 'discussions' | 'projects
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
+    const [, startTransition] = useTransition();
     const params = new URLSearchParams(searchParams);
     const currentTags = params.get('tags')?.split(',') || [];
     const [allTags, setAllTags] = useState<string[]>([]);
@@ -44,7 +45,9 @@ export function TagsFilter({ for: filterType }: { for: 'discussions' | 'projects
         } else {
             params.delete('tags');
         }
-        replace(`${pathname}?${params.toString()}`, { scroll: false });
+        startTransition(() => {
+            replace(`${pathname}?${params.toString()}`, { scroll: false });
+        });
     };
 
     const onSelectTag = (tag: string) => {

@@ -12,7 +12,7 @@ export default function CustomPagination({ totalPages }: { totalPages: number })
     const createPageURL = (pageNumber: number | string) => {
         const params = new URLSearchParams(searchParams);
         params.set('page', pageNumber.toString());
-        router.push(`${pathname}?${params.toString()}`);
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
     };
 
     return (
@@ -23,7 +23,7 @@ export default function CustomPagination({ totalPages }: { totalPages: number })
                     <PaginationPrevious
                         aria-disabled={currentPage === 1}
                         className='text-xs text-foreground aria-disabled:text-muted-foreground aria-disabled:cursor-not-allowed cursor-pointer'
-                        onClick={() => createPageURL(currentPage - 1)}
+                        onClick={(e) => { e.preventDefault(); if (currentPage > 1) createPageURL(currentPage - 1); }}
                     />
                 </PaginationItem>
 
@@ -31,6 +31,7 @@ export default function CustomPagination({ totalPages }: { totalPages: number })
                 <PaginationItem>
                     <PaginationLink
                         isActive
+                        onClick={(e) => e.preventDefault()}
                     >
                         {currentPage}
                     </PaginationLink>
@@ -41,7 +42,7 @@ export default function CustomPagination({ totalPages }: { totalPages: number })
                     <PaginationNext
                         aria-disabled={currentPage === totalPages}
                         className='text-xs text-foreground aria-disabled:text-muted-foreground aria-disabled:cursor-not-allowed cursor-pointer'
-                        onClick={() => createPageURL(currentPage + 1)}
+                        onClick={(e) => { e.preventDefault(); if (currentPage < totalPages) createPageURL(currentPage + 1); }}
                     />
                 </PaginationItem>
             </PaginationContent>

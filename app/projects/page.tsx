@@ -48,7 +48,7 @@ export default async function Page(props: {
                     <ActivityStatusSelection/>
                     <SortByDropdown />
                 </div>
-                <Suspense key={query || '' + currentPage} fallback={<ProjectsSkeleton />}>
+                <Suspense fallback={<ProjectsSkeleton />}>
                     <Projects creator={creator} query={query} domain={domain} status={status} currentPage={currentPage} orderBy={orderBy} sort={sort} activityStatus={activityStatus} tags={tags} />
                 </Suspense>
             </div>

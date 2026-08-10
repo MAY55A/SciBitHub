@@ -46,7 +46,7 @@ export default async function Page(props: {
                     <Search placeholder="Search discussions..." />
                     <SortByDropdown />
                 </div>
-                <Suspense key={query || '' + currentPage} fallback={<DiscussionsSkeleton />}>
+                <Suspense fallback={<DiscussionsSkeleton />}>
                     <Discussions creator={creator} query={query} status={status} category={category} tags={tags} currentPage={currentPage} orderBy={orderBy} sort={sort} />
                 </Suspense>
             </div>
