@@ -71,7 +71,7 @@ export default function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSa
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-primary">Visibility Level</FormLabel>
-                            <FormDescription>Controls who can view the project's results</FormDescription>
+                            <FormDescription>Controls who can view the project&apos;s results</FormDescription>
                             <FormControl>
                                 <RadioGroup {...field}
                                     value={field.value}

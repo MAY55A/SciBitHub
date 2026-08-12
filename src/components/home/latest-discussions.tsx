@@ -13,7 +13,7 @@ export default async function LatestDiscussions() {
     <section className="w-full flex flex-col items-center max-w-6xl px-4 py-20" id="latest-discussions">
       <h2 className="text-3xl font-semibold text-center mb-4">Latest Discussions</h2>
       <p className="text-center text-muted-foreground mb-6">
-        See what's trending in the community
+        See what&apos;s trending in the community
       </p>
       <Carousel className="w-full max-w-md lg:max-w-5xl md:max-w-2xl">
         <CarouselContent className="">

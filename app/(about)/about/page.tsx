@@ -52,7 +52,7 @@ export default function AboutPage() {
                         title="About the Developer"
                         content={<div className="flex gap-2">
                             <p>
-                                SciBitHub was built by a solo developer as part of an engineering thesis — blending technology and curiosity into a collaborative science platform. It's a project born out of passion for learning, sharing, and open access.
+                                SciBitHub was built by a solo developer as part of an engineering thesis — blending technology and curiosity into a collaborative science platform. It&apos;s a project born out of passion for learning, sharing, and open access.
                             </p>
                             <a
                                 href="https://github.com/MAY55A"
