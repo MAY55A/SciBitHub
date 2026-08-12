@@ -1,5 +1,6 @@
 'use client'
 
+import { useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
@@ -9,6 +10,7 @@ export function SortByDropdown() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
+    const [, startTransition] = useTransition();
     const params = new URLSearchParams(searchParams);
     const currentSort = params.get('sort');
     const currentOrderBy = params.get('orderBy');
@@ -22,7 +24,9 @@ export function SortByDropdown() {
             params.delete('orderBy');
             params.delete('sort');
         }
-        replace(`${pathname}?${params.toString()}`);
+        startTransition(() => {
+            replace(`${pathname}?${params.toString()}`, { scroll: false });
+        });
     };
 
     return (
@@ -35,7 +39,7 @@ export function SortByDropdown() {
                             ? "oldest"
                             : "most recent"
                     }
-                    <ChevronDown size={16}/>
+                    <ChevronDown size={16} />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48">

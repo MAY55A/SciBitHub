@@ -9,6 +9,7 @@ import {
 } from "@/src/components/ui/carousel"
 import { ProjectDomain } from "@/src/types/enums"
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import { Button } from "../ui/button";
 import { cn } from "@/src/lib/utils";
 
@@ -16,6 +17,7 @@ export function DomainsCarousel() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
+    const [, startTransition] = useTransition();
     const params = new URLSearchParams(searchParams);
     const currentDomain = params.get('domain') as ProjectDomain | null;
 
@@ -26,7 +28,9 @@ export function DomainsCarousel() {
         } else {
             params.delete('domain');
         }
-        replace(`${pathname}?${params.toString()}`);
+        startTransition(() => {
+            replace(`${pathname}?${params.toString()}`, { scroll: false });
+        });
     };
 
     return (
@@ -42,11 +46,12 @@ export function DomainsCarousel() {
                     <CarouselItem key={index} className="basis-1/2 md:basis-1/3 lg:basis-1/4 max-w-48">
                         <div className="p-1">
                             <Button
+                                type="button"
                                 variant="ghost"
                                 className={cn("w-full h-full flex aspect-square whitespace-normal text-muted-foreground hover:text-green border font-semibold",
                                     currentDomain === domain && "border-green text-green font-bold",
                                 )}
-                                onClick={() => handleFilter(domain)}
+                                onClick={(e) => { e.preventDefault(); handleFilter(domain); }}
                                 disabled={currentDomain === domain}
                             >
                                 {domain ?? "All Domains"}

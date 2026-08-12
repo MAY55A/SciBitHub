@@ -30,7 +30,7 @@ export default async function MyProjects(props: {
                 <Search placeholder="Search my discussions..." />
                 <DiscussionFormDialog />
             </div>
-            <Suspense key={query + currentPage} fallback={<DiscussionsSkeleton />}>
+            <Suspense fallback={<DiscussionsSkeleton />}>
                 <Discussions editable={true} creator={user.id} query={query} status={status} currentPage={currentPage} />
             </Suspense>
         </div>

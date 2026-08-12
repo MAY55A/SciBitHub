@@ -2,6 +2,7 @@
 
 import { ActivityStatus } from "@/src/types/enums"
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 
@@ -9,6 +10,7 @@ export function ActivityStatusSelection() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
+    const [, startTransition] = useTransition();
     const params = new URLSearchParams(searchParams);
     const currentStatus = params.get('activityStatus') as ActivityStatus ?? "all";
 
@@ -19,7 +21,9 @@ export function ActivityStatusSelection() {
         } else {
             params.delete('activityStatus');
         }
-        replace(`${pathname}?${params.toString()}`);
+        startTransition(() => {
+            replace(`${pathname}?${params.toString()}`, { scroll: false });
+        });
     };
 
     return (

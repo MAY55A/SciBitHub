@@ -35,7 +35,7 @@ export default async function MyProjects(props: {
                     Start A New Project
                 </Link>
             </div>
-            <Suspense key={query + currentPage} fallback={<ProjectsSkeleton />}>
+            <Suspense fallback={<ProjectsSkeleton />}>
                 <Projects editable={true} creator={user.id} query={query} status={status} currentPage={currentPage} />
             </Suspense>
         </div>

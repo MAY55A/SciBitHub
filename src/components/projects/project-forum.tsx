@@ -34,7 +34,7 @@ export default async function ProjectForum({ ...props }: {
                     <div className="w-full p-8 ">
                         <Search placeholder="Search topics..." />
                     </div>
-                    <Suspense key={props.query || '' + currentPage} fallback={null}>
+                    <Suspense fallback={null}>
                         <Topics project={props.projectId} query={props.query} tag={props.tag} currentPage={currentPage} orderBy={props.orderBy} sort={props.sort} />
                     </Suspense>
                     <div className="mt-5 flex w-full justify-center">
