@@ -58,7 +58,7 @@ export default function TaskFieldSetup({ className, icon: Icon, triggerText, tit
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>
-                        Define field configuration here. Click save when you're done.
+                        Define field configuration here. Click save when you&apos;re done.
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...fieldForm}>

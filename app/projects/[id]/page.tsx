@@ -92,7 +92,7 @@ export default async function ProjectPage({ ...props }: {
                         <ProjectResults projectId={project.id!} canEdit={canEditResults} />
                     ) : (
                         <div className="w-full flex-col justify-center rounded-lg p-10 py-24 my-8 border">
-                            <h3 className="text-center">This project's results are <strong className="capitalize text-primary">{project.visibility}</strong></h3>
+                            <h3 className="text-center">This project&apos;s results are <strong className="capitalize text-primary">{project.visibility}</strong></h3>
                             <p className="text-center text-sm text-muted-foreground">Results are not available.</p>
                         </div>
                     )

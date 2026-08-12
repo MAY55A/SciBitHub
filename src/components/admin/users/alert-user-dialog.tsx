@@ -52,7 +52,7 @@ export function AlertUserDialog({ onConfirm, onClose }: { onConfirm: (msg: strin
                     <div className="space-y-4">
                         <p className="font-retro">
                             Are you sure you want to send the following alert to this user?<br />
-                            <strong>"{message}"</strong>
+                            <strong>&quot;{message}&quot;</strong>
                         </p>                        <DialogFooter>
                             <Button variant="ghost" onClick={() => setConfirmed(false)}>
                                 Cancel

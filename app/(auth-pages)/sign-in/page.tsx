@@ -13,7 +13,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
       <form className="space-y-7 w-full max-w-md px-4 pt-[40%]">
         <h1 className="text-2xl font-medium text-center">Welcome Back !</h1>
         <p className="text-sm text-foreground font-retro">
-          Don't have an account ?{" "}
+          Don&apos;t have an account ?{" "}
           <Link className="text-green font-medium underline" href="/sign-up/credentials">
             Sign up
           </Link>
