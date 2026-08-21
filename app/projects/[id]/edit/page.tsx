@@ -7,7 +7,7 @@ import { updateProject } from "@/src/lib/services/project-service";
 import { ProjectStatus } from "@/src/types/enums";
 import { ProjectInputData } from "@/src/types/project-form-data";
 import { useRouter } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 
 const Step1 = dynamic(() => import("@/src/components/project-creation/step1"));
@@ -21,8 +21,8 @@ export default function Page() {
     const [message, setMessage] = useState<Message | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    const initialData = useRef(data);
-    const isDirty = useMemo(() => JSON.stringify(data) !== JSON.stringify(initialData.current), [data]);
+    const [initialData] = useState(() => data);
+    const isDirty = useMemo(() => JSON.stringify(data) !== JSON.stringify(initialData), [data, initialData]);
     const nextStep = () => setCurrentStep(currentStep + 1);
     const prevStep = () => setCurrentStep(currentStep - 1);
     const goToStep = (step: number) => setCurrentStep(step);
@@ -33,7 +33,7 @@ export default function Page() {
             setIsLoading(true);
             if (status)
                 data.status = status;
-            const res = await updateProject(initialData.current, data, files);
+            const res = await updateProject(initialData, data, files);
             setIsLoading(false);
             if (res.success) {
                 setMessage({ success: res.message });
@@ -68,7 +68,7 @@ export default function Page() {
     return (
         <div className="w-full max-w-[1000px] flex flex-col items-center justify-center min-h-80 m-8">
             <h1 className="text-2xl font-bold mb-4">Edit Project</h1>
-            {currentStep === 1 && <Step1 initialName={initialData.current.name} data={data} onUpdate={updateData} onNext={nextStep} onSaveStep={() => { }} onSaveProject={handleSave} dataChanged={isDirty} />}
+            {currentStep === 1 && <Step1 initialName={initialData.name} data={data} onUpdate={updateData} onNext={nextStep} onSaveStep={() => { }} onSaveProject={handleSave} dataChanged={isDirty} />}
             {currentStep === 2 && <Step2 data={data} onUpdate={updateData} onNext={nextStep} onBack={prevStep} onSaveStep={() => { }} onSaveProject={handleSave} dataChanged={isDirty} />}
             {currentStep === 3 && <Step3 data={data} onUpdate={updateData} onNext={nextStep} onBack={prevStep} onSaveStep={() => { }} onSaveProject={handleSave} files={files} updateFiles={setFiles} dataChanged={isDirty} />}
             {currentStep === 4 && <Step4 data={data} onUpdate={updateData} onNext={nextStep} onBack={prevStep} onSaveStep={() => { }} onSaveProject={handleSave} dataChanged={isDirty} />}
