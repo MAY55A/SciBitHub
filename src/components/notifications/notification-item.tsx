@@ -1,23 +1,30 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { formatDate } from '@/src/utils/utils';
 import { Notification } from '@/src/types/models';
-import { redirect, RedirectType } from 'next/navigation';
 import { cn } from '@/src/lib/utils';
 import { Button } from '../ui/button';
 import { CheckCheck } from 'lucide-react';
 
 export function NotificationItem({ notification, markAsRead }: { notification: Notification, markAsRead: (id: string) => void }) {
+    const router = useRouter();
+    const [isRead, setIsRead] = useState(notification.is_read);
+
     const handleClick = () => {
         markAsRead(notification.id);
+        setIsRead(true);
         if (notification.action_url) {
-            redirect(notification.action_url, RedirectType.push);
+            router.push(notification.action_url);
         }
     };
 
     return (
         <div
-            className={cn('z-60 flex items-start gap-3 p-3 rounded-lg', !notification.is_read && 'bg-muted/50', notification.type === 'warning' && "bg-destructive/30")}
+            className={cn('z-60 flex items-start gap-3 p-3 rounded-lg', !isRead && 'bg-muted/50', notification.type === 'warning' && "bg-destructive/30")}
             onClick={handleClick}
         >
             {notification.user && (
@@ -31,7 +38,7 @@ export function NotificationItem({ notification, markAsRead }: { notification: N
                     {formatDate(notification.created_at, true)}
                 </p>
             </div>
-            {!notification.is_read &&
+            {!isRead &&
                 <Button
                     variant="ghost"
                     size="icon"
@@ -40,7 +47,7 @@ export function NotificationItem({ notification, markAsRead }: { notification: N
                     onClick={(e) => {
                         e.stopPropagation();
                         markAsRead(notification.id);
-                        notification.is_read = true;
+                        setIsRead(true);
                     }}
                 >
                     <CheckCheck className="h-4 w-4" />
