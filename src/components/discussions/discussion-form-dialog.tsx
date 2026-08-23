@@ -59,7 +59,6 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
         })
 
         if (res.success) {
-            document.body.style.overflow = "";
             startTransition(() => {
                 setOpen(false);
                 router.refresh();
@@ -88,7 +87,6 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
 
         if (res.success) {
             startTransition(() => {
-                document.body.style.overflow = "";
                 router.refresh();
                 setOpen(false);
             });
@@ -111,6 +109,13 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
         setNewFiles([]);
         setExistingFiles(initialFiles);
     }
+
+    //fix overflow issue when dialog is closed
+    useEffect(() => {
+        if (!open) {
+            document.body.style.overflow = "";
+        }
+    }, [open]);
 
     useEffect(() => {
         if (data?.files?.length) {
@@ -142,8 +147,7 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
     }
 
     return (
-        //fix overflow issue when dialog is closed
-        <Dialog open={!!user && open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>
+        <Dialog open={!!user && open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 {data ?
                     <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :
