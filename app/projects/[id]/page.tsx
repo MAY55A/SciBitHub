@@ -15,6 +15,16 @@ const ProjectContribution = dynamic(() => import('@/src/components/projects/proj
 const ProjectForum = dynamic(() => import('@/src/components/projects/project-forum'), { loading: () => <div className="w-full h-80 flex justify-center items-center "><SquareLoader /></div> });
 const ProjectResults = dynamic(() => import('@/src/components/projects/project-results'), { loading: () => <div className="w-full h-80 flex justify-center items-center "><SquareLoader /></div> });
 
+const TabLink = ({ tab, currentTab, children }: { tab: string, currentTab: string, children: React.ReactNode }) => (
+    <Link
+        href={`?tab=${tab}`}
+        scroll={false}
+        className={cn("w-full text-center px-4 py-2 rounded-t-lg text-bold border-primary/50", currentTab === tab ? 'bg-background text-primary border-t border-l border-r' : 'bg-muted/50 border-b')}
+    >
+        {children}
+    </Link>
+);
+
 export default async function ProjectPage({ ...props }: {
     params: Promise<{ id: string }>,
     searchParams: Promise<{
@@ -41,24 +51,15 @@ export default async function ProjectPage({ ...props }: {
     const currentTab = (await searchParams).tab || "overview";
     const { canViewContribution, canSendRequest, canViewResults, canEditResults } = await getProjectPermissions(project.id!, project.visibility, project.participation_level, project.creator?.id);
 
-    const TabLink = ({ tab, children }: { tab: string, children: React.ReactNode }) => (
-        <Link
-            href={`?tab=${tab}`}
-            scroll={false}
-            className={cn("w-full text-center px-4 py-2 rounded-t-lg text-bold border-primary/50", currentTab === tab ? 'bg-background text-primary border-t border-l border-r' : 'bg-muted/50 border-b')}
-        >
-            {children}
-        </Link>
-    );
     return (
         <div className="w-full mx-auto p-6">
             <ProjectHeader project={project} />
 
             <div className="flex justify-evenly bg-muted/50 my-4 text-muted-foreground/80">
-                <TabLink tab="overview">Overview</TabLink>
-                <TabLink tab="contribution">Contribution</TabLink>
-                <TabLink tab="forum">Forum</TabLink>
-                <TabLink tab="results">Results</TabLink>
+                <TabLink tab="overview" currentTab={currentTab}>Overview</TabLink>
+                <TabLink tab="contribution" currentTab={currentTab}>Contribution</TabLink>
+                <TabLink tab="forum" currentTab={currentTab}>Forum</TabLink>
+                <TabLink tab="results" currentTab={currentTab}>Results</TabLink>
             </div>
 
             <div className="p-4 border border-t-0 rounded-b-lg">
