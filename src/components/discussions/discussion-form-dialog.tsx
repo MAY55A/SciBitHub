@@ -78,10 +78,8 @@ export default function DiscussionFormDialog({
         })
 
         if (res.success) {
-            document.body.style.overflow = "";
             startTransition(() => {
                 setOpen(false);
-                onClose?.();
                 router.refresh();
             });
         }
@@ -118,10 +116,8 @@ export default function DiscussionFormDialog({
 
         if (res.success) {
             startTransition(() => {
-                document.body.style.overflow = "";
                 router.refresh();
                 setOpen(false);
-                onClose?.();
             });
         }
     }
@@ -149,6 +145,14 @@ export default function DiscussionFormDialog({
         setNewFiles([]);
         setExistingFiles(initialFiles);
     }
+
+    //fix overflow issue when dialog is closed
+    useEffect(() => {
+        if (!open) {
+            document.body.style.overflow = "";
+            onClose?.();
+        }
+    }, [open]);
 
     useEffect(() => {
         if (!open || !data) return;
@@ -198,13 +202,7 @@ export default function DiscussionFormDialog({
     return (
         <Dialog
             open={data ? open : (!!user && open)}
-            onOpenChange={(next) => {
-                setOpen(next);
-                if (!next) {
-                    document.body.style.overflow = "";
-                    onClose?.();
-                }
-            }}
+            onOpenChange={setOpen}
         >
             {!data && (
                 <DialogTrigger asChild>
