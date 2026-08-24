@@ -59,7 +59,7 @@ export function Nav() {
                         <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                             <li className="row-span-3">
                                 <NavigationMenuLink asChild>
-                                    <a
+                                    <Link
                                         className="relative flex h-full w-full select-none flex-col justify-end rounded-md bg-[url('/images/bg-2.jpg')] bg-cover bg-center bg-no-repeat from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                                         href="/projects"
                                     >
@@ -70,7 +70,7 @@ export function Nav() {
                                         <p className="z-10 text-sm leading-tight text-muted-foreground">
                                             Discover projects in various domains and see how others are collaborating.
                                         </p>
-                                    </a>
+                                    </Link>
                                 </NavigationMenuLink>
                             </li>
                             {components.projects.map((component) => (
