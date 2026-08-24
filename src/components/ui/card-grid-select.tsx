@@ -18,7 +18,6 @@ export default function CardGridSelect({ options, value, showDescription, onChan
         const newSelected = selected.includes(title)
             ? selected.filter((item) => item !== title)
             : [...selected, title];
-        value = newSelected;
         setSelected(newSelected);
         onChange(newSelected);
     };

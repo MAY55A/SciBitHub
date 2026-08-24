@@ -9,10 +9,12 @@ import { CustomAlertDialog } from "../custom/alert-dialog";
 import { hardDeleteProject, softDeleteProject, updateActivityStatus } from "@/src/lib/actions/project-actions";
 import { useToast } from "@/src/hooks/use-toast";
 import { ActivityStatus, ProjectStatus } from "@/src/types/enums";
+import { useState } from "react";
 
 export function ProjectDropdownMenu({ project, showVisit = true }: { project: Project, showVisit?: boolean }) {
     const router = useRouter();
     const { toast } = useToast();
+    const [activityStatus, setActivityStatus] = useState(project.activity_status);
 
     const handleDelete = async () => {
         let res;
@@ -41,7 +43,7 @@ export function ProjectDropdownMenu({ project, showVisit = true }: { project: Pr
         });
 
         if (res.success) {
-            project.activity_status = status; // Update the activity status in the UI
+            setActivityStatus(status); // Update the activity status in the UI
             if (!showVisit) {
                 router.refresh(); // Refresh the page if the user is on the project page
             }
@@ -68,15 +70,15 @@ export function ProjectDropdownMenu({ project, showVisit = true }: { project: Pr
                         onClick={() => router.push(`/projects/${project.id}/edit`)}>
                         Edit
                     </DropdownMenuItem>
-                    {project.activity_status !== ActivityStatus.ONGOING &&
+                    {activityStatus !== ActivityStatus.ONGOING &&
                         <DropdownMenuItem
                             className="px-4"
                             disabled={project.status !== "published"}
                             onClick={() => handleUpdateStatus(ActivityStatus.ONGOING)}>
-                            {project.activity_status === ActivityStatus.PAUSED ? "Resume" : "Reopen"}
+                            {activityStatus === ActivityStatus.PAUSED ? "Resume" : "Reopen"}
                         </DropdownMenuItem>
                     }
-                    {project.activity_status === ActivityStatus.ONGOING &&
+                    {activityStatus === ActivityStatus.ONGOING &&
                         <>
                             <DropdownMenuItem
                                 className="px-4"
@@ -92,7 +94,7 @@ export function ProjectDropdownMenu({ project, showVisit = true }: { project: Pr
                             </DropdownMenuItem>
                         </>
                     }
-                    {project.activity_status !== ActivityStatus.CLOSED &&
+                    {activityStatus !== ActivityStatus.CLOSED &&
                         <DropdownMenuItem
                             className="px-4"
                             disabled={project.status !== "published"}

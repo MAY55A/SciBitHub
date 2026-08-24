@@ -34,12 +34,9 @@ export function TaskFields({ task }: { task: Task }) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (file) {
-            formData.data_file = file.filePath;
-        }
-        console.log('Form Data:', formData);
+        const payload = file ? { ...formData, data_file: file.filePath } : { ...formData };
         setLoading(true);
-        const res = await createContribution(formData, task.id!, task.project.moderation_level);
+        const res = await createContribution(payload, task.id!, task.project.moderation_level);
         setLoading(false);
         toast({
             description: res.message,
