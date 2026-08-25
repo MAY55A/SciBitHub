@@ -49,7 +49,15 @@ export default function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSa
     };
 
     const regionValue = form.watch("scope");
+    const visibilityValue = form.watch("visibility");
     const watchedFields = form.watch();
+
+    useEffect(() => {
+        if (visibilityValue === ProjectVisibility.RESTRICTED) {
+            form.setValue("participationLevel", ParticipationLevel.RESTRICTED);
+        }
+    }, [visibilityValue, form]);
+
     useEffect(() => {
         const same = watchedFields.visibility === data.visibility &&
             watchedFields.participationLevel === data.participationLevel &&
@@ -97,51 +105,39 @@ export default function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSa
                         </FormItem>
                     )}
                 />
-                {(() => {
-                    const visibilityValue = form.watch("visibility");
-
-                    useEffect(() => {
-                        if (visibilityValue === ProjectVisibility.RESTRICTED) {
-                            form.setValue("participationLevel", ParticipationLevel.RESTRICTED);
-                        }
-                    }, [visibilityValue]);
-
-                    return (
-                        <FormField
-                            control={form.control}
-                            name="participationLevel"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-primary">Participation Level</FormLabel>
-                                    <FormDescription>Controls who can participate in tasks</FormDescription>
-                                    <FormControl>
-                                        <RadioGroup
-                                            {...field}
-                                            value={field.value}
-                                            onValueChange={field.onChange}
-                                            className="w-full flex gap-8 px-6 pt-4"
-                                        >
-                                            {Object.values(ParticipationLevel).map(value => (
-                                                <div className="flex items-center space-x-2" key={value}>
-                                                    <RadioGroupItem
-                                                        value={value}
-                                                        id={value}
-                                                        disabled={visibilityValue === ProjectVisibility.RESTRICTED}
-                                                    />
-                                                    <Label htmlFor={value}>{value}</Label>
-                                                </div>
-                                            ))}
-                                        </RadioGroup>
-                                    </FormControl>
-                                    <FormDescription>
-                                        {ParticipationLevelDescriptions[field.value as ParticipationLevel]}
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    );
-                })()}
+                <FormField
+                    control={form.control}
+                    name="participationLevel"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="text-primary">Participation Level</FormLabel>
+                            <FormDescription>Controls who can participate in tasks</FormDescription>
+                            <FormControl>
+                                <RadioGroup
+                                    {...field}
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                    className="w-full flex gap-8 px-6 pt-4"
+                                >
+                                    {Object.values(ParticipationLevel).map(value => (
+                                        <div className="flex items-center space-x-2" key={value}>
+                                            <RadioGroupItem
+                                                value={value}
+                                                id={value}
+                                                disabled={visibilityValue === ProjectVisibility.RESTRICTED}
+                                            />
+                                            <Label htmlFor={value}>{value}</Label>
+                                        </div>
+                                    ))}
+                                </RadioGroup>
+                            </FormControl>
+                            <FormDescription>
+                                {ParticipationLevelDescriptions[field.value as ParticipationLevel]}
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 {form.getValues("participationLevel") === ParticipationLevel.RESTRICTED &&
                     (data.status === ProjectStatus.PUBLISHED && data.participationLevel === ParticipationLevel.RESTRICTED
                         ? <div className="text-sm font-retro">
