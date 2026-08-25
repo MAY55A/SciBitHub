@@ -45,7 +45,10 @@ export function ProjectOptionsMenu({
         if (res.success) {
             updateRow("status", status)
             if (status === ProjectStatus.DELETED) {
-                project.deleted_at = new Date().toISOString();
+                updateRow("deleted_at", new Date().toISOString())
+            }
+            if (status === ProjectStatus.PUBLISHED) {
+                updateRow("deleted_at", null)
             }
         }
     }
@@ -69,14 +72,14 @@ export function ProjectOptionsMenu({
                             onClick={() => setShowDialog("project-details")}>
                             View Project Details
                         </DropdownMenuItem>
-                        {!project.deleted_at && project.status !== ProjectStatus.PUBLISHED &&
+                        {(project.status === ProjectStatus.PENDING || project.status === ProjectStatus.DECLINED) &&
                             <DropdownMenuItem
                                 className="px-4 hover:text-green"
                                 onClick={() => handleUpdateStatus(ProjectStatus.PUBLISHED)}>
                                 Approve Project
                             </DropdownMenuItem>
                         }
-                        {!project.deleted_at && project.status !== ProjectStatus.DECLINED &&
+                        {(project.status === ProjectStatus.PENDING || project.status === ProjectStatus.PUBLISHED) &&
                             <DropdownMenuItem
                                 className="px-4 hover:text-primary"
                                 onClick={() => handleUpdateStatus(ProjectStatus.DECLINED)}>
@@ -86,7 +89,7 @@ export function ProjectOptionsMenu({
 
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    {project.deleted_at
+                    {project.status === ProjectStatus.DELETED
                         ? <DropdownMenuItem
                             onSelect={(event) => {
                                 event.preventDefault(); // Prevent dialog from closing immediately when opened
