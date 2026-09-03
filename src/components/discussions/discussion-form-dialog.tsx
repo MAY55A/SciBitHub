@@ -78,7 +78,7 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
             return;
         }
         setSubmitting(true);
-        const res = await updateDiscussion(formData, newFiles, existingFiles.map(f => f.path));
+        const res = await updateDiscussion({ ...data, ...formData }, newFiles, existingFiles.map(f => f.path));
         setSubmitting(false);
 
         toast({
@@ -113,6 +113,15 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
     }
 
     useEffect(() => {
+        if (data) {
+            form.reset({
+                title: data.title || "",
+                body: data.body || "",
+                category: data.category || "",
+                tags: data.tags || [],
+                ...data,
+            });
+        }
         if (data?.files?.length) {
             (async () => {
                 const files = await Promise.all(
@@ -135,7 +144,7 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
                 setExistingFiles(files);
             })();
         }
-    }, [data]);
+    }, [data, form, open]);
 
     if (loading) {
         return null;
@@ -196,7 +205,7 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
                                 <FormItem>
                                     <FormLabel className="text-green">Category</FormLabel>
                                     <FormControl>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Select a category" />
