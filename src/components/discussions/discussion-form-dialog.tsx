@@ -22,9 +22,28 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/contexts/AuthContext";
 
 
-export default function DiscussionFormDialog({ data }: { data?: DiscussionInputData }) {
+interface DiscussionFormDialogProps {
+    data?: DiscussionInputData;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
+}
+
+export default function DiscussionFormDialog({
+    data,
+    open: controlledOpen,
+    onOpenChange: setControlledOpen,
+}: DiscussionFormDialogProps) {
     const { user, loading } = useAuth();
-    const [open, setOpen] = useState(false);
+    const [internalOpen, setInternalOpen] = useState(false);
+    const isControlled = controlledOpen !== undefined;
+    const open = isControlled ? controlledOpen : internalOpen;
+    const setOpen = (newOpen: boolean) => {
+        if (isControlled) {
+            setControlledOpen?.(newOpen);
+        } else {
+            setInternalOpen(newOpen);
+        }
+    };
     const [submitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState<Message | undefined>(undefined);
     const { toast } = useToast();
@@ -153,12 +172,14 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
     return (
         //fix overflow issue when dialog is closed
         <Dialog open={!!user && open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>
-            <DialogTrigger asChild>
-                {data ?
-                    <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :
-                    <Button className="font-bold" onClick={() => user ? setOpen(true) : router.push("/sign-in?redirect_to=/discussions")}>Open a Discussion</Button>
-                }
-            </DialogTrigger>
+            {!isControlled && (
+                <DialogTrigger asChild>
+                    {data ?
+                        <Button variant="ghost" className="h-full font-normal p-0" onClick={() => setOpen(true)}>Edit</Button> :
+                        <Button className="font-bold" onClick={() => user ? setOpen(true) : router.push("/sign-in?redirect_to=/discussions")}>Open a Discussion</Button>
+                    }
+                </DialogTrigger>
+            )}
             <DialogContent className="lg:min-w-[700px] md:min-w-[700px] sm:max-w-[425px] max-h-[90vh]">
                 <DialogHeader>
                     <DialogTitle>{data ? "Edit Discussion" : "Create A New Discussion"}</DialogTitle>
@@ -204,20 +225,18 @@ export default function DiscussionFormDialog({ data }: { data?: DiscussionInputD
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="text-green">Category</FormLabel>
-                                    <FormControl>
-                                        <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a category" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {Object.values(DiscussionCategory).map((category) => (
-                                                    <SelectItem value={category} key={category}>{category}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
+                                    <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a category" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {Object.values(DiscussionCategory).map((category) => (
+                                                <SelectItem value={category} key={category}>{category}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                     <FormDescription>{DiscussionCategoriesDescriptions[field.value as DiscussionCategory]}</FormDescription>
                                     <FormFieldMessage></FormFieldMessage>
                                 </FormItem>
