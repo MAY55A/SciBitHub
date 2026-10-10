@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react";
 import { Ellipsis } from "lucide-react";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
@@ -12,6 +13,9 @@ import { DiscussionStatus } from "@/src/types/enums";
 import { useToast } from "@/src/hooks/use-toast";
 
 export function DiscussionDropdownMenu({ discussion, showVisit = true }: { discussion: Discussion, showVisit?: boolean }) {
+    // Match admin UserFormDialog: open edit from menu onClick, mount dialog OUTSIDE the
+    // DropdownMenu so Radix menu focus/pointer-events never trap the form Save button.
+    const [showEditDialog, setShowEditDialog] = useState(false);
     const router = useRouter();
     const { toast } = useToast();
 
@@ -22,12 +26,10 @@ export function DiscussionDropdownMenu({ discussion, showVisit = true }: { discu
             variant: res.success ? "default" : "destructive",
         });
 
-        // Refresh the page if the user is on the discussion page
         if (!showVisit) {
             router.refresh();
         }
     }
-
 
     const handleDelete = async () => {
         const res = await deleteDiscussion(discussion.id!);
@@ -36,74 +38,90 @@ export function DiscussionDropdownMenu({ discussion, showVisit = true }: { discu
             variant: res.success ? "default" : "destructive",
         });
 
-        // Redirect to user profile discussions page if deletion is successful
         if (res.success) {
             router.push("/profile/discussions");
         }
     }
 
+    const creatorId =
+        typeof (discussion.creator as unknown) === "string"
+            ? (discussion.creator as unknown as string)
+            : discussion.creator?.id ?? null;
+
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-6 w-6 p-0"><Ellipsis size={15} /></Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-36">
-                <DropdownMenuGroup>
-                    {showVisit &&
+        <div>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-6 w-6 p-0"><Ellipsis size={15} /></Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-36">
+                    <DropdownMenuGroup>
+                        {showVisit &&
+                            <DropdownMenuItem
+                                title="Visit discussion page"
+                                className="px-4"
+                                onClick={() => router.push(`/discussions/${discussion.id}`)}
+                            >
+                                Visit
+                            </DropdownMenuItem>
+                        }
                         <DropdownMenuItem
-                            title="Visit discussion page"
+                            title="Edit"
                             className="px-4"
-                            onClick={() => router.push(`/discussions/${discussion.id}`)}
+                            onClick={() => setShowEditDialog(true)}
                         >
-                            Visit
+                            Edit
                         </DropdownMenuItem>
-                    }
-                    {/* for editing */}
+                        {discussion.status === DiscussionStatus.OPEN ?
+                            <DropdownMenuItem
+                                title="Do not allow new replies"
+                                className="px-4"
+                                onClick={() => handleUpdateStatus(DiscussionStatus.CLOSED)}
+                            >
+                                Close
+                            </DropdownMenuItem> :
+                            <DropdownMenuItem
+                                title="Allow new replies"
+                                className="px-4"
+                                onClick={() => handleUpdateStatus(DiscussionStatus.OPEN)}
+                            >
+                                Open
+                            </DropdownMenuItem>
+                        }
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem
-                        title="Edit"
-                        className="px-4"
                         onSelect={(event) => {
-                            event.preventDefault(); // Prevent dialog from closing
-                            document.body.style.overflow = ""; // Restore scroll manually (when form dialog is closed focus is locked)
+                            event.preventDefault();
                         }}
-                    >
-                        <DiscussionFormDialog data={{ ...discussion, creator: discussion.creator?.id }} />
+                        className="hover:text-destructive">
+                        <CustomAlertDialog
+                            triggerText="Delete"
+                            buttonVariant="ghost"
+                            confirmButtonVariant="destructive"
+                            title="Are you Sure ?"
+                            description="This action cannot be undone."
+                            confirmText="Delete discussion"
+                            onConfirm={handleDelete}
+                            buttonClass="h-full hover:text-destructive pl-0"
+                        />
                     </DropdownMenuItem>
-                    {discussion.status === DiscussionStatus.OPEN ?
-                        <DropdownMenuItem
-                            title="Do not allow new replies"
-                            className="px-4"
-                            onClick={() => handleUpdateStatus(DiscussionStatus.CLOSED)}
-                        >
-                            Close
-                        </DropdownMenuItem> :
-                        <DropdownMenuItem
-                            title="Allow new replies"
-                            className="px-4"
-                            onClick={() => handleUpdateStatus(DiscussionStatus.OPEN)}
-                        >
-                            Open
-                        </DropdownMenuItem>
-                    }
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                    onSelect={(event) => {
-                        event.preventDefault(); // Prevent dialog from closing
+                </DropdownMenuContent>
+            </DropdownMenu>
+            {showEditDialog && (
+                <DiscussionFormDialog
+                    data={{
+                        id: discussion.id,
+                        title: discussion.title,
+                        body: discussion.body,
+                        category: discussion.category,
+                        tags: discussion.tags ?? null,
+                        files: discussion.files ?? null,
+                        creator: creatorId,
                     }}
-                    className="hover:text-destructive">
-                    <CustomAlertDialog
-                        triggerText="Delete"
-                        buttonVariant="ghost"
-                        confirmButtonVariant="destructive"
-                        title="Are you Sure ?"
-                        description="This action cannot be undone."
-                        confirmText="Delete discussion"
-                        onConfirm={handleDelete}
-                        buttonClass="h-full hover:text-destructive pl-0"
-                    />
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu >
+                    onClose={() => setShowEditDialog(false)}
+                />
+            )}
+        </div>
     )
 }

@@ -91,9 +91,20 @@ export const updateDiscussion = async (data: DiscussionInputData, newfiles: File
         return { success: false, message: "You are not authenticated." };
     }
 
-    if (user.data.user.id !== data.creator) {
+    const sessionUserId = user.data.user.id;
+    let creatorId = data.creator || "";
+    if (!creatorId && data.id) {
+        const { data: row } = await supabase
+            .from("discussions")
+            .select("creator")
+            .eq("id", data.id)
+            .single();
+        creatorId = row?.creator || "";
+    }
+    if (!creatorId || sessionUserId !== creatorId) {
         return { success: false, message: "You are not authorized." };
     }
+    data = { ...data, creator: creatorId };
 
     if (!data) {
         return { success: false, message: "Discussion new data is required." };

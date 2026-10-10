@@ -9,8 +9,9 @@ export const discussionInputDataSchema = z.object({
         errorMap: () => ({ message: "Please select a category" }),
     }),
     tags: z.array(z.string()).nullable().optional(),
-    files: z.array(z.string()).optional(),
-    creator: z.string().optional(),
+    // DB may return null for discussions with no attachments; form maps null -> [].
+    files: z.array(z.string()).nullable().optional(),
+    creator: z.string().nullable().optional(),
 });
 
 export type DiscussionInputData = z.infer<typeof discussionInputDataSchema>;
