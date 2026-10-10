@@ -134,15 +134,6 @@ export default function DiscussionFormDialog({
         }
     }
 
-    const onInvalid = (errors: Record<string, unknown>) => {
-        const first = Object.values(errors)[0] as { message?: string } | undefined;
-        const description = first?.message
-            ? String(first.message)
-            : "Please fix the highlighted fields.";
-        console.error("Discussion form validation failed:", errors);
-        toast({ description, variant: "destructive" });
-    };
-
     const resetForm = async () => {
         form.reset({
             title: data?.title || "",
@@ -234,7 +225,7 @@ export default function DiscussionFormDialog({
                 </DialogHeader>
                 <Form {...form}>
                     <form
-                        onSubmit={form.handleSubmit(handleSubmit, onInvalid)}
+                        onSubmit={form.handleSubmit(handleSubmit)}
                         className="space-y-4 p-4 max-h-[80vh] overflow-y-auto "
                     >
                         <FormField
