@@ -48,14 +48,9 @@ const icons = {
 
 export function DiscussionsEngagementBarGraph() {
     const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>('replies');
-    const [isClient, setIsClient] = useState(false);
     const [isPending, startTransition] = useTransition();
     const [data, setData] = useState<any[]>([]);
     const supabase = createClient();
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
 
     useEffect(() => {
         startTransition(async () => {
@@ -70,7 +65,7 @@ export function DiscussionsEngagementBarGraph() {
         });
     }, [activeChart]);
 
-    if (!isClient) {
+    if (typeof window === 'undefined') {
         return null;
     }
 
