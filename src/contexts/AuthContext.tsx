@@ -47,8 +47,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     useEffect(() => {
-        fetchUser();
-
+        const loadUser = async () => {
+            await fetchUser();
+        };
+        loadUser();
+        
         const { data: authListener } = supabase.auth.onAuthStateChange((_event, _session) => {
             fetchUser();
         });
