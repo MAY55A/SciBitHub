@@ -29,21 +29,21 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
         defaultValues: { reported_link: reportedLink, reported_type: type },
     });
 
-    async function checkReported() {
-        const supabase = createClient();
-        const { data } = await supabase
-            .from("reports")
-            .select("id")
-            .eq("reported_link", reportedLink)
-            .eq("reporter", user)
-            .maybeSingle();
-
-        setHasReported(data !== null);
-    }
-
     useEffect(() => {
+        const checkReported = async () => {
+            const supabase = createClient();
+            const { data } = await supabase
+                .from("reports")
+                .select("id")
+                .eq("reported_link", reportedLink)
+                .eq("reporter", user)
+                .maybeSingle();
+
+            setHasReported(data !== null);
+        }
+
         checkReported();
-    }, [])
+    }, [reportedLink, user])
 
     async function handleSubmit(formData: ReportInputData) {
         const res = await createReport(formData);
