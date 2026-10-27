@@ -15,27 +15,37 @@ export const BookmarkButton = ({ projectId, discussionId }: { projectId?: string
     const { user } = useAuth();
     const { toast } = useToast();
 
-    async function checkExistingBookmark() {
-        const query = supabase
-            .from("bookmarks")
-            .select("id")
-            .eq("user_id", user!.id);
-
-        if (discussionId) {
-            query.eq("discussion_id", discussionId);
-        } else {
-            query.eq("project_id", projectId);
-        }
-
-        const { data } = await query.maybeSingle();
-        setExistingBookmark(data);
-    }
-
     useEffect(() => {
-        if (user) {
-            checkExistingBookmark();
+        if (!user) {
+            return;
         }
-    }, [user]);
+
+        const checkExistingBookmark = async () => {
+            const query = supabase
+                .from("bookmarks")
+                .select("id")
+                .eq("user_id", user.id);
+
+            if (discussionId) {
+                query.eq("discussion_id", discussionId);
+            } else if (projectId) {
+                query.eq("project_id", projectId);
+            } else {
+                return;
+            }
+
+            const { data, error } = await query.maybeSingle();
+
+            if (error) {
+                console.error("Error checking bookmark:", error);
+                return;
+            }
+
+            setExistingBookmark(data);
+        };
+
+        checkExistingBookmark();
+    }, [user, discussionId, projectId]);
 
     async function toggleBookmark() {
         if (!existingBookmark) {
