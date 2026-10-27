@@ -167,30 +167,25 @@ export default function DiscussionFormDialog({
             id: data.id,
         });
 
-        if (data.files?.length) {
-            (async () => {
-                const files = await Promise.all(
-                    data.files!.map(async (path) => {
-                        const file = await getFileWithMetadata(path);
-                        if (!file) {
-                            return {
-                                name: path.split("/").pop() || "Unknown",
-                                preview: "",
-                                type: "Unknown",
-                                size: 0,
-                                path,
-                            }
+        (async () => {
+            const files = await Promise.all(
+                (data.files ?? []).map(async (path) => {
+                    const file = await getFileWithMetadata(path);
+                    if (!file) {
+                        return {
+                            name: path.split("/").pop() || "Unknown",
+                            preview: "",
+                            type: "Unknown",
+                            size: 0,
+                            path,
                         }
-                        return file;
-                    })
-                );
-                setInitialFiles(files);
-                setExistingFiles(files);
-            })();
-        } else {
-            setInitialFiles([]);
-            setExistingFiles([]);
-        }
+                    }
+                    return file;
+                })
+            );
+            setInitialFiles(files);
+            setExistingFiles(files);
+        })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open, data?.id]);
 
