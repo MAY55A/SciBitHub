@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={orbitron.className}>
+    <html lang="en" className={orbitron.className} suppressHydrationWarning>
       <body className="h-full bg-background text-foreground">
         <ClientThemeProvider>
           <AuthProvider>
