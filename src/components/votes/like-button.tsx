@@ -12,21 +12,22 @@ export const LikeButton = ({ projectId, likes, creatorId }: { projectId: string,
     const supabase = createClient();
     const { user } = useAuth();
 
-    async function checkExistingLike() {
-        const { data } = await supabase
-            .from("project_likes")
-            .select("id")
-            .eq("user_id", user!.id)
-            .eq("project_id", projectId)
-            .maybeSingle();
-        setExistingLike(data);
-    }
-
     useEffect(() => {
         if (user) {
+
+            const checkExistingLike = async () => {
+                const { data } = await supabase
+                    .from("project_likes")
+                    .select("id")
+                    .eq("user_id", user!.id)
+                    .eq("project_id", projectId)
+                    .maybeSingle();
+                setExistingLike(data);
+            }
+
             checkExistingLike();
         }
-    }, [user]);
+    }, [user, projectId]);
 
     async function like() {
         if (!existingLike) {
