@@ -18,12 +18,10 @@ export default function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSa
     const [error, setError] = useState("");
     const [tasks, setTasks] = useState<TaskInputData[]>(data.tasks);
     const [newTask, setNewTask] = useState<Partial<TaskInputData>>();
-    const [isSaved, setIsSaved] = useState(false);
-
-    useEffect(() => {
-        const same = tasks.length > 0 && JSON.stringify(data.tasks) === JSON.stringify(tasks);
-        setIsSaved(same);
-    }, [JSON.stringify(tasks)]);
+    const [isSaved, setIsSaved] = useState(
+        data.tasks.length > 0 &&
+        JSON.stringify(data.tasks) === JSON.stringify(tasks)
+    );
 
     function addTask(task: TaskInputData) {
         if (tasks.find(t => t.title === task.title)) {
@@ -32,6 +30,7 @@ export default function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSa
         }
         setError("");
         setTasks((prev) => [...prev, task]);
+        setIsSaved(false);
         setNewTask(undefined);
         setShowTaskForm(false);
     }
@@ -42,10 +41,12 @@ export default function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSa
         }
         setError("");
         setTasks((prev) => prev.map((task, i) => i === index ? updatedTask : task));
+        setIsSaved(false);
         setEditForm(-1);
     }
     const removeTask = (index: number) => {
         setTasks((prev) => prev.filter((_, i) => i !== index));
+        setIsSaved(false);
     };
 
     const saveData = () => {
@@ -53,14 +54,13 @@ export default function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSa
             setError("Project needs at least one task");
             return;
         }
-        updateFiles(
-            tasks.reduce((acc: any, task, index) => {
-                acc[index] = task.dataSource;
-                task.dataSource = undefined;
-                return acc;
-            }, {})
-        );
-        onUpdate({ tasks: tasks });
+        const taskFiles = tasks.reduce((acc: any, task, index) => {
+            acc[index] = task.dataSource;
+            return acc;
+        }, {});
+        const tasksToSave = tasks.map(({ dataSource, ...task }) => task);
+        updateFiles(taskFiles);
+        onUpdate({ tasks: tasksToSave });
         setIsSaved(true);
         onSaveStep();
     };
@@ -94,7 +94,7 @@ export default function Step3({ data, onUpdate, onNext, onBack, onSaveStep, onSa
                             <TaskSetup
                                 buttonText="Save Task"
                                 data={{ ...task, dataSource: task.dataSource || files[index] }}
-                                onSubmit={(data) => editTask(index, {...task, ...data})} onChange={() => { }}
+                                onSubmit={(data) => editTask(index, { ...task, ...data })} onChange={() => { }}
                                 canEditType={!(data.status && data.status === "published")}
                             />
                             <Button

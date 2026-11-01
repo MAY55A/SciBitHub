@@ -16,22 +16,23 @@ export const VoteButtons = ({ voted_id, voted_type, upvotes, downvotes, creatorI
     const { user } = useAuth();
     const pathname = usePathname();
 
-    async function checkExistingVote() {
-        const { data } = await supabase
-            .from("votes")
-            .select("id, vote")
-            .eq("voter", user!.id)
-            .eq("voted", voted_id)
-            .eq("voted_type", voted_type)
-            .maybeSingle();
-        setExistingVote(data);
-    }
-
     useEffect(() => {
         if (user && user.role !== "admin") {
+
+            const checkExistingVote = async () => {
+                const { data } = await supabase
+                    .from("votes")
+                    .select("id, vote")
+                    .eq("voter", user!.id)
+                    .eq("voted", voted_id)
+                    .eq("voted_type", voted_type)
+                    .maybeSingle();
+                setExistingVote(data);
+            }
+
             checkExistingVote();
         }
-    }, [user]);
+    }, [user, voted_id, voted_type]);
 
     async function vote(vote_value: -1 | 1) {
         if (!existingVote) {

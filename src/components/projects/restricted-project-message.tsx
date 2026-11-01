@@ -17,42 +17,41 @@ export function RestrictedProjectMessage({ projectId, canSendRequest }: { projec
     const [hasRequested, setHasRequested] = useState(false);
     const supabase = createClient();
 
-
-    const getExistingRequests = async () => {
-        const { data: existingInvitation } = await supabase.
-            from("participation_requests").
-            select("id")
-            .eq("project_id", projectId)
-            .eq("user_id", user!.id)
-            .eq("type", RequestType.INVITATION)
-            .is("deleted_at", null)
-            .limit(1)
-            .single();
-        if (existingInvitation) {
-            setHasInvitation(true);
-            return;
-        }
-
-        const { data: previousRequest } = await supabase.
-            from("participation_requests").
-            select("id")
-            .eq("project_id", projectId)
-            .eq("user_id", user!.id)
-            .eq("type", RequestType.APPLICATION)
-            .is("deleted_at", null)
-            .limit(1)
-            .single();
-        if (previousRequest) {
-            setHasRequested(true);
-            return;
-        }
-    }
-
     useEffect(() => {
-        if (!!user && canSendRequest) {
-            getExistingRequests();
+        if (!user || !canSendRequest) return;
+
+        const getExistingRequests = async () => {
+            const { data: existingInvitation } = await supabase.
+                from("participation_requests").
+                select("id")
+                .eq("project_id", projectId)
+                .eq("user_id", user!.id)
+                .eq("type", RequestType.INVITATION)
+                .is("deleted_at", null)
+                .limit(1)
+                .single();
+            if (existingInvitation) {
+                setHasInvitation(true);
+                return;
+            }
+
+            const { data: previousRequest } = await supabase.
+                from("participation_requests").
+                select("id")
+                .eq("project_id", projectId)
+                .eq("user_id", user!.id)
+                .eq("type", RequestType.APPLICATION)
+                .is("deleted_at", null)
+                .limit(1)
+                .single();
+            if (previousRequest) {
+                setHasRequested(true);
+                return;
+            }
         }
-    })
+
+        getExistingRequests();
+    }, [user, projectId, canSendRequest]);
 
     const sendRequest = async () => {
         setIsSubmitting(true);

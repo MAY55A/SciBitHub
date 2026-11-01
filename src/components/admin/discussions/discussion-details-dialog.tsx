@@ -14,26 +14,30 @@ import { format } from "date-fns";
 export default function DiscussionDetailsDialog({ discussion, onClose }: { discussion: Discussion, onClose: () => void }) {
     const [open, setOpen] = useState(true);
     const [files, setFiles] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(Boolean(discussion.files?.length));
 
     useEffect(() => {
         if (discussion.files && discussion.files.length > 0) {
+
             const fetchFiles = async () => {
                 try {
-                    const url = `/api/get-files-with-metadata?${discussion.files!.map((p) => `paths=${encodeURIComponent(p)}`).join("&")}`;
+                    const url = `/api/get-files-with-metadata?${discussion.files!
+                        .map((p) => `paths=${encodeURIComponent(p)}`)
+                        .join("&")}`;
                     const res = await fetch(url);
+                    if (!res.ok) {
+                        throw new Error("Failed to fetch files");
+                    }
                     const data = await res.json();
                     setFiles(data);
                 } catch (err) {
-                    console.error("Failed to load files", err);
                     setFiles([]);
                 } finally {
                     setLoading(false);
                 }
             };
+
             fetchFiles();
-        } else {
-            setLoading(false);
         }
     }, [discussion.files]);
 

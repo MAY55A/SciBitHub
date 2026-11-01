@@ -45,7 +45,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 : <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-4 font-retro border rounded-lg">
                     <CloudOff className="mb-2 text-primary" size={40} />
                     <p>Dataset is currently unavailable.</p>
-                    <p className="text-sm text-muted-foreground">We're having trouble connecting to the storage system. Please try again later.</p>
+                    <p className="text-sm text-muted-foreground">We&apos;re having trouble connecting to the storage system. Please try again later.</p>
                 </div>}
         </div>
     );

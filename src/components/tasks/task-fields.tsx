@@ -34,12 +34,9 @@ export function TaskFields({ task }: { task: Task }) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (file) {
-            formData.data_file = file.filePath;
-        }
-        console.log('Form Data:', formData);
+        const payload = file ? { ...formData, data_file: file.filePath } : { ...formData };
         setLoading(true);
-        const res = await createContribution(formData, task.id!, task.project.moderation_level);
+        const res = await createContribution(payload, task.id!, task.project.moderation_level);
         setLoading(false);
         toast({
             description: res.message,
@@ -50,27 +47,26 @@ export function TaskFields({ task }: { task: Task }) {
         }
     };
 
-    const fetchRandomFile = async () => {
-        const result = await getRandomFile(task.data_source!);
-        if (result) {
-            setFile(result);
+    useEffect(() => {
+        if (task.type !== TaskType.DATALABELLING) return;
+
+        getRandomFile(task.data_source!).then((result) => {
+            if (result) {
+                setFile(result);
+            }
+        });
+    }, [task.data_source, task.type]);
+
+    useEffect(() => {
+        if (!isContributor || task.type !== TaskType.SURVEY) return;
+
+        const checkUserContributed = async () => {
+            const result = await hasUserContributed(user.id, task.id!);
+            setIsFirstSurvey(!result);
         }
-    };
 
-    const checkContribution = async () => {
-        const result = await hasUserContributed(user!.id, task.id!);
-        setIsFirstSurvey(!result);
-    };
-
-    useEffect(() => {
-        if (task.type === TaskType.DATALABELLING)
-            fetchRandomFile();
-    }, []);
-
-    useEffect(() => {
-        if (isContributor && task.type === TaskType.SURVEY)
-            checkContribution();
-    }, [user]);
+        checkUserContributed();
+    }, [isContributor, task.id, task.type, user]);
 
     const reset = () => {
         setFormData({});
@@ -79,8 +75,12 @@ export function TaskFields({ task }: { task: Task }) {
         setAccepted(false);
         setFormKey((k) => k + 1);
         if (task.type === TaskType.DATALABELLING) {
-            fetchRandomFile();
-        } else if(task.type === TaskType.SURVEY) {
+            getRandomFile(task.data_source!).then((result) => {
+                if (result) {
+                    setFile(result);
+                }
+            });
+        } else if (task.type === TaskType.SURVEY) {
             setIsFirstSurvey(false);
         }
     };

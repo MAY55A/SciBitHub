@@ -52,7 +52,7 @@ export default function Signup() {
       <h1 className="text-2xl font-medium text-center">Confirm & Sign up</h1>
       <p className="text-sm opacity-80 font-retro">
         Hello <strong className="text-green">{formData.username}</strong>, this is the final step, you are almost there !<br />
-        All that's left is to confirm your details.<br />
+        All that&apos;s left is to confirm your details.<br />
         Please note that the information you have provided will be **publicly visible** to anyone,
         but you will have the option to edit it later.
         Your role however <strong>cannot</strong> be changed later, so please choose wisely.

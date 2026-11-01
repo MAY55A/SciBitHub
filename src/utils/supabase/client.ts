@@ -8,7 +8,7 @@ export const createClient = () =>
   );
 
 function useSupabaseClient() {
-  return useMemo(createClient, []);
+  return useMemo(() => createClient(), []);
 }
 
 export default useSupabaseClient;

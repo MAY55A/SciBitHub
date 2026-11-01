@@ -29,21 +29,21 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
         defaultValues: { reported_link: reportedLink, reported_type: type },
     });
 
-    async function checkReported() {
-        const supabase = createClient();
-        const { data } = await supabase
-            .from("reports")
-            .select("id")
-            .eq("reported_link", reportedLink)
-            .eq("reporter", user)
-            .maybeSingle();
-
-        setHasReported(data !== null);
-    }
-
     useEffect(() => {
+        const checkReported = async () => {
+            const supabase = createClient();
+            const { data } = await supabase
+                .from("reports")
+                .select("id")
+                .eq("reported_link", reportedLink)
+                .eq("reporter", user)
+                .maybeSingle();
+
+            setHasReported(data !== null);
+        }
+
         checkReported();
-    }, [])
+    }, [reportedLink, user])
 
     async function handleSubmit(formData: ReportInputData) {
         const res = await createReport(formData);
@@ -54,15 +54,20 @@ export default function ReportFormDialog({ user, id, type }: { user: string, id:
         });
 
         if (res.success) {
-            document.body.style.overflow = "";
             setHasReported(true);
             setOpen(false);
         }
     }
 
+    //fix overflow issue when dialog is closed
+    useEffect(() => {
+        if (!open) {
+            document.body.style.overflow = "";
+        }
+    }, [open]);
+
     return (
-        //fix overflow issue when dialog is closed
-        <Dialog open={open} onOpenChange={(open) => { setOpen(open); if (!open) document.body.style.overflow = ""; }}>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button
                     variant="ghost"

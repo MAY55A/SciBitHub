@@ -78,10 +78,8 @@ export default function DiscussionFormDialog({
         })
 
         if (res.success) {
-            document.body.style.overflow = "";
             startTransition(() => {
                 setOpen(false);
-                onClose?.();
                 router.refresh();
             });
         }
@@ -118,10 +116,8 @@ export default function DiscussionFormDialog({
 
         if (res.success) {
             startTransition(() => {
-                document.body.style.overflow = "";
                 router.refresh();
                 setOpen(false);
-                onClose?.();
             });
         }
     }
@@ -150,6 +146,14 @@ export default function DiscussionFormDialog({
         setExistingFiles(initialFiles);
     }
 
+    //fix overflow issue when dialog is closed
+    useEffect(() => {
+        if (!open) {
+            document.body.style.overflow = "";
+            onClose?.();
+        }
+    }, [open]);
+
     useEffect(() => {
         if (!open || !data) return;
 
@@ -163,30 +167,25 @@ export default function DiscussionFormDialog({
             id: data.id,
         });
 
-        if (data.files?.length) {
-            (async () => {
-                const files = await Promise.all(
-                    data.files!.map(async (path) => {
-                        const file = await getFileWithMetadata(path);
-                        if (!file) {
-                            return {
-                                name: path.split("/").pop() || "Unknown",
-                                preview: "",
-                                type: "Unknown",
-                                size: 0,
-                                path,
-                            }
+        (async () => {
+            const files = await Promise.all(
+                (data.files ?? []).map(async (path) => {
+                    const file = await getFileWithMetadata(path);
+                    if (!file) {
+                        return {
+                            name: path.split("/").pop() || "Unknown",
+                            preview: "",
+                            type: "Unknown",
+                            size: 0,
+                            path,
                         }
-                        return file;
-                    })
-                );
-                setInitialFiles(files);
-                setExistingFiles(files);
-            })();
-        } else {
-            setInitialFiles([]);
-            setExistingFiles([]);
-        }
+                    }
+                    return file;
+                })
+            );
+            setInitialFiles(files);
+            setExistingFiles(files);
+        })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open, data?.id]);
 
@@ -198,13 +197,7 @@ export default function DiscussionFormDialog({
     return (
         <Dialog
             open={data ? open : (!!user && open)}
-            onOpenChange={(next) => {
-                setOpen(next);
-                if (!next) {
-                    document.body.style.overflow = "";
-                    onClose?.();
-                }
-            }}
+            onOpenChange={setOpen}
         >
             {!data && (
                 <DialogTrigger asChild>

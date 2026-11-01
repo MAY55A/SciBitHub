@@ -32,7 +32,7 @@ export default function DeleteAccount() {
             <h1 className="text-2xl font-medium">Delete Account</h1>
             <p className="text-sm text-foreground/60">
                 Deleting your account will remove your ability to sign in and mark your profile as deleted. 
-                However, your {user?.role === UserRole.RESEARCHER ? "projects" : "contributions"}, discussions, forum topics, and replies will remain available to others under "Deleted user".
+                However, your {user?.role === UserRole.RESEARCHER ? "projects" : "contributions"}, discussions, forum topics, and replies will remain available to others under &quot;Deleted user&quot;.
             </p>
             <CustomAlertDialog
                 buttonVariant="destructive"

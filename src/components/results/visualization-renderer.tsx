@@ -21,13 +21,13 @@ type ChartRendererProps = {
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"];
 
 export const VisualizationRenderer: React.FC<ChartRendererProps> = memo(({ data, files, config }) => {
-    const { type, chart_type, group_by, value_field, display_field, table_columns, title } = config;
+    const { type, chart_type, group_by, display_field, table_columns, title } = config;
     const [displayFiles, setDisplayFiles] = useState<{ fileName: string, url: string }[] | null>(null);
     const chartData = useMemo(() => {
         if (type === VisualizationType.TABLE || type === VisualizationType.GALLERY) return data;
 
         return transformDataForChart(data, config);
-    }, [data, config]);
+    }, [data, config, type]);
 
     useEffect(() => {
         const loadFiles = async () => {
@@ -146,7 +146,7 @@ export const VisualizationRenderer: React.FC<ChartRendererProps> = memo(({ data,
                                 fill="#8884d8"
                                 label
                             >
-                                {chartData.map((entry, index) => (
+                                {chartData.map((_, index) => (
                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>
@@ -166,6 +166,8 @@ export const VisualizationRenderer: React.FC<ChartRendererProps> = memo(({ data,
         && JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data)
         && JSON.stringify(prevProps.files) === JSON.stringify(nextProps.files);
 });
+
+    VisualizationRenderer.displayName = "VisualizationRenderer";
 
 function safeNumber(value: any): number {
     const num = Number(value);

@@ -15,25 +15,33 @@ interface CountrySelectProps {
 
 const CountrySelector: React.FC<CountrySelectProps> = ({ control, name, multiple }) => {
     const [countries, setCountries] = useState<CountryOption[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
-    // Fetching countries list (static or API-based)
-    useEffect(() => {
-        setLoading(true);
-        fetch('https://countries.dev/countries?fields=name')
-            .then(response => response.json())
-            .then(data => {
-                const countryOptions = data?.map((country: any) => ({
+    // Fetching countries list
+useEffect(() => {
+    fetch('https://countries.dev/countries?fields=name')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error: ${response.status}`);
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            const countryOptions: CountryOption[] = data.map(
+                (country: { name: string }) => ({
                     value: country.name,
                     label: country.name,
-                }));
-                setCountries(countryOptions);
-            })
-            .catch(err => {
-                console.error('Error fetching countries:', err);
-            })
-            .finally(() => setLoading(false));
-    }, []);
+                })
+            );
+
+            setCountries(countryOptions);
+        })
+        .catch(err => {
+            console.error('Error fetching countries:', err);
+        })
+        .finally(() => setLoading(false));
+}, []);
 
     return (
         <FormField
