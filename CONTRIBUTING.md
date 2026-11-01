@@ -155,10 +155,13 @@ Supabase and MinIO restart automatically with Docker Desktop.
    git checkout -b feature/your-feature-name
    ```
 2. Make your changes and test them locally
-3. Commit following the [commit guidelines](#commit-guidelines) below
-4. Push your branch and open a **Pull Request** against `dev`
-5. Fill in the PR description explaining what you changed and why
-6. Wait for review — we aim to respond within a week
+3. Run the linter and fix any linting errors:
+   ```bash
+   npm run lint
+4. Commit following the [commit guidelines](#commit-guidelines) below
+5. Push your branch and open a **Pull Request** against `dev`
+6. Fill in the PR description explaining what you changed and why
+7. Wait for review — we aim to respond within a week
 
 > **Note:** All pull requests should target the `dev` branch, not `main`. Changes are merged into `main` only after review and testing.
 
