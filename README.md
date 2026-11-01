@@ -46,7 +46,19 @@ It connects researchers, contributors, and curious minds to engage in data colle
 - **Icons**: Lucide
 - **Markdown support**: `@uiw/react-md-editor`
 
+
 ---
+
+## Development
+
+Install dependencies and run the linter before opening a pull request:
+
+```bash
+npm install
+npm run lint
+```
+
+Linting is configured with ESLint for the Next.js and TypeScript codebase.
 
 ## Screenshots
 
