@@ -53,13 +53,13 @@ export function ResearcherProfile({ user }: { user: User }) {
                         Location :
                         <span className="text-muted-foreground">{user.metadata.organizationLocation || "- not specified -"}</span>
                     </p>
-                    <p className="flex flex-wrap items-center gap-2 text-sm ">
+                    <div className="flex flex-wrap items-center gap-2 text-sm ">
                         <TestTube2 size={"15"} />
                         Fields of Interest :
                         {user.metadata.interests?.map((field, index) =>
                             <Badge variant="outline" key={index} className="text-muted-foreground">{field}</Badge>
                         )}
-                    </p>
+                    </div>
                 </div>
             }
             {user.metadata?.researcherType === ResearcherType.ACADEMIC &&
@@ -79,13 +79,13 @@ export function ResearcherProfile({ user }: { user: User }) {
                         Country :
                         <span className="text-muted-foreground">{user.country}</span>
                     </p>
-                    <p className="flex flex-wrap items-center gap-2 text-sm ">
+                    <div className="flex flex-wrap items-center gap-2 text-sm ">
                         <TestTube2 size={"15"} />
                         Fields of Interest :
                         {user.metadata.interests?.map((field, index) =>
                             <Badge variant="outline" key={index} className="text-muted-foreground">{field}</Badge>
                         )}
-                    </p>
+                    </div>
                 </div>
             }
             {user.metadata?.researcherType === ResearcherType.CASUAL &&
@@ -95,13 +95,13 @@ export function ResearcherProfile({ user }: { user: User }) {
                         Country :
                         <span className="text-muted-foreground">{user.country}</span>
                     </p>
-                    <p className="flex flex-wrap items-center gap-2 text-sm ">
+                    <div className="flex flex-wrap items-center gap-2 text-sm ">
                         <TestTube2 size={"15"} />
                         Fields of Interest :
                         {user.metadata.interests?.map((field, index) =>
                             <Badge variant="outline" key={index} className="text-muted-foreground">{field}</Badge>
                         )}
-                    </p>
+                    </div>
                 </div>
             }
             <div className="flex flex-col gap-2 justify-center rounded-lg border p-8 font-retro">
