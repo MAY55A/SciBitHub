@@ -4,7 +4,7 @@ import { ProjectInputData, TaskInputData } from "@/src/types/project-form-data";
 import { deleteFromMinIO, uploadFileToMinIO } from "@/src/utils/minio/client";
 import { createClient } from "@/src/utils/supabase/client";
 import { base64ToFile } from "@/src/utils/utils";
-import { NotificationTarget, ParticipationLevel, ProjectStatus, RequestType } from "@/src/types/enums";
+import { NotificationTarget, ParticipationLevel, ProjectStatus, ProjectVisibility, RequestType } from "@/src/types/enums";
 import { PublicUser } from "@/src/types/models";
 
 
@@ -17,6 +17,14 @@ export const createProject = async (inputData: Partial<ProjectInputData>, status
 
     if (!inputData) {
         return { success: false, message: "Project data is required." };
+    }
+
+    if (inputData.visibility !== undefined && inputData.visibility !== ProjectVisibility.PUBLIC) {
+        return { success: false, message: "Only public visibility is supported for free usage." };
+    }
+
+    if (inputData.visibility !== undefined && inputData.visibility !== ProjectVisibility.PUBLIC) {
+        return { success: false, message: "Only public visibility is supported for free usage." };
     }
 
     // Insert the new project into the database
@@ -169,6 +177,14 @@ export const updateProject = async (initialData: Partial<ProjectInputData>, newD
     }
     if (!newData) {
         return { success: false, message: "Project's new data is required." };
+    }
+
+    if (newData.visibility !== undefined && newData.visibility !== ProjectVisibility.PUBLIC) {
+        return { success: false, message: "Only public visibility is supported for free usage." };
+    }
+
+    if (newData.visibility !== undefined && newData.visibility !== ProjectVisibility.PUBLIC) {
+        return { success: false, message: "Only public visibility is supported for free usage." };
     }
     const { shortDescription, longDescription, coverImage, tasks, participants, participationLevel, moderationLevel, ...filteredInputData } = newData;
 

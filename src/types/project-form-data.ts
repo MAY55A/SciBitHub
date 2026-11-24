@@ -42,7 +42,7 @@ export const projectInputDataSchema = z.object({
     }),
     scope: z.enum(Object.values(Scope) as [string, ...string[]]),
     countries: z.array(z.string()).optional(),
-    visibility: z.enum(Object.values(ProjectVisibility) as [string, ...string[]]),
+    visibility: z.enum(Object.values(ProjectVisibility) as [string, ...string[]]).refine((val) => val === ProjectVisibility.PUBLIC, { message: "Only public visibility is supported for free usage." }),
     participationLevel: z.enum(Object.values(ParticipationLevel) as [string, ...string[]]),
     moderationLevel: z.enum(Object.values(ModerationLevel) as [string, ...string[]]),
     deadline: z.date().optional(),
