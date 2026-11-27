@@ -1,7 +1,7 @@
 # docker-compose.yml
 services:
   minio:
-    image: minio/minio
+    image: dhi.io/minio
     restart: always
     ports:
       - "9000:9000"
