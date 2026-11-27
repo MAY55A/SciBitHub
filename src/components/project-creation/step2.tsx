@@ -53,8 +53,8 @@ export default function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSa
     const watchedFields = form.watch();
 
     useEffect(() => {
-        if (visibilityValue === ProjectVisibility.RESTRICTED) {
-            form.setValue("participationLevel", ParticipationLevel.RESTRICTED);
+        if (visibilityValue && visibilityValue !== ProjectVisibility.PUBLIC) {
+            form.setValue("visibility", ProjectVisibility.PUBLIC);
         }
     }, [visibilityValue, form]);
 
@@ -84,22 +84,32 @@ export default function Step2({ data, onUpdate, onNext, onBack, onSaveStep, onSa
                                 <RadioGroup {...field}
                                     value={field.value}
                                     onValueChange={(value) => {
-                                        field.onChange(value);
-                                        if (value === ProjectVisibility.RESTRICTED) {
-                                            form.setValue("participationLevel", ParticipationLevel.RESTRICTED);
+                                        if (value === ProjectVisibility.PUBLIC) {
+                                            field.onChange(value);
                                         }
                                     }}
                                     className="w-full flex gap-8 px-6 pt-4">
-                                    {Object.values(ProjectVisibility).map(value =>
-                                        <div className="flex items-center space-x-2" key={value}>
-                                            <RadioGroupItem value={value} id={value} />
-                                            <Label htmlFor={value}>{value}</Label>
-                                        </div>
-                                    )}
+                                    {Object.values(ProjectVisibility).map(value => {
+                                        const isDisabled = value !== ProjectVisibility.PUBLIC;
+                                        return (
+                                            <div className="flex items-center space-x-2" key={value}>
+                                                <RadioGroupItem value={value} id={value} disabled={isDisabled} />
+                                                <Label
+                                                    htmlFor={value}
+                                                    className={cn(isDisabled && "text-muted-foreground opacity-50 cursor-not-allowed")}
+                                                >
+                                                    {value}
+                                                </Label>
+                                            </div>
+                                        );
+                                    })}
                                 </RadioGroup>
                             </FormControl>
                             <FormDescription>
                                 {ProjectVisibilityDescriptions[field.value as ProjectVisibility]}
+                            </FormDescription>
+                            <FormDescription className="text-xs italic">
+                                Private and restricted visibility options are planned for a future release.
                             </FormDescription>
                             <FormMessage></FormMessage>
                         </FormItem>
